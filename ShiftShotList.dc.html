@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="brands.css">
+<style>
+  doc-page:not(:defined) { visibility: hidden; }
+  a { color: var(--color-accent); }
+  a:hover { color: var(--color-accent-700); }
+</style>
+<script src="doc-page.js"></script>
+</helmet>
+
+<doc-page margin="0.7in">
+<div data-brand="shift" style="font-family: var(--font-body);">
+
+  <div style="font-size: 9.5pt; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 10px;">SHIFT — photography brief</div>
+  <h1 style="font-family: var(--font-heading); font-weight: 800; font-size: 34pt; line-height: 1; letter-spacing: -0.04em; margin: 0 0 14px;">SHIFT shot list</h1>
+  <p style="font-size: 11pt; line-height: 1.5; margin: 0 0 8px; max-width: 62ch;">SHIFT runs on the same design system as Bridge but not on the same photography. Bridge shoots the product as it leaves the factory: clean ground, even light, nothing in the way. SHIFT shoots the product as it comes back — worn, mended, labelled, on a bench. The difference in the pictures is what makes the two houses read apart when the type and the grid are shared.</p>
+  <p style="font-size: 11pt; line-height: 1.5; margin: 0 0 24px; max-width: 62ch;">Eleven of these positions are currently filled by re-used Bridge files (marked <strong>placeholder</strong> below) — they work, but they are the factory version of the garment and undercut the argument. The eighteen shots listed here replace them.</p>
+
+  <h2 style="font-family: var(--font-heading); font-weight: 700; font-size: 15pt; margin: 0 0 8px; border-top: 1px solid var(--color-text); padding-top: 14px; letter-spacing: -0.03em;">The look</h2>
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 28px; margin-bottom: 26px;">
+    <div>
+      <div style="font-size: 9pt; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 6px;">Light</div>
+      <p style="margin: 0; font-size: 10pt; line-height: 1.5;">Available daylight, north-facing. No fill, no flash, no beauty dish. Shadows are allowed to land where they land.</p>
+    </div>
+    <div>
+      <div style="font-size: 9pt; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 6px;">Ground</div>
+      <p style="margin: 0; font-size: 10pt; line-height: 1.5;">Real surfaces: unbleached paper, steel bench, painted brick, a plywood offcut. Never a seamless sweep.</p>
+    </div>
+    <div>
+      <div style="font-size: 9pt; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 6px;">Condition</div>
+      <p style="margin: 0; font-size: 10pt; line-height: 1.5;">Show the wear. Fade, a darned elbow, a replacement zip in a slightly different black. Mends are in focus, not hidden.</p>
+    </div>
+    <div>
+      <div style="font-size: 9pt; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 6px;">People</div>
+      <p style="margin: 0; font-size: 10pt; line-height: 1.5;">Hands, not faces. The bench staff at work; the rider is implied by the garment, not modelled.</p>
+    </div>
+  </div>
+
+  <table style="width: 100%; border-collapse: collapse; font-size: 9.5pt; margin-bottom: 28px;">
+    <thead>
+      <tr>
+        <th style="text-align: start; border-top: 1px solid var(--color-text); border-bottom: 1px solid var(--color-text); padding: 8px 10px 8px 0; font-family: var(--font-heading); font-weight: 700;">Set</th>
+        <th style="text-align: start; border-top: 1px solid var(--color-text); border-bottom: 1px solid var(--color-text); padding: 8px 10px; font-family: var(--font-heading); font-weight: 700;">Files</th>
+        <th style="text-align: start; border-top: 1px solid var(--color-text); border-bottom: 1px solid var(--color-text); padding: 8px 10px; font-family: var(--font-heading); font-weight: 700;">Ratio</th>
+        <th style="text-align: start; border-top: 1px solid var(--color-text); border-bottom: 1px solid var(--color-text); padding: 8px 0 8px 10px; font-family: var(--font-heading); font-weight: 700;">Minimum px</th>
+      </tr>
+    </thead>
+    <tbody>
+      <sc-for list="{{ sets }}" as="s" hint-placeholder-count="4">
+        <tr>
+          <td style="border-bottom: 1px solid var(--color-divider); padding: 8px 10px 8px 0;">{{ s.name }}</td>
+          <td style="border-bottom: 1px solid var(--color-divider); padding: 8px 10px;">{{ s.count }}</td>
+          <td style="border-bottom: 1px solid var(--color-divider); padding: 8px 10px;">{{ s.ratio }}</td>
+          <td style="border-bottom: 1px solid var(--color-divider); padding: 8px 0 8px 10px;">{{ s.px }}</td>
+        </tr>
+      </sc-for>
+    </tbody>
+  </table>
+
+  <sc-for list="{{ groups }}" as="g" hint-placeholder-count="4">
+    <div style="break-inside: avoid; margin-bottom: 30px;">
+      <h2 style="font-family: var(--font-heading); font-weight: 700; font-size: 16pt; margin: 0 0 6px; border-top: 1px solid var(--color-text); padding-top: 14px; letter-spacing: -0.03em;">{{ g.title }}</h2>
+      <p style="font-size: 10pt; line-height: 1.5; margin: 0 0 16px; max-width: 64ch; color: var(--color-neutral-800);">{{ g.intro }}</p>
+      <table style="width: 100%; border-collapse: collapse; font-size: 9.5pt;">
+        <thead>
+          <tr>
+            <th style="text-align: start; border-bottom: 1px solid var(--color-text); padding: 6px 10px 6px 0; font-family: var(--font-heading); font-weight: 700; width: 42px;">Ref</th>
+            <th style="text-align: start; border-bottom: 1px solid var(--color-text); padding: 6px 10px; font-family: var(--font-heading); font-weight: 700;">Subject and direction</th>
+            <th style="text-align: start; border-bottom: 1px solid var(--color-text); padding: 6px 0 6px 10px; font-family: var(--font-heading); font-weight: 700; width: 32%;">Where it appears</th>
+          </tr>
+        </thead>
+        <tbody>
+          <sc-for list="{{ g.rows }}" as="r" hint-placeholder-count="5">
+            <tr>
+              <td style="border-bottom: 1px solid var(--color-divider); padding: 8px 10px 8px 0; font-variant-numeric: tabular-nums; vertical-align: top;">{{ r.ref }}</td>
+              <td style="border-bottom: 1px solid var(--color-divider); padding: 8px 10px; vertical-align: top;">{{ r.brief }}</td>
+              <td style="border-bottom: 1px solid var(--color-divider); padding: 8px 0 8px 10px; vertical-align: top; color: var(--color-neutral-800);">{{ r.where }}</td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </div>
+  </sc-for>
+
+  <div style="break-inside: avoid; border-top: 1px solid var(--color-text); padding-top: 14px;">
+    <h2 style="font-family: var(--font-heading); font-weight: 700; font-size: 16pt; margin: 0 0 8px; letter-spacing: -0.03em;">Currently standing in</h2>
+    <p style="font-size: 10pt; line-height: 1.5; margin: 0 0 14px; max-width: 64ch; color: var(--color-neutral-800);">These Bridge files are wired into SHIFT today. Each is fine as a placeholder and wrong as a final: they show the garment new.</p>
+    <table style="width: 100%; border-collapse: collapse; font-size: 9.5pt;">
+      <tbody>
+        <sc-for list="{{ standins }}" as="p" hint-placeholder-count="6">
+          <tr>
+            <td style="border-bottom: 1px solid var(--color-divider); padding: 7px 10px 7px 0; width: 46%;">{{ p.file }}</td>
+            <td style="border-bottom: 1px solid var(--color-divider); padding: 7px 0 7px 10px; color: var(--color-neutral-800);">{{ p.replace }}</td>
+          </tr>
+        </sc-for>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+</doc-page>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      sets: [
+        { name: 'S — Graded stock', count: '9', ratio: '3:4 portrait', px: '1600 × 2130' },
+        { name: 'T — Mends and marks', count: '4', ratio: '1:1 macro', px: '1800 × 1800' },
+        { name: 'U — The bench', count: '3', ratio: '4:3 and 16:11', px: '2400 × 1800' },
+        { name: 'V — Fibre and recovery', count: '2', ratio: '4:3 landscape', px: '2400 × 1800' },
+      ],
+      groups: [
+        {
+          title: 'Set S — Graded stock',
+          intro: 'The nine pieces in the pre-owned grid, shot as objects that have been somewhere. Lay each on unbleached paper or hang it against painted brick, with its paper grade tag in frame and legible. Same distance and same crop for all nine so the grid reads as one set — the variation should come from the garments, not the staging. Fold or hang naturally; no pinning, no steaming.',
+          rows: [
+            { ref: 'S1', brief: 'Meridian Bib Short, black — flat on paper, straps folded back, new pad visible. Grade A tag.', where: 'PLP card 1 · PDP hero · bag thumbnail' },
+            { ref: 'S2', brief: 'Winterline Shell, translucent — on a wooden hanger, hood down, re-taped cuff turned to camera. Grade B tag.', where: 'PLP card 2 · PDP hero' },
+            { ref: 'S3', brief: 'Cadence Roll-Neck, green — folded to show the replacement zip, which is a slightly different black. Grade A tag.', where: 'PLP card 3 · PDP hero · SHIFT home pre-owned rail' },
+            { ref: 'S4', brief: "Women's Winter Tight, black — flat, knee panel uppermost so the visible mend is the subject. Grade C tag.", where: 'PLP card 4 · PDP hero · home rail' },
+            { ref: 'S5', brief: 'Series 01 Pro Jersey, deep blue — hung, print faded evenly across the chest. Grade B tag.', where: 'PLP card 5 · PDP hero · home rail' },
+            { ref: 'S6', brief: 'Featherweight Gilet, orange — flat, one season old, no repairs. Grade A tag. The cleanest of the nine.', where: 'PLP card 6 · PDP hero · home rail' },
+            { ref: 'S7', brief: 'Cargo Bib Short, olive — flat, leg pockets open, renewed mesh showing. Grade B tag.', where: 'PLP card 7 · PDP hero' },
+            { ref: 'S8', brief: 'Merino Long Sleeve, cream — hung, darned elbow toward camera, cuff wear visible. Grade C tag.', where: 'PLP card 8 · PDP hero' },
+            { ref: 'S9', brief: 'Merino Neck Warmer, navy — coiled on paper, de-pilled surface. Grade B tag.', where: 'PLP card 9 · PDP hero' },
+          ],
+        },
+        {
+          title: 'Set T — Mends and marks',
+          intro: 'Square macros of repair itself. These carry the PDP gallery and the field notes, and they are the shots that most distinguish SHIFT from Bridge: Bridge photographs construction, SHIFT photographs intervention. Shoot at f/4 or wider, focus on the stitch line, let the rest fall away.',
+          rows: [
+            { ref: 'T1', brief: 'A replacement zip at the collar — new slider against faded tape, hand-stitched top stop.', where: 'PDP gallery shot 2 (all products)' },
+            { ref: 'T2', brief: 'A crash-repair panel on a hip or shoulder — new fabric let into old, seam visible, deliberate not disguised.', where: 'PDP gallery · field note "40 most common failures"' },
+            { ref: 'T3', brief: 'A darn or bar-tack over a small tear, thread colour close but not exact.', where: 'PDP gallery · SHIFT home manifesto band' },
+            { ref: 'T4', brief: 'A stitched seam opened flat with a seam ripper alongside — the argument for not bonding seams.', where: 'Field note "Why we stopped bonding seams"' },
+          ],
+        },
+        {
+          title: 'Set U — The bench',
+          intro: 'Where the work happens, with people present as hands and forearms only. Twelve benches exist; shoot one properly rather than all twelve thinly. Machine, tools, thread cones, the log book. Warm interior daylight; the workshop is allowed to look like a workshop.',
+          rows: [
+            { ref: 'U1', brief: 'Hands feeding a garment under the needle, thread cones and scissors in the near foreground.', where: 'SHIFT home hero (right half) · repair pillar · field note 2' },
+            { ref: 'U2', brief: 'The repair log book open, a page of entries against product numbers. Legible but not readable.', where: 'Repair pillar · ledger section' },
+            { ref: 'U3', brief: 'Graded stock finished and stacked, paper tags fanned, ready to post.', where: 'Resale pillar · order confirmed · crossover block on Bridge' },
+          ],
+        },
+        {
+          title: 'Set V — Fibre and recovery',
+          intro: 'The end of the loop, and currently the weakest part of the set — the materials pillar is standing in with a fabric close-up because nothing else exists. Two shots close it: what a garment becomes when it cannot be resold.',
+          rows: [
+            { ref: 'V1', brief: 'Cut-down garments sorted into fibre piles by colour on a steel table. Material, no people.', where: 'Materials pillar · SHIFT home' },
+            { ref: 'V2', brief: 'Yarn cones or baled fibre at the mill, ready to go back in. Industrial, cool light, no styling.', where: 'Materials pillar · ledger section' },
+          ],
+        },
+      ],
+      standins: [
+        { file: 'E1-repair-bench-hands-green.jpeg', replace: 'Replace with U1 — home hero and repair pillar' },
+        { file: 'E2-folded-stack-repair-label.jpeg', replace: 'Replace with U3 — resale pillar, confirmed screen' },
+        { file: 'E4-hands-on-bars-gloves.jpeg', replace: 'Replace with U1 or U2 — repair pillar' },
+        { file: 'A19-mesh-base-layer-white-front.jpeg', replace: 'Replace with V1 — materials pillar' },
+        { file: 'B2-collar-zip-detail-blue.jpeg', replace: 'Replace with T1 — PDP gallery shot 2' },
+        { file: 'A1 / A2 / A4 / A8 / A9 / A10 / A12 / A13 / A15', replace: 'Replace with S1–S9 — the graded-stock set' },
+        { file: 'D1-rider-empty-road-dusk.jpeg', replace: 'Keep — field note 3 wants a Bridge riding shot' },
+        { file: 'C2-rider-mountain-road.jpeg', replace: 'Keep — the crossover block should show Bridge photography' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

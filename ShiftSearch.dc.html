@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="brands.css">
+<script src="locale.js"></script>
+<style>
+  body { margin: 0; }
+  a { color: var(--color-accent); }
+  a:hover { color: var(--color-accent-700); }
+</style>
+</helmet>
+
+<div data-brand="shift" style="background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); min-height: 100vh; display: flex; flex-direction: column;">
+
+  <dc-import name="Blocks" brand="shift" block="nav" device="{{ device }}" bag-count="2" on-navigate="{{ navigateOut }}" hint-size="100%,140px"></dc-import>
+
+  <!-- SEARCH BAR — persistent across every state -->
+  <div style="border-bottom: 1px solid var(--color-divider); padding: {{ padBar }};">
+    <div style="max-width: 1760px; margin: 0 auto; display: flex; align-items: center; gap: 12px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-700)" stroke-width="2" stroke-linecap="square" style="flex: none;"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg>
+      <input class="input" id="sfe-q" placeholder="{{ str.sePlaceholder }}" style="border: 0; background: transparent; font-family: var(--font-heading); font-weight: 700; font-size: {{ querySize }}; min-height: {{ fieldH }}; padding-inline-start: 0; flex: 1; min-width: 0;" value="{{ query }}" onChange="{{ onQuery }}" onKeyDown="{{ onKey }}">
+      <sc-if value="{{ hasQuery }}" hint-placeholder-val="{{ false }}">
+        <button class="btn btn-icon btn-ghost" aria-label="{{ str.seClear }}" style="flex: none; min-width: 44px; min-height: 44px;" onClick="{{ clearQuery }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M5 5l14 14M19 5 5 19"/></svg></button>
+      </sc-if>
+      <sc-if value="{{ wideBar }}" hint-placeholder-val="{{ true }}">
+        <button class="btn btn-primary" style="flex: none; min-height: {{ tapH }};" onClick="{{ runSearch }}">{{ searchLabel }}</button>
+      </sc-if>
+      <sc-if value="{{ narrowBar }}" hint-placeholder-val="{{ false }}">
+        <button class="btn btn-icon btn-primary" aria-label="Search" style="flex: none; min-width: 48px; min-height: 48px;" onClick="{{ runSearch }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg></button>
+      </sc-if>
+    </div>
+  </div>
+
+  <div style="flex: 1;">
+
+    <!-- 1 — EMPTY / SUGGESTIONS -->
+    <sc-if value="{{ isIdle }}" hint-placeholder-val="{{ true }}">
+      <div style="max-width: 1760px; margin: 0 auto; display: grid; grid-template-columns: {{ idleCols }};">
+        <div style="border-inline-end: {{ borderRight }}; padding: {{ padPanel }};">
+          <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 18px;">{{ str.seRecent }}</div>
+          <div style="display: flex; flex-direction: column;">
+            <button class="btn btn-ghost" style="justify-content: flex-start; min-height: {{ rowH }}; border-bottom: 1px solid var(--color-divider);" onClick="{{ searchRoll }}">roll-neck</button>
+            <button class="btn btn-ghost" style="justify-content: flex-start; min-height: {{ rowH }}; border-bottom: 1px solid var(--color-divider);" onClick="{{ searchGradeA }}">grade a</button>
+            <button class="btn btn-ghost" style="justify-content: flex-start; min-height: {{ rowH }};" onClick="{{ searchShell }}">thermal shell</button>
+          </div>
+          <button class="btn btn-ghost" style="padding-inline-start: 0; font-size: 12px; margin-top: 16px;" onClick="{{ clearRecent }}">{{ str.seClearRecent }}</button>
+        </div>
+        <div style="padding: {{ padPanel }};">
+          <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 18px;">{{ str.sePopular }}</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px;">
+            <button class="btn btn-secondary" style="min-height: {{ tapH }};" onClick="{{ searchGradeA }}">{{ str.sfGradeA }}</button>
+            <button class="btn btn-secondary" style="min-height: {{ tapH }};" onClick="{{ searchJersey }}">Jersey</button>
+            <button class="btn btn-secondary" style="min-height: {{ tapH }};" onClick="{{ searchShell }}">Thermal shell</button>
+            <button class="btn btn-secondary" style="min-height: {{ tapH }};" onClick="{{ searchNeck }}">Neck warmer</button>
+          </div>
+          <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 18px;">{{ str.seBrowseInstead }}</div>
+          <div style="display: grid; grid-template-columns: {{ catCols }}; border-top: 1px solid var(--color-divider);">
+            <button class="btn btn-ghost" style="justify-content: flex-start; min-height: {{ rowH }}; border-bottom: 1px solid var(--color-divider); border-inline-end: 1px solid var(--color-divider);" onClick="{{ goJerseys }}">{{ str.sfCatJerseys }}</button>
+            <button class="btn btn-ghost" style="justify-content: flex-start; min-height: {{ rowH }}; border-bottom: 1px solid var(--color-divider);" onClick="{{ goOuterwear }}">{{ str.sfCatOuterwear }}</button>
+            <button class="btn btn-ghost" style="justify-content: flex-start; min-height: {{ rowH }}; border-bottom: 1px solid var(--color-divider); grid-column: 1 / -1;" onClick="{{ goAccessories }}">{{ str.accessories }}</button>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- 2 — RESULTS -->
+    <sc-if value="{{ isResults }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width: 1760px; margin: 0 auto;">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px 24px; padding: {{ padToolbar }}; border-bottom: 1px solid var(--color-divider);">
+          <span style="font-size: 13px; color: var(--color-neutral-800);">{{ resultLine }}</span>
+          <div class="seg" style="{{ segStyle }}">
+            <label class="seg-opt"><input type="radio" name="sfe-sort" checked="{{ sortRelevance }}" onChange="{{ pickRelevance }}"><span>{{ str.seRelevance }}</span></label>
+            <label class="seg-opt"><input type="radio" name="sfe-sort" checked="{{ sortPrice }}" onChange="{{ pickPrice }}"><span>{{ str.sePrice }}</span></label>
+            <label class="seg-opt"><input type="radio" name="sfe-sort" checked="{{ sortNewest }}" onChange="{{ pickNewest }}"><span>{{ str.seNewest }}</span></label>
+          </div>
+        </div>
+
+        <sc-if value="{{ hasFacets }}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: {{ padChips }}; border-bottom: 1px solid var(--color-divider);">
+            <span style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-700); margin-inline-end: 4px;">{{ str.seNarrowBy }}</span>
+            <sc-for list="{{ facets }}" as="facet" hint-placeholder-count="3">
+              <button class="tag" style="{{ facet.style }}" onClick="{{ facet.toggle }}">{{ facet.label }}</button>
+            </sc-for>
+            <sc-if value="{{ hasActiveFacet }}" hint-placeholder-val="{{ false }}">
+              <button class="btn btn-ghost" style="font-size: 12px;" onClick="{{ clearFilters }}">{{ str.seClearFilters }}</button>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <div style="display: grid; grid-template-columns: {{ resultCols }}; gap: 32px 24px; padding: {{ padGrid }};">
+          <sc-for list="{{ results }}" as="item" hint-placeholder-count="6">
+            <button onClick="{{ goProduct }}" style="appearance: none; border: 0; background: transparent; padding: 0; margin: 0; font: inherit; color: inherit; text-align: start; cursor: pointer; display: block; width: 100%;" style-hover="opacity: 0.78;">
+              <div style="aspect-ratio: 4 / 5; background: var(--color-surface);"><img src="{{ item.src }}" alt="{{ item.name }}" style="width: 100%; height: 100%; object-fit: cover; display: block;"></div>
+              <div style="padding-top: 14px; display: flex; flex-direction: column; gap: 4px;">
+                <span style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-700);">{{ item.kickerLabel }}</span>
+                <span style="font-family: var(--font-heading); font-weight: 700; font-size: 16px;">{{ item.name }}</span>
+                <span style="font-size: 14px;">{{ item.price }}</span>
+              </div>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- 3 — NO RESULTS -->
+    <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width: 1760px; margin: 0 auto; padding: {{ padPanel }};">
+        <div style="max-width: 560px;">
+          <div style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 16px;">{{ str.seNoMatches }}</div>
+          <h1 style="font-size: {{ h1Size }}; margin: 0 0 8px;">{{ nothingFor }}</h1>
+          <p style="margin: 0 0 28px; font-size: 14px; color: var(--color-neutral-800); text-wrap: pretty;">{{ str.seEmptyLead }}</p>
+
+          <div style="border-top: 1px solid var(--color-divider); padding-top: 24px;">
+            <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 14px;">{{ str.seDidYouMean }}</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px;">
+              <button class="btn btn-secondary" style="min-height: {{ tapH }};" onClick="{{ searchJersey }}">jersey</button>
+              <button class="btn btn-secondary" style="min-height: {{ tapH }};" onClick="{{ searchShell }}">shell</button>
+              <button class="btn btn-secondary" style="min-height: {{ tapH }};" onClick="{{ searchGradeA }}">grade a</button>
+            </div>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+              <button class="btn btn-primary" style="min-height: {{ tapH }};" onClick="{{ goPlp }}">{{ str.seBrowseEverything }}</button>
+              <button class="btn btn-ghost" style="min-height: {{ tapH }};">{{ str.seAskWorkshop }}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+  </div>
+
+  <dc-import name="Blocks" brand="shift" block="footer" device="{{ device }}" on-navigate="{{ navigateOut }}" hint-size="100%,420px"></dc-import>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900},&quot;forceScreen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;&quot;,&quot;idle&quot;,&quot;results&quot;,&quot;empty&quot;],&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;}}">
+
+class Component extends DCLogic {
+  state = {
+    screen: this.queryScreen() || this.props.forceScreen || 'idle',
+    query: this.initQuery(),
+    sort: 'relevance',
+    facet: '',
+    busy: false,
+  };
+
+  // embedded hands us onExit; standalone falls through to the SHIFT shop file itself
+  exit(dest) {
+    const f = this.props.onExit;
+    if (typeof f === 'function') return f(dest);
+    if (typeof window === 'undefined') return;
+    if (dest === 'signin') { window.location.href = 'ShiftLogin.dc.html'; return; }
+    if (dest === 'checkout') { window.location.href = 'ShiftShop.dc.html?screen=checkout'; return; }
+    if (dest === 'jerseys' || dest === 'outerwear' || dest === 'accessories') { window.location.href = 'ShiftShop.dc.html?screen=plp&cat=' + dest; return; }
+    window.location.href = 'ShiftShop.dc.html?screen=plp';
+  }
+
+  queryScreen() {
+    if (typeof window === 'undefined') return '';
+    const m = /[?&]screen=([a-z]+)/.exec(window.location.search || '');
+    return m ? m[1] : '';
+  }
+
+  initQuery() {
+    if (this.props.initialQuery) return this.props.initialQuery;
+    const s = this.queryScreen() || this.props.forceScreen || 'idle';
+    if (s === 'results') return 'jersey';
+    if (s === 'empty') return 'aero winter xl';
+    return '';
+  }
+
+  componentDidMount() {
+    this.onResize = () => this.setState({ vw: window.innerWidth });
+    window.addEventListener('resize', this.onResize);
+    this.onResize();
+    if (this.props.initialQuery) this.search(this.props.initialQuery);
+    const attach = () => {
+      const s = window.BridgeLocale;
+      if (!s) { this._lRetry = setTimeout(attach, 60); return; }
+      this._lUnsub = s.subscribe(() => this.setState({ localeTick: (this.state.localeTick || 0) + 1 }));
+      this.setState({ localeTick: (this.state.localeTick || 0) + 1 });
+    };
+    attach();
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onResize);
+    clearTimeout(this._lRetry);
+    if (this._lUnsub) this._lUnsub();
+  }
+
+  // the graded-stock catalogue this page searches — same pieces ShiftShop lists
+  catalogue() {
+    const J = 'bridge-jerseys/', O = 'bridge-outerwear/';
+    return [
+      { src: J + 'M01.jpeg', kicker: 'Jerseys · Grade A', name: 'Cadence Roll-Neck', price: '£29', tags: 'jersey roll neck grade a cadence' },
+      { src: O + 'mens-featherweight-shell-forest.jpeg', kicker: 'Outerwear · Grade B', name: 'Featherweight Shell — Forest', price: '£64', tags: 'shell outerwear grade b featherweight forest' },
+      { src: J + 'W01.jpeg', kicker: 'Jerseys · Grade A', name: 'Deco Jersey — Lagoon', price: '£46', tags: 'jersey deco grade a lagoon' },
+      { src: J + 'M03.jpeg', kicker: 'Jerseys · Grade B', name: 'Magma Jersey — Ember', price: '£42', tags: 'jersey magma grade b ember' },
+      { src: O + 'womens-swirl-thermal-jacket-teal.jpeg', kicker: 'Outerwear · Grade A', name: 'Swirl Thermal Jacket — Teal', price: '£32', tags: 'thermal jacket outerwear grade a swirl teal' },
+      { src: J + 'W07.jpeg', kicker: 'Jerseys · Grade C', name: 'Tapestry Jersey — Sovereign', price: '£38', tags: 'jersey tapestry grade c sovereign' },
+      { src: J + 'M07.jpeg', kicker: 'Jerseys · Grade B', name: 'Series 01 Jersey — Cobalt', price: '£36', tags: 'jersey series 01 grade b cobalt' },
+      { src: 'bridge/A13-merino-neck-warmer-navy.jpeg', kicker: 'Accessories · Grade B', name: 'Merino Neck Warmer', price: '£7', tags: 'neck warmer accessories grade b merino' },
+    ];
+  }
+
+  matches(q) {
+    const term = (q || '').toLowerCase().trim();
+    if (!term) return [];
+    const words = term.split(/\s+/);
+    return this.catalogue().filter((item) => {
+      const hay = (item.name + ' ' + item.kicker + ' ' + item.tags).toLowerCase();
+      return words.every((w) => hay.indexOf(w) !== -1);
+    });
+  }
+
+  set(patch) { this.setState(patch); }
+
+  search(term) {
+    const q = (term === undefined ? this.state.query : term).trim();
+    if (!q) return this.setState({ screen: 'idle', query: '' });
+    const found = this.matches(q);
+    this.setState({ busy: true });
+    setTimeout(() => this.setState({ busy: false, query: q, facet: '', screen: found.length ? 'results' : 'empty' }), 450);
+  }
+
+  facetList(found) {
+    const groups = [];
+    found.forEach((item) => {
+      const g = item.kicker.split(' · ')[0];
+      if (groups.indexOf(g) === -1) groups.push(g);
+    });
+    return groups;
+  }
+
+  sortResults(list) {
+    const by = this.state.sort;
+    const out = list.slice();
+    if (by === 'price') out.sort((a, b) => Number(a.price.replace(/[^0-9.]/g, '')) - Number(b.price.replace(/[^0-9.]/g, '')));
+    if (by === 'newest') out.reverse();
+    return out;
+  }
+
+  renderVals() {
+    const s = this.state;
+    const vw = s.vw || (typeof window !== 'undefined' ? window.innerWidth : 1280);
+    const mobile = vw < 720;
+    const found = this.matches(s.query);
+    const groups = this.facetList(found);
+    const shown = s.facet && groups.indexOf(s.facet) !== -1 ? found.filter((i) => i.kicker.indexOf(s.facet) === 0) : found;
+
+    const L = window.BridgeLocale;
+    const str = L ? L.strings() : {};
+    const fmt = L ? L.fmt : ((x) => x);
+    const countLabel = shown.length === 1 ? str.seResultOne : fmt(str.seResultMany, shown.length);
+    return {
+      str: str,
+      resultLine: fmt(str.seForQuery, countLabel, s.query),
+      nothingFor: fmt(str.seNothingFor, s.query),
+
+      device: mobile ? 'mobile' : 'desktop',
+      padBar: mobile ? '12px 16px' : '18px clamp(16px, 5vw, 64px)',
+      padPanel: mobile ? '24px 16px 32px' : '40px clamp(16px, 5vw, 64px)',
+      padToolbar: mobile ? '14px 16px' : '18px clamp(16px, 5vw, 64px)',
+      padChips: mobile ? '12px 16px' : '16px clamp(16px, 5vw, 64px)',
+      padGrid: mobile ? '20px 16px 32px' : '32px clamp(16px, 5vw, 64px) 56px',
+      idleCols: mobile ? '1fr' : 'minmax(0, 1fr) minmax(0, 1fr)',
+      catCols: mobile ? '1fr' : 'minmax(0, 1fr) minmax(0, 1fr)',
+      resultCols: mobile ? 'minmax(0, 1fr) minmax(0, 1fr)' : 'repeat(4, minmax(0, 1fr))',
+      borderRight: mobile ? '0' : '1px solid var(--color-divider)',
+      cardH: mobile ? '210px' : '300px',
+      querySize: mobile ? '18px' : '22px',
+      h1Size: mobile ? '30px' : '40px',
+      tapH: mobile ? '48px' : '46px',
+      fieldH: mobile ? '44px' : '40px',
+      rowH: mobile ? '52px' : '42px',
+      segStyle: mobile ? 'min-height: 48px; width: 100%;' : 'min-height: 46px;',
+
+      isIdle: s.screen === 'idle',
+      isResults: s.screen === 'results',
+      isEmpty: s.screen === 'empty',
+
+      query: s.query,
+      hasQuery: !!s.query,
+      results: this.sortResults(shown).map((i) => Object.assign({}, i, { kickerLabel: i.kicker })),
+      facets: groups.map((g) => ({
+        label: g + ' (' + found.filter((i) => i.kicker.indexOf(g) === 0).length + ')',
+        style: s.facet === g
+          ? 'background: var(--color-accent); color: var(--color-bg); border: 1px solid var(--color-accent); cursor: pointer;'
+          : 'background: transparent; color: var(--color-text); border: 1px solid var(--color-divider); cursor: pointer;',
+        toggle: () => this.set({ facet: s.facet === g ? '' : g }),
+      })),
+      hasFacets: groups.length > 1,
+      hasActiveFacet: !!s.facet,
+      wideBar: !mobile,
+      narrowBar: mobile,
+      onKey: (e) => { if (e.key === 'Enter') this.search(); },
+      searchLabel: s.busy ? str.searching : str.search,
+
+      sortRelevance: s.sort === 'relevance', sortPrice: s.sort === 'price', sortNewest: s.sort === 'newest',
+      pickRelevance: () => this.set({ sort: 'relevance' }),
+      pickPrice: () => this.set({ sort: 'price' }),
+      pickNewest: () => this.set({ sort: 'newest' }),
+
+      onQuery: (e) => this.set({ query: e.target.value }),
+      clearQuery: () => this.set({ query: '', screen: 'idle' }),
+      runSearch: () => this.search(),
+      searchJersey: () => this.search('jersey'),
+      searchShell: () => this.search('shell'),
+      searchRoll: () => this.search('roll neck'),
+      searchGradeA: () => this.search('grade a'),
+      searchNeck: () => this.search('neck warmer'),
+      clearRecent: () => this.set({ screen: 'idle' }),
+      clearFilters: () => this.set({ facet: '' }),
+
+      navigateOut: (dest) => this.exit(dest),
+      goPlp: () => this.exit('plp'),
+      goJerseys: () => this.exit('jerseys'),
+      goOuterwear: () => this.exit('outerwear'),
+      goAccessories: () => this.exit('accessories'),
+      goProduct: () => this.exit('product'),
+    };
+  }
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="brands.css">
+<script src="locale.js"></script>
+</helmet>
+
+<div style="font-family: var(--font-body); color: var(--color-text);">
+
+  <!-- ===== TRIGGER — utility-bar / footer button ===== -->
+  <sc-if value="{{ isTrigger }}" hint-placeholder-val="{{ true }}">
+    <div style="display: inline-flex;">
+      <button aria-haspopup="dialog" aria-expanded="{{ open }}" onClick="{{ openPanel }}" style="{{ triggerStyle }}">
+        <span aria-hidden="true" style="{{ flagStyle }}">{{ currentFlag }}</span>
+        <span>{{ triggerLabel }}</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square" style="flex: none; display: block; opacity: 0.6;"><path d="m5 9 7 7 7-7"/></svg>
+      </button>
+    </div>
+  </sc-if>
+
+  <!-- ===== INLINE — full-width row for mobile menu ===== -->
+  <sc-if value="{{ isInline }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <button class="btn btn-ghost" style="justify-content: flex-start; min-height: 52px; width: 100%; gap: 10px;" onClick="{{ openPanel }}">
+        <span aria-hidden="true" style="{{ flagStyleLarge }}">{{ currentFlag }}</span>
+        <span>{{ inlineLabel }}</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" style="flex: none; margin-inline-start: auto; opacity: 0.5;"><path d="m9 5 7 7-7 7"/></svg>
+      </button>
+    </div>
+  </sc-if>
+
+  <!-- ===== PANEL — country + language dialog ===== -->
+  <sc-if value="{{ showPanel }}" hint-placeholder-val="{{ false }}">
+    <div role="dialog" aria-modal="true" aria-label="{{ str.localeTitle }}" dir="{{ pendingDir }}" style="position: fixed; inset: 0; z-index: 900; background: rgba(32,30,29,0.55); isolation: isolate; display: flex; align-items: {{ scrimAlign }}; justify-content: center; padding: {{ scrimPad }};" onClick="{{ scrimClick }}">
+      <div onClick="{{ stop }}" style="background: var(--color-bg, #ffffff); color: var(--color-text, #201e1d); box-shadow: 0 24px 64px rgba(32,30,29,0.35); border: 2px solid var(--color-text); width: 100%; max-width: {{ panelMax }}; max-height: {{ panelMaxH }}; display: flex; flex-direction: column; overflow: hidden;">
+
+        <div style="display: flex; align-items: flex-start; gap: 16px; padding: 24px 24px 20px; border-bottom: 2px solid var(--color-divider); flex: none;">
+          <div style="min-width: 0;">
+            <div style="font-family: var(--font-heading); font-weight: 800; font-size: 22px; letter-spacing: -0.01em; line-height: 1.15;">{{ str.localeTitle }}</div>
+            <p style="margin: 6px 0 0; font-size: 13px; color: var(--color-neutral-700); text-wrap: pretty; max-width: 52ch;">{{ str.localeLead }}</p>
+          </div>
+          <button class="btn btn-icon btn-ghost" aria-label="{{ str.close }}" style="margin-inline-start: auto; flex: none; min-width: 44px; min-height: 44px;" onClick="{{ closePanel }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M5 5l14 14M19 5 5 19"/></svg></button>
+        </div>
+
+        <div style="flex: 1; min-height: 0; display: grid; grid-template-columns: {{ bodyCols }}; overflow: hidden;">
+
+          <div style="min-height: 0; overflow-y: auto; border-inline-end: {{ splitRule }}; border-bottom: {{ stackRule }}; padding: 18px 24px 24px;">
+            <div style="font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 12px;">{{ str.country }}</div>
+            <sc-for list="{{ countryGroups }}" as="grp" hint-placeholder-count="3">
+              <div style="margin-bottom: 18px;">
+                <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-text); opacity: 0.45; padding-bottom: 6px; border-bottom: 1px solid var(--color-divider); margin-bottom: 4px;">{{ grp.region }}</div>
+                <sc-for list="{{ grp.items }}" as="c" hint-placeholder-count="4">
+                  <button aria-pressed="{{ c.selected }}" onClick="{{ c.select }}" style="{{ c.style }}">
+                    <span aria-hidden="true" style="{{ c.flagStyle }}">{{ c.flag }}</span>
+                    <span style="font-weight: {{ c.weight }};">{{ c.label }}</span>
+                    <span style="margin-inline-start: auto; font-size: 11px; letter-spacing: 0.06em; color: var(--color-neutral-700); white-space: nowrap;">{{ c.currency }}</span>
+                    <span style="{{ c.tickStyle }}"></span>
+                  </button>
+                </sc-for>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="min-height: 0; overflow-y: auto; padding: 18px 24px 24px;">
+            <div style="font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 12px;">{{ str.language }}</div>
+            <div style="display: flex; flex-direction: column;">
+              <sc-for list="{{ languageRows }}" as="l" hint-placeholder-count="7">
+                <button aria-pressed="{{ l.selected }}" onClick="{{ l.select }}" style="{{ l.style }}">
+                  <span dir="{{ l.dir }}" style="font-weight: {{ l.weight }};">{{ l.native }}</span>
+                  <span style="margin-inline-start: auto; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-neutral-700);">{{ l.code }}</span>
+                  <span style="{{ l.tickStyle }}"></span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+
+        </div>
+
+        <div style="flex: none; border-top: 2px solid var(--color-divider); padding: 16px 24px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <span style="font-size: 12px; color: var(--color-neutral-700);">{{ pendingSummary }}</span>
+          <div style="margin-inline-start: auto; display: flex; gap: 8px;">
+            <button class="btn btn-secondary" style="min-height: 44px;" onClick="{{ closePanel }}">{{ str.cancel }}</button>
+            <button class="btn btn-primary" style="min-height: 44px;" onClick="{{ apply }}">{{ str.apply }}</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:80},&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;trigger&quot;,&quot;inline&quot;],&quot;default&quot;:&quot;trigger&quot;,&quot;tsType&quot;:&quot;'trigger' | 'inline'&quot;,&quot;section&quot;:&quot;Locale&quot;},&quot;tone&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;'light' | 'dark'&quot;,&quot;section&quot;:&quot;Locale&quot;},&quot;device&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;desktop&quot;,&quot;mobile&quot;],&quot;default&quot;:&quot;desktop&quot;,&quot;tsType&quot;:&quot;'desktop' | 'mobile'&quot;,&quot;section&quot;:&quot;Locale&quot;},&quot;onChange&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(next: { country: string; language: string }) =&gt; void&quot;}}">
+class Component extends DCLogic {
+  state = { open: false, pendingCountry: null, pendingLanguage: null, tick: 0 };
+
+  store() { return window.BridgeLocale; }
+
+  componentDidMount() {
+    const attach = () => {
+      const s = this.store();
+      if (!s) { this._retry = setTimeout(attach, 60); return; }
+      this._unsub = s.subscribe(() => this.setState({ tick: this.state.tick + 1 }));
+      this.setState({ tick: this.state.tick + 1 });
+    };
+    attach();
+  }
+  componentWillUnmount() {
+    clearTimeout(this._retry);
+    if (this._unsub) this._unsub();
+  }
+
+  current() {
+    const s = this.store();
+    if (s) return s.get();
+    return { countryCode: 'GB', languageCode: 'en', dir: 'ltr', isRtl: false, t: {}, country: { name: 'United Kingdom', currency: 'GBP £' }, language: { native: 'English', code: 'en', dir: 'ltr' } };
+  }
+
+  open() {
+    const c = this.current();
+    this.setState({ open: true, pendingCountry: c.countryCode, pendingLanguage: c.languageCode });
+  }
+
+  renderVals() {
+    const store = this.store();
+    const cur = this.current();
+    const str = cur.t && cur.t.localeTitle ? cur.t : (store ? store.strings() : {});
+    const variant = this.props.variant || 'trigger';
+    const tone = this.props.tone || 'light';
+    const mobile = this.props.device === 'mobile';
+
+    const countries = store ? store.COUNTRIES : [];
+    const languages = store ? store.LANGUAGES : [];
+    const pc = this.state.pendingCountry || cur.countryCode;
+    const pl = this.state.pendingLanguage || cur.languageCode;
+    const pLang = languages.filter((l) => l.code === pl)[0] || { dir: 'ltr', native: 'English' };
+    const pCountry = countries.filter((c) => c.code === pc)[0] || { name: '', currency: '' };
+    const nameOf = (c) => (pl === 'ar' && c.nameAr ? c.nameAr : c.name);
+
+    const rowBase = (selected) =>
+      'appearance: none; background: ' + (selected ? 'var(--color-surface)' : 'transparent') +
+      '; border: none; border-bottom: 1px solid var(--color-divider); cursor: pointer; width: 100%;' +
+      ' display: flex; align-items: center; gap: 10px; min-height: 46px; padding: 0 4px; font: inherit;' +
+      ' font-size: 14px; color: var(--color-text); text-align: start;';
+    const tick = (selected) =>
+      'flex: none; width: 10px; height: 10px; border: 2px solid ' + (selected ? 'var(--color-accent)' : 'var(--color-divider)') +
+      '; background: ' + (selected ? 'var(--color-accent)' : 'transparent') + ';';
+
+    const regions = [];
+    countries.forEach((c) => { if (regions.indexOf(c.region) < 0) regions.push(c.region); });
+
+    const REGION_KEY = { Europe: 'regEurope', Americas: 'regAmericas', 'Middle East': 'regMiddleEast', 'Asia Pacific': 'regAsiaPacific' };
+    const onDark = tone === 'dark';
+    const flagFont = store ? store.FLAG_FONT : 'sans-serif';
+    const flagCss = (size) => 'flex: none; font-family: ' + flagFont + '; font-size: ' + size +
+      '; line-height: 1; letter-spacing: 0; display: inline-block;';
+
+    return {
+      currentFlag: store ? store.flag(cur.countryCode) : '',
+      flagStyle: flagCss(onDark ? '13px' : '14px'),
+      flagStyleLarge: flagCss('18px'),
+      isTrigger: variant === 'trigger',
+      isInline: variant === 'inline',
+      showPanel: this.state.open,
+      open: this.state.open,
+      str: str,
+
+      triggerLabel: (cur.countryCode || 'GB') + ' · ' + (cur.language && cur.language.native ? cur.language.native : 'English'),
+      inlineLabel: (str.shippingTo || 'Shipping to') + ': ' + (store ? store.countryName(cur.country) : 'United Kingdom') + ' · ' + (cur.language.native || 'English'),
+      triggerStyle:
+        'appearance: none; background: transparent; cursor: pointer; font: inherit; display: inline-flex;' +
+        ' align-items: center; gap: 7px; padding: 4px 6px; margin: -4px -6px; border: 1px solid transparent;' +
+        ' color: ' + (onDark ? 'var(--color-bg)' : 'var(--color-text)') + ';' +
+        ' font-size: ' + (onDark ? '11px' : '12px') + '; letter-spacing: ' + (onDark ? '0.1em' : '0.02em') + ';' +
+        (onDark ? ' text-transform: uppercase;' : '') +
+        ' min-height: 28px; white-space: nowrap;',
+
+      openPanel: () => this.open(),
+      closePanel: () => this.setState({ open: false }),
+      stop: (e) => e.stopPropagation(),
+      scrimClick: () => this.setState({ open: false }),
+
+      scrimAlign: mobile ? 'flex-end' : 'center',
+      scrimPad: mobile ? '0' : '4vh 24px',
+      panelMax: mobile ? '100%' : '760px',
+      panelMaxH: mobile ? '100%' : 'min(640px, 88vh)',
+      bodyCols: mobile ? 'minmax(0, 1fr)' : 'minmax(0, 1.35fr) minmax(0, 1fr)',
+      splitRule: mobile ? 'none' : '2px solid var(--color-divider)',
+      stackRule: mobile ? '2px solid var(--color-divider)' : 'none',
+      pendingDir: pLang.dir || 'ltr',
+      pendingSummary: (str.shippingTo || 'Shipping to') + ' ' + nameOf(pCountry) + ' · ' + pCountry.currency,
+
+      countryGroups: regions.map((region) => ({
+        region: str[REGION_KEY[region]] || region,
+        items: countries.filter((c) => c.region === region).map((c) => ({
+          label: nameOf(c),
+          flag: store ? store.flag(c.code) : '',
+          flagStyle: flagCss('16px'),
+          currency: c.currency,
+          selected: c.code === pc,
+          weight: c.code === pc ? '700' : '400',
+          style: rowBase(c.code === pc),
+          tickStyle: tick(c.code === pc),
+          select: () => this.setState({ pendingCountry: c.code }),
+        })),
+      })),
+
+      languageRows: languages.map((l) => ({
+        native: l.native,
+        code: l.code,
+        dir: l.dir,
+        selected: l.code === pl,
+        weight: l.code === pl ? '700' : '400',
+        style: rowBase(l.code === pl),
+        tickStyle: tick(l.code === pl),
+        select: () => this.setState({ pendingLanguage: l.code }),
+      })),
+
+      apply: () => {
+        if (store) store.set({ country: pc, language: pl });
+        this.setState({ open: false });
+        const fn = this.props.onChange;
+        if (typeof fn === 'function') fn({ country: pc, language: pl });
+      },
+    };
+  }
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="brands.css">
+<script src="locale.js"></script>
+<style>
+  body { margin: 0; }
+  a { color: var(--color-accent); }
+  a:hover { color: var(--color-accent-700); }
+</style>
+</helmet>
+
+<sc-if value="{{ isSingle }}" hint-placeholder-val="{{ true }}">
+<div data-brand="bridge" style="background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); min-height: var(--nl-min-h, 100vh); display: flex; flex-direction: column;">
+
+  <dc-import name="Blocks" brand="bridge" block="nav" device="{{ device }}" bag-count="0" on-navigate="{{ navigateOut }}" hint-size="100%,100px"></dc-import>
+
+  <div style="flex: 1; display: grid; grid-template-columns: {{ splitCols }};">
+
+    <!-- LEFT: the offer -->
+    <div style="border-inline-end: 1px solid var(--color-divider); display: flex; flex-direction: column;">
+      <div style="flex: none; height: {{ plateImgH }}; overflow: hidden;">
+        <img src="bridge/D3-sunlit-lane.jpeg" alt="A sunlit lane" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+      </div>
+      <div style="padding: {{ padPlate }}; border-top: 1px solid var(--color-divider);">
+        <div style="font-family: var(--font-heading); font-weight: 800; font-size: {{ plateSize }}; line-height: 1.02; letter-spacing: -0.02em; max-width: 22ch;">{{ str.nlPlateHead }}</div>
+        <div style="border-top: 1px solid var(--color-divider); margin-top: 20px; padding-top: 16px; display: grid; grid-template-columns: {{ statCols }}; gap: 16px;">
+          <div><div style="font-family: var(--font-heading); font-weight: 800; font-size: 24px;">2×</div><div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-700);">{{ str.nlAMonth }}</div></div>
+          <div><div style="font-family: var(--font-heading); font-weight: 800; font-size: 24px;">14k</div><div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-700);">{{ str.nlReaders }}</div></div>
+          <div><div style="font-family: var(--font-heading); font-weight: 800; font-size: 24px;">0</div><div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-700);">{{ str.nlAds }}</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: the flow -->
+    <div style="display: flex; flex-direction: column;">
+
+    <div style="padding: {{ padRail }}; border-bottom: 1px solid var(--color-divider); display: flex; align-items: center; gap: 28px; flex-wrap: wrap;">
+      <div style="flex: 1; min-width: 240px;">
+        <dc-import name="Components" comp="stepper" steps="{{ flowSteps }}" current-step="{{ flowStep }}" hint-size="100%,54px"></dc-import>
+      </div>
+      <button class="btn btn-ghost" style="flex: none;" onClick="{{ reset }}">{{ str.restartFlow }}</button>
+    </div>
+
+      <div style="flex: 1; display: flex; align-items: flex-start; padding: {{ padForm }};">
+
+        <!-- 1 — SIGN UP -->
+        <sc-if value="{{ isForm }}" hint-placeholder-val="{{ true }}">
+          <div style="width: 100%; max-width: 460px;">
+            <div style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 16px;">{{ str.nlFreeKicker }}</div>
+            <h1 style="font-size: {{ h1Size }}; margin: 0 0 8px;">{{ str.nlTitle }}</h1>
+            <p style="margin: 0 0 32px; font-size: 14px; color: var(--color-neutral-800); text-wrap: pretty;">{{ str.nlLead }}</p>
+
+            <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}">
+              <div class="alert alert-error" style="margin-bottom: 24px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></svg><p class="alert-body">{{ error }}</p></div>
+            </sc-if>
+
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+              <div class="field">
+                <label for="nl-email">{{ str.emailAddress }}</label>
+                <input class="input" id="nl-email" type="email" placeholder="you@example.com" style="min-height: {{ fieldH }};" value="{{ email }}" onChange="{{ onEmail }}">
+              </div>
+              <div class="field">
+                <label for="nl-name">{{ str.nlFirstOptional }}</label>
+                <input class="input" id="nl-name" placeholder="Anni" style="min-height: {{ fieldH }};" value="{{ name }}" onChange="{{ onName }}">
+              </div>
+
+              <div>
+                <div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 12px;">{{ str.nlWhatSend }}</div>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                  <label class="radio" style="min-height: {{ rowH }};"><input type="checkbox" checked="{{ wantRoutes }}" onChange="{{ toggleRoutes }}"><span class="dot"></span><span>{{ str.nlRoutes }}</span></label>
+                  <label class="radio" style="min-height: {{ rowH }};"><input type="checkbox" checked="{{ wantKit }}" onChange="{{ toggleKit }}"><span class="dot"></span><span>{{ str.nlNewKit }}</span></label>
+                  <label class="radio" style="min-height: {{ rowH }};"><input type="checkbox" checked="{{ wantWorkshop }}" onChange="{{ toggleWorkshop }}"><span class="dot"></span><span>{{ str.nlWorkshop }}</span></label>
+                </div>
+              </div>
+
+              <div>
+                <div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 12px;">{{ str.nlHowOften }}</div>
+                <div class="seg" style="{{ segStyle }}">
+                  <label class="seg-opt"><input type="radio" name="nl-freq" checked="{{ freqFort }}" onChange="{{ pickFort }}"><span>{{ str.nlFortnightly }}</span></label>
+                  <label class="seg-opt"><input type="radio" name="nl-freq" checked="{{ freqMonth }}" onChange="{{ pickMonth }}"><span>{{ str.nlMonthly }}</span></label>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: 32px;">
+              <button class="btn btn-primary" style="min-height: {{ tapH }};" onClick="{{ submitForm }}" disabled="{{ busy }}">{{ formLabel }}</button>
+            </div>
+            <p style="margin: 16px 0 0; font-size: 12px; color: var(--color-neutral-700); max-width: 46ch;">{{ str.nlPrivacy1 }}<a href="#">{{ str.nlPrivacyLink }}</a>{{ str.nlPrivacy2 }}</p>
+          </div>
+        </sc-if>
+
+        <!-- 2 — CONFIRM -->
+        <sc-if value="{{ isConfirm }}" hint-placeholder-val="{{ false }}">
+          <div style="width: 100%; max-width: 460px;">
+            <div style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 16px;">{{ str.nlOneStep }}</div>
+            <h1 style="font-size: {{ h1Size }}; margin: 0 0 8px;">{{ str.nlCheckInbox }}</h1>
+            <p style="margin: 0 0 28px; font-size: 14px; color: var(--color-neutral-800); text-wrap: pretty;">{{ confirmLead }}</p>
+
+            <div style="border-top: 1px solid var(--color-divider); border-bottom: 1px solid var(--color-divider); padding: 18px 0; display: flex; align-items: center; gap: 14px;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2" stroke-linecap="square" style="flex: none;"><path d="M3 6h18v12H3z"/><path d="m3 7 9 6 9-6"/></svg>
+              <div style="font-size: 13px;">{{ str.nlSentJust }}</div>
+            </div>
+
+            <div style="margin-top: 28px; display: flex; gap: 12px; flex-wrap: wrap;">
+              <button class="btn btn-primary" style="min-height: {{ tapH }};" onClick="{{ confirmIt }}" disabled="{{ busy }}">{{ confirmLabel }}</button>
+              <button class="btn btn-ghost" style="min-height: {{ tapH }};" onClick="{{ backToForm }}">{{ str.nlChangeAddress }}</button>
+            </div>
+            <p style="margin: 20px 0 0; font-size: 12px; color: var(--color-neutral-700);">{{ str.nlNothing1 }}<a href="#">{{ str.nlSendAgain }}</a>{{ str.nlNothing2 }}</p>
+          </div>
+        </sc-if>
+
+        <!-- 3 — SUBSCRIBED -->
+        <sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+          <div style="width: 100%; max-width: 480px;">
+            <div style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 16px;">{{ str.nlSubscribedStep }}</div>
+            <h1 style="font-size: {{ h1Size }}; margin: 0 0 8px;">{{ greeting }}</h1>
+            <p style="margin: 0 0 32px; font-size: 14px; color: var(--color-neutral-800);">{{ str.nlDoneLead }}</p>
+
+            <div style="border-top: 1px solid var(--color-divider); display: grid; grid-template-columns: 130px minmax(0, 1fr); font-size: 13px;">
+              <span style="padding: 13px 0; border-bottom: 1px solid var(--color-divider); font-size: 12px; color: var(--color-neutral-700);">{{ str.nlAddress }}</span>
+              <span style="padding: 13px 0; border-bottom: 1px solid var(--color-divider);">{{ email }}</span>
+              <span style="padding: 13px 0; border-bottom: 1px solid var(--color-divider); font-size: 12px; color: var(--color-neutral-700);">{{ str.nlTopics }}</span>
+              <span style="padding: 13px 0; border-bottom: 1px solid var(--color-divider);">{{ topicSummary }}</span>
+              <span style="padding: 13px 0; border-bottom: 1px solid var(--color-divider); font-size: 12px; color: var(--color-neutral-700);">{{ str.nlFrequency }}</span>
+              <span style="padding: 13px 0; border-bottom: 1px solid var(--color-divider);">{{ freqLabel }}</span>
+            </div>
+
+            <div style="margin-top: 32px; display: flex; flex-direction: column; gap: 12px; max-width: 320px;">
+              <button class="btn btn-primary btn-block" style="min-height: {{ tapH }};" onClick="{{ exitToShop }}"><span>{{ str.nlHaveLook }}</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+              <button class="btn btn-secondary btn-block" style="min-height: {{ tapH }};" onClick="{{ backToForm }}"><span>{{ str.nlChangeWhat }}</span></button>
+            </div>
+          </div>
+        </sc-if>
+
+      </div>
+    </div>
+
+  </div>
+
+  <dc-import name="Blocks" brand="bridge" block="footer" device="{{ device }}" on-navigate="{{ navigateOut }}" hint-size="100%,380px"></dc-import>
+</div>
+</sc-if>
+
+<sc-if value="{{ isBoth }}" hint-placeholder-val="{{ false }}">
+  <div data-brand="bridge" style="background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); padding: 40px; min-height: 100vh;">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; border-bottom: 1px solid var(--color-divider); padding-bottom: 18px; margin-bottom: 40px; flex-wrap: wrap;">
+      <div>
+        <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent-700); margin-bottom: 10px;">Bridge — journal signup</div>
+        <h1 style="margin: 0 0 6px; font-size: 46px; line-height: 0.96; letter-spacing: -0.02em;">Journal — all screens</h1>
+        <p style="margin: 0; font-size: 13px; color: var(--color-neutral-800); max-width: 64ch;">Signup, double opt-in and welcome, both breakpoints, full pages end to end.</p>
+      </div>
+      <div style="font-size: 12px; color: var(--color-neutral-700); text-align: end; flex: none;">Desktop 1440 at 0.45×<br>Mobile 390 at 1× — full height, no scroll</div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 56px;">
+      <sc-for list="{{ screens }}" as="s" hint-placeholder-count="3">
+        <div>
+          <div style="display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid var(--color-divider); padding-bottom: 10px; margin-bottom: 18px;">
+            <span style="font-family: var(--font-heading); font-weight: 800; font-size: 13px; background: var(--color-text); color: var(--color-bg); padding: 2px 8px;">{{ s.index }}</span>
+            <span style="font-family: var(--font-heading); font-weight: 800; font-size: 20px;">{{ s.label }}</span>
+            <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700);">{{ s.key }}</span>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 28px; flex-wrap: wrap;">
+            <div style="flex: none;">
+              <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 8px;">Desktop</div>
+              <div style="width: 648px; overflow: hidden; border: 1px solid var(--color-divider); background: var(--color-bg);">
+                <div data-scale="0.45" style="width: 1440px; transform: scale(0.45); transform-origin: top left;">
+                  <iframe src="{{ s.urlD }}" title="{{ s.label }} desktop" scrolling="no" onLoad="{{ fitFrame }}" style="width: 1440px; height: 900px; border: 0; display: block;"></iframe>
+                </div>
+              </div>
+            </div>
+            <div style="flex: none;">
+              <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 8px;">Mobile — 390</div>
+              <div style="width: 390px; border: 1px solid var(--color-divider); overflow: hidden; background: var(--color-bg);">
+                <iframe src="{{ s.urlM }}" title="{{ s.label }} mobile" scrolling="no" onLoad="{{ fitFrame }}" style="width: 390px; height: 700px; border: 0; display: block;"></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</sc-if>
+
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:880},&quot;forceScreen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;&quot;,&quot;form&quot;,&quot;confirm&quot;,&quot;done&quot;],&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;forceError&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;}}">
+class Component extends DCLogic {
+  state = {
+    screen: this.queryScreen() || this.props.forceScreen || 'form',
+    email: (this.queryScreen() || this.props.forceScreen) ? 'a.albers@example.com' : '',
+    name: (this.queryScreen() || this.props.forceScreen) ? 'Anni' : '',
+    topics: { routes: true, kit: true, workshop: false },
+    freq: 'fortnightly',
+    error: this.props.forceError || '',
+    busy: false,
+  };
+
+  queryScreen() {
+    if (typeof window === 'undefined') return '';
+    const m = /[?&]screen=([a-z]+)/.exec(window.location.search || '');
+    return m ? m[1] : '';
+  }
+
+  queryView() {
+    if (typeof window === 'undefined') return '';
+    const m = /[?&]view=(desktop|mobile|responsive)/.exec(window.location.search || '');
+    return m ? m[1] : '';
+  }
+
+
+  componentDidMount() {
+    this.onResize = () => this.setState({ vw: window.innerWidth });
+    window.addEventListener('resize', this.onResize);
+    this.onResize();
+    const attach = () => {
+      const s = window.BridgeLocale;
+      if (!s) { this._lRetry = setTimeout(attach, 60); return; }
+      this._lUnsub = s.subscribe(() => this.setState({ localeTick: (this.state.localeTick || 0) + 1 }));
+      this.setState({ localeTick: (this.state.localeTick || 0) + 1 });
+    };
+    attach();
+    this._fitTimers = [800, 2000, 4000].map((ms) => setTimeout(() => this.fitAllFrames(), ms));
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onResize);
+    clearTimeout(this._lRetry);
+    if (this._lUnsub) this._lUnsub();
+  }
+
+  set(patch) { this.setState(patch); }
+
+  wait(ms, then) {
+    this.setState({ busy: true, error: '' });
+    setTimeout(() => this.setState(Object.assign({ busy: false }, then)), ms);
+  }
+
+  step() {
+    const s = this.state.screen;
+    if (s === 'confirm') return 2;
+    if (s === 'done') return 3;
+    return 1;
+  }
+
+  stepStyle(n) {
+    const cur = this.step();
+    const active = n === cur;
+    const past = n < cur;
+    return {
+      color: active || past ? 'var(--color-text)' : 'var(--color-neutral-600)',
+      bg: active ? 'var(--color-accent)' : past ? 'var(--color-neutral-300)' : 'transparent',
+      ink: active ? 'var(--color-bg)' : 'var(--color-text)',
+    };
+  }
+
+  topicLabel() {
+    const L = window.BridgeLocale;
+    const x = L ? L.strings() : {};
+    const t = this.state.topics;
+    const names = [];
+    if (t.routes) names.push(x.nlTopicRoutes || 'Routes');
+    if (t.kit) names.push(x.nlTopicKit || 'New kit');
+    if (t.workshop) names.push(x.nlTopicWorkshop || 'Workshop');
+    return names.length ? names.join(', ') : (x.nlEverything || 'Everything');
+  }
+
+  fitAllFrames() {
+    const root = this.hostEl || document;
+    const frames = root.querySelectorAll ? root.querySelectorAll('iframe') : [];
+    for (let i = 0; i < frames.length; i++) this.fitFrame({ target: frames[i] });
+  }
+
+  fitFrame(e) {
+    const f = e.target;
+    const measure = () => {
+      try {
+        const d = f.contentDocument;
+        if (!d || !d.body) return;
+        f.style.height = '0px';
+        const h = Math.max(d.body.scrollHeight, d.documentElement ? d.documentElement.scrollHeight : 0);
+        if (!h) { f.style.height = '700px'; return; }
+        f.style.height = h + 'px';
+        const inner = f.parentElement;
+        if (inner && inner.dataset && inner.dataset.scale) {
+          const sc = parseFloat(inner.dataset.scale) || 1;
+          inner.style.height = h + 'px';
+          if (inner.parentElement) inner.parentElement.style.height = Math.round(h * sc) + 'px';
+        }
+      } catch (err) {}
+    };
+    measure();
+    setTimeout(measure, 350);
+    setTimeout(measure, 1200);
+  }
+
+  showcaseScreens() {
+    const list = [["form","Signup"],["confirm","Confirm"],["done","Welcome"]];
+    return list.map((row, i) => ({
+      key: row[0],
+      label: row[1],
+      index: (i + 1) < 10 ? '0' + (i + 1) : String(i + 1),
+      urlD: 'BridgeJournal.dc.html?view=desktop&screen=' + row[0],
+      urlM: 'BridgeJournal.dc.html?view=mobile&screen=' + row[0],
+    }));
+  }
+
+  /* the host's variant picker changes the prop after mount — mirror it into state
+     so choosing a screen in Tweaks actually moves the flow. */
+  componentDidUpdate(prev) {
+    const f = this.props.forceScreen;
+    if (f && prev.forceScreen !== f) this.setState({ screen: f });
+  }
+
+  renderVals() {
+    const s = this.state;
+    const valid = (e) => /^[^@\s]+@[^@\s.]+\.[^@\s]+$/.test(e);
+    const one = this.stepStyle(1), two = this.stepStyle(2), three = this.stepStyle(3);
+    const view = this.props.view || this.queryView() || 'responsive';
+    const vw = s.vw || (typeof window !== 'undefined' ? window.innerWidth : 1280);
+    const mobile = view === 'mobile' ? true : view === 'desktop' ? false : vw < 720;
+    const seeded = this.props.forceScreen || 'form';
+
+    const L = window.BridgeLocale;
+    const str = L ? L.strings() : {};
+    const fmt = L ? L.fmt : ((x) => x);
+    return {
+      str: str,
+      confirmLead: fmt(str.nlConfirmLead, s.email),
+      screens: this.showcaseScreens(),
+      fitFrame: (e) => this.fitFrame(e),
+      frameDesktop: 'BridgeJournal.dc.html?view=desktop&screen=' + seeded,
+      frameMobile: 'BridgeJournal.dc.html?view=mobile&screen=' + seeded,
+      isBoth: view === 'both',
+      isSingle: view !== 'both',
+
+      device: mobile ? 'mobile' : 'desktop',
+      splitCols: mobile ? '1fr' : 'minmax(0, 1fr) minmax(0, 1fr)',
+      statCols: 'repeat(3, minmax(0, 1fr))',
+      padForm: mobile ? '28px 16px 40px' : '56px 40px',
+      padPlate: mobile ? '24px 16px 28px' : '40px',
+      padPlateTop: mobile ? '18px 16px' : '32px 40px',
+      padRail: mobile ? '18px 16px' : '24px 40px',
+      h1Size: mobile ? '30px' : '40px',
+      plateSize: mobile ? '26px' : '34px',
+      plateImgH: mobile ? '180px' : '260px',
+      tapH: mobile ? '48px' : '34px',
+      fieldH: mobile ? '48px' : '38px',
+      rowH: mobile ? '44px' : 'auto',
+      segStyle: mobile ? 'min-height: 48px; width: 100%;' : 'min-height: 34px; max-width: 320px;',
+
+      flowSteps: [str.nlSignUpStep, str.nlConfirmStep, str.nlSubscribedStep],
+      flowStep: ['form', 'confirm', 'done'].indexOf(s.screen),
+      isForm: s.screen === 'form',
+      isConfirm: s.screen === 'confirm',
+      isDone: s.screen === 'done',
+
+      email: s.email, name: s.name, busy: s.busy,
+      error: s.error, hasError: !!s.error,
+      formLabel: s.busy ? str.nlSigningUp : str.nlSignMeUp,
+      confirmLabel: s.busy ? str.confirming : str.nlClicked,
+      greeting: s.name ? fmt(str.nlOnListName, s.name) : str.nlOnList,
+      topicSummary: this.topicLabel(),
+      freqLabel: s.freq === 'fortnightly' ? str.nlFortLabel : str.nlMonthLabel,
+
+      wantRoutes: s.topics.routes, wantKit: s.topics.kit, wantWorkshop: s.topics.workshop,
+      toggleRoutes: () => this.set({ topics: Object.assign({}, s.topics, { routes: !s.topics.routes }) }),
+      toggleKit: () => this.set({ topics: Object.assign({}, s.topics, { kit: !s.topics.kit }) }),
+      toggleWorkshop: () => this.set({ topics: Object.assign({}, s.topics, { workshop: !s.topics.workshop }) }),
+      freqFort: s.freq === 'fortnightly', freqMonth: s.freq === 'monthly',
+      pickFort: () => this.set({ freq: 'fortnightly' }),
+      pickMonth: () => this.set({ freq: 'monthly' }),
+
+      stepOneColor: one.color, stepOneBg: one.bg, stepOneInk: one.ink,
+      stepTwoColor: two.color, stepTwoBg: two.bg, stepTwoInk: two.ink,
+      stepThreeColor: three.color, stepThreeBg: three.bg, stepThreeInk: three.ink,
+
+      navigateOut: (dest) => {
+        const f = this.props.onExit;
+        if (typeof f === 'function') { f(dest); return; }
+        if (dest === 'men' || dest === 'women' || dest === 'accessories') { window.location.href = 'BridgeShop.dc.html?screen=plp&section=' + dest; return; }
+        if (dest === 'journal') { window.location.href = 'BridgeJournal.dc.html'; return; }
+        if (dest === 'search') { window.location.href = 'BridgeSearch.dc.html'; return; }
+        if (dest === 'signin') { window.location.href = 'BridgeLogin.dc.html'; return; }
+        if (dest === 'checkout') { window.location.href = 'BridgeShop.dc.html?screen=checkout'; return; }
+        window.location.href = 'BridgeShop.dc.html';
+      },
+      exitToShop: () => { const f = this.props.onExit; if (typeof f === 'function') f('home'); else window.location.href = 'BridgeShop.dc.html'; },
+
+      onEmail: (e) => this.set({ email: e.target.value, error: '' }),
+      onName: (e) => this.set({ name: e.target.value }),
+
+      reset: () => this.set({ screen: 'form', error: '', busy: false }),
+      backToForm: () => this.set({ screen: 'form', error: '' }),
+      submitForm: () => {
+        if (!valid(s.email)) return this.set({ error: str.errEmail });
+        this.wait(700, { screen: 'confirm' });
+      },
+      confirmIt: () => this.wait(600, { screen: 'done' }),
+    };
+  }
+}
+
+</script>
+</body>
+</html>

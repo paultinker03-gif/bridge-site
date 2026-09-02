@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="brands.css">
+<script src="locale.js"></script>
+<style>
+  body { margin: 0; }
+  a { color: var(--color-accent); }
+  a:hover { color: var(--color-accent-700); }
+</style>
+</helmet>
+
+<div data-brand="shift" dir="{{ dir }}" style="background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); min-height: 100vh;">
+
+  <div style="position: sticky; top: 0; z-index: 20;">
+    <dc-import name="Blocks" brand="shift" block="nav" device="{{ device }}" bag-count="{{ bagCount }}" account-label="{{ str.sfYourRecord }}" on-navigate="{{ navigate }}" hint-size="100%,110px"></dc-import>
+  </div>
+
+  <!-- ============ PLP ============ -->
+  <sc-if value="{{ isPlp }}" hint-placeholder-val="{{ true }}">
+    <div style="max-width: 1760px; margin: 0 auto;">
+      <!-- SHIFT leads with the argument, not the crumb: headline and lead sit
+           side by side across the full measure before any control appears. -->
+      <div style="padding: {{ padHead }};">
+        <div style="font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 18px;">{{ str.sfCertified }}</div>
+        <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; flex-wrap: wrap;">
+          <h1 style="margin: 0; font-size: {{ h1Size }}; max-width: 22ch;">{{ str.sfPlpTitle }}</h1>
+          <p style="margin: 0; font-size: 14px; color: var(--color-neutral-800); max-width: 42ch; text-wrap: pretty;">{{ str.sfPlpLead }}</p>
+        </div>
+      </div>
+
+      <sc-if value="{{ searchOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="padding: {{ padToolbar }}; border-bottom: 1px solid var(--color-divider); display: flex; align-items: center; gap: 12px;">
+          <input class="input" id="sf-search" placeholder="{{ str.searchPlaceholder }}" style="flex: 1; min-width: 0; min-height: 44px;" value="{{ query }}" onChange="{{ onQuery }}">
+          <button class="btn btn-ghost" style="flex: none; min-height: 44px;" onClick="{{ clearSearch }}">{{ str.seClear }}</button>
+        </div>
+      </sc-if>
+      <dc-import name="Blocks" brand="shift" block="plp" cols="4" device="{{ device }}" filters="{{ plpFilters }}" products="{{ plpItems }}" sorts="{{ plpSorts }}" count-label="{{ countLine }}" card-height="{{ plpCardH }}" empty="{{ emptyState }}" on-navigate="{{ navigate }}" hint-size="100%,900px"></dc-import>
+    </div>
+  </sc-if>
+
+  <!-- ============ PRODUCT ============ -->
+  <sc-if value="{{ isProduct }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width: 1760px; margin: 0 auto;">
+      <div style="display: grid; grid-template-columns: {{ split75 }}; align-items: start;">
+        <div style="position: sticky; top: 0; align-self: start;">
+          <dc-import name="Blocks" brand="shift" block="gallery" device="{{ device }}" images="{{ pdpShots }}" hero-height="{{ pdpHeroH }}" hint-size="100%,620px"></dc-import>
+        </div>
+        <div>
+          <dc-import name="Blocks" brand="shift" block="productHero" pdp-demo="false" device="{{ device }}" hero-back-label="{{ str.sfPreOwned }}" hero-back-dest="plp" hero-crumb-current="{{ sel.name }}" hero-kicker="{{ sel.grade }}" hero-title="{{ sel.name }}" hero-price="{{ sel.price }}" hero-was="{{ sel.was }}" hero-saving="{{ sel.saving }}" on-navigate="{{ navigate }}" hint-size="100%,180px"></dc-import>
+        <div style="padding: {{ padPdp }}; display: flex; flex-direction: column; gap: 28px; align-self: start;">
+          <!-- The provenance record comes BEFORE the buy block. On SHIFT the
+               history is the product argument; on Bridge the spec is. -->
+          <div>
+            <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 12px;">{{ str.sfRecord }}</div>
+            <div style="display: flex; flex-direction: column;">
+              <sc-for list="{{ sel.record }}" as="r" hint-placeholder-count="4">
+                <div style="display: flex; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--color-divider); font-size: 13px;">
+                  <span dir="ltr" style="flex: none; width: 92px; color: var(--color-neutral-700); font-variant-numeric: tabular-nums;">{{ r.when }}</span>
+                  <span>{{ r.what }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 12px;">{{ str.sfCondition }}</div>
+            <p style="margin: 0; font-size: 14px; color: var(--color-neutral-800); text-wrap: pretty;">{{ sel.note }}</p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <button class="btn btn-primary btn-block" style="min-height: {{ tapH }};" onClick="{{ addToBag }}"><span>{{ addLabel }}</span></button>
+            <button class="btn btn-secondary btn-block" style="min-height: {{ tapH }};" onClick="{{ goCheckout }}"><span>{{ str.shGoCheckout }}</span></button>
+          </div>
+
+          <p style="margin: 0; font-size: 12px; color: var(--color-neutral-700); text-wrap: pretty;">{{ str.sfGuarantee }}</p>
+        </div>
+        </div>
+      </div>
+
+      <dc-import name="Blocks" brand="shift" block="crosssell" device="{{ device }}" cross-sell-title="{{ str.shCompletes }}" cross-sell-dest="plp" products="{{ related }}" card-height="280px" card-min="220px" on-navigate="{{ navigate }}" hint-size="100%,440px"></dc-import>
+    </div>
+  </sc-if>
+
+  <!-- ============ CHECKOUT ============ -->
+  <sc-if value="{{ isCheckout }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width: 1760px; margin: 0 auto; display: grid; grid-template-columns: {{ split75 }};">
+      <div style="border-inline-end: 1px solid var(--color-divider); padding: {{ padCheckout }};">
+        <div style="margin-bottom: 36px;">
+          <dc-import name="Components" comp="stepper" brand="shift" steps="{{ coSteps }}" current-step="1" hint-size="100%,54px"></dc-import>
+        </div>
+
+        <h1 style="margin: 0 0 32px; font-size: {{ h1Size }};">{{ str.shCheckout }}</h1>
+
+        <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}">
+          <div class="alert alert-error" style="margin-bottom: 28px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></svg><p class="alert-body">{{ error }}</p></div>
+        </sc-if>
+
+        <div style="display: flex; flex-direction: column; gap: 34px;">
+          <div>
+            <h3 style="margin: 0 0 4px;">{{ str.shContact }}</h3>
+            <p style="margin: 0 0 20px; font-size: 13px; color: var(--color-neutral-800);">{{ str.shContactLead }}</p>
+            <div style="display: grid; grid-template-columns: {{ cols2 }}; gap: 20px;">
+              <div class="field" style="grid-column: 1 / -1;"><label for="sco-email">{{ str.acEmailRow }}</label><input class="input" id="sco-email" type="email" placeholder="you@example.com" value="{{ email }}" onChange="{{ onEmail }}"></div>
+              <div class="field"><label for="sco-first">{{ str.firstName }}</label><input class="input" id="sco-first" placeholder="Anni"></div>
+              <div class="field"><label for="sco-last">{{ str.lastName }}</label><input class="input" id="sco-last" placeholder="Albers"></div>
+            </div>
+          </div>
+
+          <div style="border-top: 1px solid var(--color-divider); padding-top: 30px;">
+            <h3 style="margin: 0 0 20px;">{{ str.shDeliveryAddress }}</h3>
+            <div style="display: grid; grid-template-columns: {{ cols2 }}; gap: 20px;">
+              <div class="field" style="grid-column: 1 / -1;"><label for="sco-addr">{{ str.shAddress }}</label><input class="input" id="sco-addr" placeholder="14 Colston Street"></div>
+              <div class="field"><label for="sco-city">{{ str.shTownCity }}</label><input class="input" id="sco-city" placeholder="Bristol"></div>
+              <div class="field"><label for="sco-post">{{ str.shPostcode }}</label><input class="input" id="sco-post" placeholder="BS1 5AP"></div>
+            </div>
+          </div>
+
+          <div style="border-top: 1px solid var(--color-divider); padding-top: 30px;">
+            <h3 style="margin: 0 0 20px;">{{ str.shDeliveryMethod }}</h3>
+            <div style="display: flex; flex-direction: column;">
+              <sc-for list="{{ shipOptions }}" as="so" hint-placeholder-count="3">
+                <label class="radio" style="justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--color-divider);">
+                  <span style="display: flex; align-items: center; gap: 10px;"><input type="radio" name="sco-ship" checked="{{ so.on }}" onChange="{{ so.pick }}"><span class="dot"></span><span>{{ so.label }}</span></span>
+                  <span style="font-size: 13px;">{{ so.price }}</span>
+                </label>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="border-top: 1px solid var(--color-divider); padding-top: 30px;">
+            <h3 style="margin: 0 0 20px;">{{ str.shPayment }}</h3>
+            <div style="display: grid; grid-template-columns: {{ cols3card }}; gap: 20px;">
+              <div class="field" style="grid-column: 1 / -1;"><label for="sco-card">{{ str.shCardNumber }}</label><input class="input" id="sco-card" inputMode="numeric" placeholder="0000 0000 0000 0000"></div>
+              <div class="field"><label for="sco-exp">{{ str.shExpiry }}</label><input class="input" id="sco-exp" placeholder="MM / YY"></div>
+              <div class="field"><label for="sco-cvc">{{ str.shCVC }}</label><input class="input" id="sco-cvc" placeholder="123"></div>
+              <div class="field"><label for="sco-zip">{{ str.shBillingPost }}</label><input class="input" id="sco-zip" placeholder="BS1 5AP"></div>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+            <button class="btn btn-primary" style="min-height: {{ tapH }};" onClick="{{ placeOrder }}" disabled="{{ busy }}">{{ payLabel }}</button>
+            <button class="btn btn-ghost" onClick="{{ goPlp }}">{{ str.shKeepShopping }}</button>
+          </div>
+        </div>
+      </div>
+
+      <aside style="padding: {{ padSummary }}; align-self: start;">
+        <dc-import name="Blocks" brand="shift" block="summary" device="{{ device }}" bag="{{ bagLines }}" lines="{{ totalLines }}" total="{{ total }}" summary-count="{{ bagItems }}" assurances="{{ assurances }}" on-navigate="{{ navigate }}" hint-size="100%,640px"></dc-import>
+      </aside>
+    </div>
+  </sc-if>
+
+  <!-- ============ ORDER CONFIRMED ============ -->
+  <sc-if value="{{ isConfirmed }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width: 1760px; margin: 0 auto; display: grid; grid-template-columns: {{ split75 }}; min-height: 70vh;">
+      <div style="border-inline-end: 1px solid var(--color-divider); padding: {{ padCheckout }};">
+        <div style="font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 20px;">{{ str.shOrderConfirmed }}</div>
+        <h1 style="margin: 0 0 16px; font-size: {{ h1Size }};">{{ str.shThanks }}</h1>
+        <p style="margin: 0 0 32px; font-size: 15px; max-width: 46ch; text-wrap: pretty;">{{ confirmLead }}</p>
+        <div style="border-top: 1px solid var(--color-divider); border-bottom: 1px solid var(--color-divider); padding: 22px 0; display: grid; grid-template-columns: 160px 1fr; gap: 10px 20px; font-size: 14px; max-width: 520px;">
+          <span style="color: var(--color-neutral-700);">{{ str.shOrderRow }}</span><span dir="ltr">SFT-04117</span>
+          <span style="color: var(--color-neutral-700);">{{ str.shTotalPaid }}</span><span dir="ltr">{{ total }}</span>
+          <span style="color: var(--color-neutral-700);">{{ str.sfSecondLife }}</span><span dir="ltr">{{ sel.life }}</span>
+        </div>
+        <div style="margin-top: 32px; display: flex; gap: 12px; flex-wrap: wrap;">
+          <button class="btn btn-primary" style="min-height: {{ tapH }};" onClick="{{ goPlp }}">{{ str.shKeepShopping }}</button>
+          <a class="btn btn-secondary" href="SHIFT.dc.html" style="min-height: {{ tapH }}; text-decoration: none;">{{ str.shBackHome }}</a>
+        </div>
+      </div>
+      <div style="background: var(--color-surface);"><img src="bridge/E2-folded-stack-repair-label.jpeg" alt="Folded kit with a repair label, ready to post" style="width: 100%; height: 100%; object-fit: cover; display: block; min-height: 320px;"></div>
+    </div>
+  </sc-if>
+
+  <dc-import name="Blocks" brand="shift" block="footer" device="{{ device }}" on-navigate="{{ navigate }}" hint-size="100%,420px"></dc-import>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;responsive&quot;,&quot;desktop&quot;,&quot;mobile&quot;],&quot;default&quot;:&quot;responsive&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;startScreen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;plp&quot;,&quot;product&quot;,&quot;checkout&quot;,&quot;confirmed&quot;],&quot;default&quot;:&quot;plp&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;onSignIn&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onSearch&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(q?: string) =&gt; void&quot;},&quot;onNewsletter&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onHome&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(dest: string) =&gt; void&quot;}}">
+const IMG = 'bridge/';
+const JIMG = 'bridge-jerseys/';
+const OIMG = 'bridge-outerwear/';
+
+const STOCK = [
+  { id: 3, name: 'Cadence Roll-Neck', cat: 'Jerseys', grade: 'A', life: 'Second life no. 04206', price: 29, was: 60, colour: 'Teal', note: 'Zip replaced, collar re-stitched. As new otherwise. Size S.', src: JIMG + 'M01.jpeg', hoverSrc: JIMG + 'M01-closeup.jpeg', alt: 'Cadence roll-neck, front' },
+  { id: 2, name: 'Featherweight Shell — Forest', cat: 'Outerwear', grade: 'B', life: 'Second life no. 03980', price: 64, was: 160, colour: 'Green', note: 'Re-waterproofed, cuff seam re-taped. Light scuff at the left hip. Size L.', src: OIMG + 'mens-featherweight-shell-forest.jpeg', hoverSrc: OIMG + 'mens-featherweight-shell-forest-detail.jpeg', alt: 'Featherweight shell, forest' },
+  { id: 10, name: 'Deco Jersey — Lagoon', cat: 'Jerseys', grade: 'A', life: 'Second life no. 04231', price: 46, was: 88, colour: 'Teal', note: 'One season, traded in at Bristol. No mends needed. Size S.', src: JIMG + 'W01.jpeg', hoverSrc: JIMG + 'W01-closeup.jpeg', alt: 'Deco Jersey, lagoon, front' },
+  { id: 11, name: 'Magma Jersey — Ember', cat: 'Jerseys', grade: 'B', life: 'Second life no. 04102', price: 42, was: 88, colour: 'Rust', note: 'Sleeve hem restitched at bench 02. Print faded evenly. Size M.', src: JIMG + 'M03.jpeg', hoverSrc: JIMG + 'M03-closeup.jpeg', alt: 'Magma Jersey, ember, front' },
+  { id: 6, name: 'Swirl Thermal Jacket — Teal', cat: 'Outerwear', grade: 'A', life: 'Second life no. 04188', price: 32, was: 62, colour: 'Teal', note: 'Traded in after one season. No repairs needed. Size S.', src: OIMG + 'womens-swirl-thermal-jacket-teal.jpeg', hoverSrc: OIMG + 'womens-swirl-thermal-jacket-teal-detail.jpeg', alt: 'Swirl thermal jacket, teal' },
+  { id: 12, name: 'Tapestry Jersey — Sovereign', cat: 'Jerseys', grade: 'C', life: 'Second life no. 03864', price: 38, was: 95, colour: 'Navy', note: 'Visible mend at the left cuff, priced for it. Size L.', src: JIMG + 'W07.jpeg', hoverSrc: JIMG + 'W07-closeup.jpeg', alt: 'Tapestry Jersey, sovereign, front' },
+  { id: 5, name: 'Series 01 Jersey — Cobalt', cat: 'Jerseys', grade: 'B', life: 'Second life no. 04090', price: 36, was: 82, colour: 'Blue', note: 'Hem restitched, print faded evenly. Size M.', src: JIMG + 'M07.jpeg', hoverSrc: JIMG + 'M07-closeup.jpeg', alt: 'Series 01 Jersey, cobalt, front' },
+  { id: 8, name: 'Merino Long Sleeve', cat: 'Jerseys', grade: 'C', life: 'Second life no. 03712', price: 21, was: 42, colour: 'White', note: 'Cuff wear and one darned elbow. Priced down. Size XL.', src: JIMG + 'W04.jpeg', hoverSrc: JIMG + 'W04-closeup.jpeg', alt: 'Merino long sleeve, front' },
+  { id: 9, name: 'Merino Neck Warmer', cat: 'Accessories', grade: 'B', life: 'Second life no. 04033', price: 7, was: 16, colour: 'Navy', note: 'Washed and de-pilled. Size one.', src: IMG + 'A13-merino-neck-warmer-navy.jpeg', alt: 'Merino neck warmer, navy' },
+  { id: 13, name: 'Weave Jersey — Fern', cat: 'Jerseys', grade: 'B', life: 'Second life no. 04077', price: 35, was: 80, colour: 'Green', note: 'Traded in after light use. Small print fade at the shoulder. Size M.', src: JIMG + 'M02.jpeg', hoverSrc: JIMG + 'M02-closeup.jpeg', alt: 'Weave Jersey, fern, front' },
+  { id: 14, name: 'Kolam Jersey — Emerald', cat: 'Jerseys', grade: 'A', life: 'Second life no. 04255', price: 40, was: 90, colour: 'Green', note: 'One owner, no repairs. Size S.', src: JIMG + 'M04.jpeg', hoverSrc: JIMG + 'M04-closeup.jpeg', alt: 'Kolam Jersey, emerald, front' },
+  { id: 15, name: 'Series 01 Jersey — Claret', cat: 'Jerseys', grade: 'C', life: 'Second life no. 03799', price: 28, was: 75, colour: 'Burgundy', note: 'Visible fade at the collar, priced for it. Size L.', src: JIMG + 'M05.jpeg', hoverSrc: JIMG + 'M05-closeup.jpeg', alt: 'Series 01 Jersey, claret, front' },
+  { id: 16, name: 'Tropicana Jersey — Canopy', cat: 'Jerseys', grade: 'B', life: 'Second life no. 04140', price: 38, was: 90, colour: 'Green', note: 'Zip pull replaced. Otherwise as new. Size M.', src: JIMG + 'W02.jpeg', hoverSrc: JIMG + 'W02-closeup.jpeg', alt: 'Tropicana Jersey, canopy, front' },
+  { id: 17, name: 'Sashiko Jersey — Indigo', cat: 'Jerseys', grade: 'A', life: 'Second life no. 04262', price: 36, was: 85, colour: 'Navy', note: 'One season, traded in at Girona. Size S.', src: JIMG + 'W03.jpeg', hoverSrc: JIMG + 'W03-closeup.jpeg', alt: 'Sashiko Jersey, indigo, front' },
+  { id: 18, name: 'Petroglyph Jersey — Oxide', cat: 'Jerseys', grade: 'C', life: 'Second life no. 03840', price: 34, was: 100, colour: 'Rust', note: 'Hem restitched, colour holding well. Size L.', src: JIMG + 'W05.jpeg', hoverSrc: JIMG + 'W05-closeup.jpeg', alt: 'Petroglyph Jersey, oxide, front' },
+  { id: 19, name: 'Jacquard Thermal Jacket — Forest', cat: 'Outerwear', grade: 'B', life: 'Second life no. 04019', price: 55, was: 120, colour: 'Green', note: 'Re-taped seams, light cuff wear. Size M.', src: OIMG + 'mens-jacquard-thermal-jacket-forest.jpeg', hoverSrc: OIMG + 'mens-jacquard-thermal-jacket-forest-detail.jpeg', alt: 'Jacquard thermal jacket, forest' },
+  { id: 20, name: 'Mosaic Thermal Jacket — Glasshouse', cat: 'Outerwear', grade: 'A', life: 'Second life no. 04271', price: 62, was: 115, colour: 'Blue', note: 'One owner, no repairs needed. Size S.', src: OIMG + 'womens-mosaic-thermal-jacket-multi.jpeg', hoverSrc: OIMG + 'womens-mosaic-thermal-jacket-multi-detail.jpeg', alt: 'Mosaic thermal jacket, glasshouse' },
+  { id: 1, name: 'Facet Jersey — Harbour', cat: 'Jerseys', grade: 'A', life: 'Second life no. 04298', price: 39, was: 85, colour: 'Blue', note: 'One owner, no repairs. Size M.', src: JIMG + 'M06.jpeg', hoverSrc: JIMG + 'M06-closeup.jpeg', alt: 'Facet Jersey, harbour, front' },
+  { id: 4, name: 'Contour Jersey — Copper', cat: 'Jerseys', grade: 'B', life: 'Second life no. 04061', price: 37, was: 85, colour: 'Teal', note: 'Sleeve print faded evenly. Size L.', src: JIMG + 'M08.jpeg', hoverSrc: JIMG + 'M08-closeup.jpeg', alt: 'Contour Jersey, copper, front' },
+  { id: 7, name: 'Canopy Jersey — Woodland', cat: 'Jerseys', grade: 'A', life: 'Second life no. 04303', price: 41, was: 90, colour: 'Green', note: 'One season, no mends needed. Size S.', src: JIMG + 'M09.jpeg', hoverSrc: JIMG + 'M09-closeup.jpeg', alt: 'Canopy Jersey, woodland, front' },
+  { id: 21, name: 'Series 01 Jersey — Slate', cat: 'Jerseys', grade: 'C', life: 'Second life no. 03778', price: 27, was: 75, colour: 'Grey', note: 'Visible fade at the shoulder, priced for it. Size XL.', src: JIMG + 'M10.jpeg', hoverSrc: JIMG + 'M10-closeup.jpeg', alt: 'Series 01 Jersey, slate, front' },
+  { id: 22, name: 'Spot Jersey — Chalk', cat: 'Jerseys', grade: 'B', life: 'Second life no. 04155', price: 34, was: 80, colour: 'Grey', note: 'Zip pull replaced. Size M.', src: JIMG + 'M11.jpeg', hoverSrc: JIMG + 'M11-closeup.jpeg', alt: 'Spot Jersey, chalk, front' },
+  { id: 23, name: 'Series 01 Jersey — Ink', cat: 'Jerseys', grade: 'A', life: 'Second life no. 04310', price: 32, was: 75, colour: 'Black', note: 'One owner, no repairs. Size S.', src: JIMG + 'M12.jpeg', hoverSrc: JIMG + 'M12-closeup.jpeg', alt: 'Series 01 Jersey, ink, front' },
+  { id: 24, name: 'Orchard Jersey — Ochre', cat: 'Jerseys', grade: 'B', life: 'Second life no. 04166', price: 39, was: 90, colour: 'Ochre', note: 'Hem restitched at bench 03. Size M.', src: JIMG + 'W06.jpeg', hoverSrc: JIMG + 'W06-closeup.jpeg', alt: 'Orchard Jersey, ochre, front' },
+  { id: 25, name: 'Breton Jersey — Navy', cat: 'Jerseys', grade: 'C', life: 'Second life no. 03821', price: 30, was: 85, colour: 'White', note: 'Visible mend at the collar, priced for it. Size L.', src: JIMG + 'W08.jpeg', hoverSrc: JIMG + 'W08-closeup.jpeg', alt: 'Breton Jersey, navy, front' },
+  { id: 26, name: 'Strata Jersey — Canyon', cat: 'Jerseys', grade: 'A', life: 'Second life no. 04317', price: 42, was: 90, colour: 'Rust', note: 'One season, traded in at Bristol. Size S.', src: JIMG + 'W09.jpeg', hoverSrc: JIMG + 'W09-closeup.jpeg', alt: 'Strata Jersey, canyon, front' },
+  { id: 27, name: 'Swallow Jersey — Claret', cat: 'Jerseys', grade: 'B', life: 'Second life no. 04180', price: 36, was: 85, colour: 'Burgundy', note: 'Traded in after light use. Size M.', src: JIMG + 'W10.jpeg', hoverSrc: JIMG + 'W10-closeup.jpeg', alt: 'Swallow Jersey, claret, front' },
+  { id: 28, name: 'Pinstripe Jersey — Silver', cat: 'Jerseys', grade: 'C', life: 'Second life no. 03855', price: 29, was: 80, colour: 'White', note: 'Cuff wear, priced down. Size XL.', src: JIMG + 'W11.jpeg', hoverSrc: JIMG + 'W11-closeup.jpeg', alt: 'Pinstripe Jersey, silver, front' },
+  { id: 29, name: 'Ridgeline Jersey — Moorland', cat: 'Jerseys', grade: 'A', life: 'Second life no. 04322', price: 40, was: 90, colour: 'Teal', note: 'One owner, no repairs. Size S.', src: JIMG + 'W12.jpeg', hoverSrc: JIMG + 'W12-closeup.jpeg', alt: 'Ridgeline Jersey, moorland, front' },
+  { id: 30, name: 'Script Jersey — Sand', cat: 'Jerseys', grade: 'B', life: 'Second life no. 04197', price: 41, was: 95, colour: 'Ochre', note: 'Re-stitched cuff, otherwise as new. Size M.', src: JIMG + 'W13.jpeg', hoverSrc: JIMG + 'W13-closeup.jpeg', alt: 'Script Jersey, sand, front' },
+  { id: 31, name: 'Chevron Jersey — Signal', cat: 'Jerseys', grade: 'C', life: 'Second life no. 03868', price: 26, was: 85, colour: 'Blue', note: 'Print faded, priced for it. Size L.', src: JIMG + 'W14.jpeg', hoverSrc: JIMG + 'W14-closeup.jpeg', alt: 'Chevron Jersey, signal, front' },
+  { id: 32, name: 'Featherweight Shell — Rust', cat: 'Outerwear', grade: 'A', life: 'Second life no. 04328', price: 58, was: 90, colour: 'Rust', note: 'One owner, no repairs. Size M.', src: OIMG + 'mens-featherweight-shell-rust.jpeg', hoverSrc: OIMG + 'mens-featherweight-shell-rust-detail.jpeg', alt: 'Featherweight shell, rust' },
+  { id: 33, name: 'Jacquard Thermal Jacket — Copper', cat: 'Outerwear', grade: 'B', life: 'Second life no. 04073', price: 68, was: 120, colour: 'Rust', note: 'Re-taped seams, light cuff wear. Size L.', src: OIMG + 'mens-jacquard-thermal-jacket-copper.jpeg', hoverSrc: OIMG + 'mens-jacquard-thermal-jacket-copper-detail.jpeg', alt: 'Jacquard thermal jacket, copper' },
+  { id: 34, name: 'Jacquard Thermal Jacket — Navy', cat: 'Outerwear', grade: 'C', life: 'Second life no. 03889', price: 52, was: 120, colour: 'Navy', note: 'Visible mend at the cuff, priced for it. Size S.', src: OIMG + 'mens-jacquard-thermal-jacket-navy.jpeg', hoverSrc: OIMG + 'mens-jacquard-thermal-jacket-navy-detail.jpeg', alt: 'Jacquard thermal jacket, navy' },
+  { id: 35, name: 'Mosaic Thermal Jacket — Harbour', cat: 'Outerwear', grade: 'A', life: 'Second life no. 04335', price: 71, was: 115, colour: 'Blue', note: 'One season, traded in at Girona. Size M.', src: OIMG + 'mens-mosaic-thermal-jacket-blue.jpeg', hoverSrc: OIMG + 'mens-mosaic-thermal-jacket-blue-detail.jpeg', alt: 'Mosaic thermal jacket, harbour' },
+  { id: 36, name: 'Confetti Thermal Jacket — Bloom', cat: 'Outerwear', grade: 'B', life: 'Second life no. 04084', price: 65, was: 115, colour: 'Blue', note: 'Re-waterproofed, light cuff wear. Size S.', src: OIMG + 'womens-confetti-thermal-jacket-blue.jpeg', hoverSrc: OIMG + 'womens-confetti-thermal-jacket-blue-detail.jpeg', alt: 'Confetti thermal jacket, bloom' },
+  { id: 37, name: 'Folk Floral Thermal Jacket — Meadow', cat: 'Outerwear', grade: 'A', life: 'Second life no. 04341', price: 74, was: 125, colour: 'Blue', note: 'One owner, no repairs needed. Size M.', src: OIMG + 'womens-folk-floral-thermal-jacket-blue.jpeg', hoverSrc: OIMG + 'womens-folk-floral-thermal-jacket-blue-detail.jpeg', alt: 'Folk floral thermal jacket, meadow' },
+  { id: 38, name: 'Paisley Thermal Jacket — Indigo', cat: 'Outerwear', grade: 'C', life: 'Second life no. 03897', price: 56, was: 125, colour: 'Navy', note: 'Cuff seam re-taped, priced down. Size L.', src: OIMG + 'womens-paisley-thermal-jacket-indigo.jpeg', hoverSrc: OIMG + 'womens-paisley-thermal-jacket-indigo-detail.jpeg', alt: 'Paisley thermal jacket, indigo' },
+];
+
+const COLOURS = [
+  { key: 'Teal', value: '#1f6b74' },
+  { key: 'Green', value: '#245c3c' },
+  { key: 'Blue', value: '#28418f' },
+  { key: 'Navy', value: '#1e2a4a' },
+  { key: 'Burgundy', value: '#6d2233' },
+  { key: 'Rust', value: '#b4501f' },
+  { key: 'Ochre', value: '#b78530' },
+  { key: 'Grey', value: '#6f6f70' },
+  { key: 'Black', value: '#1a1918' },
+  { key: 'White', value: '#e9e7e2' },
+];
+
+const RECORDS = {
+  A: [['2023', 'Sold new, Bridge Bristol'], ['2025', 'Two services logged'], ['Aug 2026', 'Traded in, graded A'], ['Aug 2026', 'Cleaned, inspected, listed']],
+  B: [['2022', 'Sold new, Bridge Girona'], ['2024', 'Crash repair, bench 04'], ['Jul 2026', 'Traded in, graded B'], ['Aug 2026', 'Repaired and listed']],
+  C: [['2021', 'Sold new, Bridge online'], ['2023', 'Two repairs logged'], ['Jun 2026', 'Traded in, graded C'], ['Aug 2026', 'Serviceable, priced down']],
+};
+
+class Component extends DCLogic {
+  state = {
+    screen: this.queryScreen() || this.props.startScreen || 'plp',
+    grade: 'all',
+    sizes: {},
+    swatch: {},
+    inStock: false,
+    cat: 'all',
+    query: '',
+    searchOpen: false,
+    sort: 'newest',
+    product: 1,
+    bag: [{ id: 1, qty: 1 }, { id: 3, qty: 1 }],
+    shipping: 'Standard',
+    email: '',
+    error: '',
+    busy: false,
+    added: false,
+    vw: 1440,
+  };
+
+  queryScreen() {
+    if (typeof window === 'undefined') return '';
+    const m = /[?&]screen=([a-z]+)/.exec(window.location.search || '');
+    return m ? m[1] : '';
+  }
+  queryView() {
+    if (typeof window === 'undefined') return '';
+    const m = /[?&]view=(desktop|mobile|responsive)/.exec(window.location.search || '');
+    return m ? m[1] : '';
+  }
+
+  componentDidMount() {
+    this.onResize = () => this.setState({ vw: window.innerWidth });
+    window.addEventListener('resize', this.onResize);
+    this.onResize();
+    const attach = () => {
+      const s = window.BridgeLocale;
+      if (!s) { this._retry = setTimeout(attach, 60); return; }
+      this._unsub = s.subscribe(() => this.setState({ tick: (this.state.tick || 0) + 1 }));
+      this.setState({ tick: (this.state.tick || 0) + 1 });
+    };
+    attach();
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onResize);
+    clearTimeout(this._retry);
+    if (this._unsub) this._unsub();
+  }
+
+  top() { try { window.scrollTo(0, 0); } catch (e) {} }
+  go(screen) { this.setState({ screen: screen, error: '' }); this.top(); }
+  item(id) { return STOCK.filter((x) => x.id === id)[0] || STOCK[0]; }
+
+  shape(x, str) {
+    return {
+      id: x.id,
+      name: x.name,
+      grade: (str.sfGradeA ? str['sfGrade' + x.grade] : 'Grade ' + x.grade) || ('Grade ' + x.grade),
+      life: x.life,
+      price: '£' + x.price,
+      was: '£' + x.was,
+      priceInk: x.was ? 'var(--color-signal-700)' : 'var(--color-text)',
+      saving: Math.round((1 - x.price / x.was) * 100) + '% off new',
+      note: x.note,
+      src: x.src,
+      hoverSrc: x.hoverSrc || '',
+      alt: x.alt,
+      record: (RECORDS[x.grade] || []).map((r) => ({ when: r[0], what: r[1] })),
+    };
+  }
+
+  card(x, str) {
+    const sh = this.shape(x, str);
+    return {
+      id: x.id,
+      name: x.name,
+      meta: x.life,
+      price: sh.price,
+      was: sh.was,
+      note: x.note.split('.')[0],
+      tag: sh.grade,
+      tagTone: x.grade === 'A' ? 'accent' : x.grade === 'B' ? 'solid' : 'quiet',
+      src: sh.src,
+      hoverSrc: sh.hoverSrc,
+      alt: sh.alt,
+      dest: 'item:' + x.id,
+    };
+  }
+
+  visible() {
+    const s = this.state;
+    const q = (s.query || '').trim().toLowerCase();
+    const activeColours = Object.keys(s.swatch).filter((k) => s.swatch[k]);
+    let list = STOCK.filter((x) => (s.grade === 'all' || x.grade === s.grade) && (s.cat === 'all' || x.cat === s.cat)
+      && (!activeColours.length || activeColours.indexOf(x.colour) >= 0)
+      && (!q || (x.name + ' ' + x.cat + ' ' + x.note).toLowerCase().indexOf(q) >= 0));
+    if (s.sort === 'price') list = list.slice().sort((a, b) => a.price - b.price);
+    if (s.sort === 'saving') list = list.slice().sort((a, b) => (1 - a.price / a.was < 1 - b.price / b.was ? 1 : -1));
+    return list;
+  }
+
+  /* the host's variant picker changes the prop after mount — mirror it into state
+     so choosing a screen in Tweaks actually moves the flow. */
+  componentDidUpdate(prev) {
+    const f = this.props.startScreen;
+    if (f && prev.startScreen !== f) this.setState({ screen: f });
+  }
+
+  renderVals() {
+    const s = this.state;
+    const L = window.BridgeLocale;
+    const loc = L ? L.get() : { dir: 'ltr' };
+    const str = L ? L.strings() : {};
+    const fmt = L ? L.fmt : ((x) => x);
+    const money = (n) => '£' + n.toFixed(2);
+
+    const view = this.props.view || this.queryView() || 'responsive';
+    const vw = s.vw || 1440;
+    const mobile = view === 'mobile' ? true : view === 'desktop' ? false : vw < 720;
+    const tablet = !mobile && vw < 1080;
+    const two = 'minmax(0, 1fr) minmax(0, 1fr)';
+
+    const list = this.visible();
+    const sel = this.shape(this.item(s.product), str);
+    const shipCost = s.shipping === 'Express' ? 6 : 0;
+    const bagRows = s.bag.map((b) => Object.assign({}, this.item(b.id), { qty: b.qty }));
+    const subtotal = bagRows.reduce((t, b) => t + b.price * b.qty, 0);
+    const bagCount = bagRows.reduce((t, b) => t + b.qty, 0);
+    const total = subtotal + shipCost;
+    const shipName = { Standard: 'shShipStandard', Express: 'shShipExpress', 'Workshop collection': 'shShipCollect' };
+    const shipLabel = str[shipName[s.shipping]] || s.shipping;
+
+    return {
+      str: str,
+      dir: loc.dir || 'ltr',
+      device: mobile ? 'mobile' : 'desktop',
+
+      isPlp: s.screen === 'plp',
+      isProduct: s.screen === 'product',
+      isCheckout: s.screen === 'checkout',
+      isConfirmed: s.screen === 'confirmed',
+
+      // ── measure — SHIFT's own rhythm on the shared grid ──
+      split75: mobile ? '1fr' : tablet ? two : 'minmax(0, 7fr) minmax(0, 5fr)',
+      cols2: mobile ? '1fr' : two,
+      cols3card: mobile ? '1fr' : 'minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr)',
+      plpCols: mobile || tablet ? '1fr' : '250px minmax(0, 1fr)',
+      padHead: mobile ? '28px 16px 22px' : 'clamp(40px, 4vw, 64px) clamp(16px, 5vw, 64px) 28px',
+      padToolbar: mobile ? '14px 16px' : '16px clamp(16px, 5vw, 64px)',
+      padGrid: mobile ? '20px 16px 32px' : 'clamp(24px, 3vw, 40px) clamp(16px, 5vw, 64px) clamp(40px, 5vw, 72px)',
+      padSection: mobile ? '28px 16px 40px' : 'clamp(40px, 5vw, 72px) clamp(16px, 5vw, 64px)',
+      padPdp: mobile ? '24px 16px 32px' : 'clamp(32px, 3vw, 48px) clamp(16px, 5vw, 64px)',
+      padPdpGallery: mobile ? '20px 0 8px' : 'clamp(24px, 3vw, 48px) clamp(16px, 5vw, 64px)',
+      padCheckout: mobile ? '28px 16px 40px' : 'clamp(40px, 4vw, 64px) clamp(16px, 5vw, 64px)',
+      padSummary: mobile ? '8px 16px 40px' : 'clamp(40px, 4vw, 64px) clamp(16px, 5vw, 64px)',
+      pdpHeroH: mobile ? '440px' : tablet ? '520px' : '620px',
+      plpCardH: mobile ? '210px' : '340px',
+      h1Size: mobile ? '34px' : tablet ? '46px' : 'clamp(40px, 4.2vw, 64px)',
+      h2Size: mobile ? '28px' : 'clamp(30px, 3vw, 42px)',
+      h3Size: mobile ? '24px' : 'clamp(24px, 2.4vw, 34px)',
+      tapH: mobile ? '50px' : '46px',
+
+      // ── plp ──
+      countLine: fmt(str.sfPieces || '%s of %s pieces', String(list.length), String(STOCK.length)),
+      plpItems: (function () {
+        const cards = list.map((x) => this.card(x, str));
+        /* the cross-brand advert, mirroring Bridge's SHIFT card: one occasional
+           cell in the same grid rather than a banner */
+        if (cards.length >= 6) cards.splice(6, 0, {
+          kind: 'promo',
+          kicker: 'Bridge',
+          name: str.xbBridgeTitle || 'Built to be worth repairing',
+          body: str.xbBridgeBody || 'Everything SHIFT re-sells started as Bridge kit. See the new season at the source.',
+          cta: str.xbBridgeCta || 'Visit Bridge',
+          href: 'BridgeShop.dc.html',
+          src: 'bridge-jerseys/W01.jpeg',
+          alt: 'Bridge Deco Jersey, Lagoon',
+        });
+        return cards;
+      }).call(this),
+      hasItems: list.length > 0,
+      isEmpty: list.length === 0,
+      emptyState: { title: str.sfNothingTitle, body: str.sfNothingBody, cta: str.sfGetDrops, dest: 'newsletter' },
+      plpSorts: [
+        { key: 'newest', label: str.sfSortNewest, on: s.sort === 'newest' },
+        { key: 'price', label: str.sfSortPrice, on: s.sort === 'price' },
+        { key: 'saving', label: str.sfSortSaving, on: s.sort === 'saving' },
+      ],
+      plpFilters: [
+        {
+          label: str.sfAllGrades, kind: 'chip',
+          items: [
+            { label: str.sfAllGrades, on: s.grade === 'all' },
+            { label: str.sfGradeA, on: s.grade === 'A' },
+            { label: str.sfGradeB, on: s.grade === 'B' },
+            { label: str.sfGradeC, on: s.grade === 'C' },
+          ],
+        },
+        {
+          label: str.shProductType, kind: 'check',
+          items: [
+            { label: str.sfEverything, on: s.cat === 'all' },
+            { label: str.sfCatJerseys, on: s.cat === 'Jerseys', count: String(STOCK.filter((x) => x.cat === 'Jerseys').length) },
+            { label: str.sfCatOuterwear, on: s.cat === 'Outerwear', count: String(STOCK.filter((x) => x.cat === 'Outerwear').length) },
+            { label: str.accessories, on: s.cat === 'Accessories', count: String(STOCK.filter((x) => x.cat === 'Accessories').length) },
+          ],
+        },
+        {
+          label: str.shSize, kind: 'chip',
+          items: ['XS', 'S', 'M', 'L', 'XL', 'XXL'].map((z) => ({ label: z, on: !!s.sizes[z] })),
+        },
+        {
+          label: str.shColour, kind: 'swatch',
+          items: COLOURS.map((c) => ({ label: c.key, value: c.value, on: !!s.swatch[c.key] })),
+        },
+        {
+          label: str.shAvailability, kind: 'check',
+          items: [{ label: str.shInStock, on: !!s.inStock }],
+        },
+      ],
+
+      // ── product ──
+      sel: sel,
+      pdpShots: [
+        { src: sel.src, alt: sel.alt },
+        sel.hoverSrc ? { src: sel.hoverSrc, alt: sel.name + ', close-up' } : { src: IMG + 'B2-collar-zip-detail-blue.jpeg', alt: 'Repair detail at the collar' },
+        { src: IMG + 'E1-repair-bench-hands-green.jpeg', alt: 'The piece under the needle at the bench' },
+        { src: IMG + 'E2-folded-stack-repair-label.jpeg', alt: 'Graded and labelled, ready to ship' },
+      ],
+      related: list.filter((x) => x.id !== s.product).slice(0, 4).map((x) => this.card(x, str)),
+      addLabel: s.added ? str.shAdded : str.shAddToBag,
+      addToBag: () => {
+        const next = this.state.bag.slice();
+        const hit = next.filter((b) => b.id === s.product)[0];
+        if (hit) hit.qty += 1; else next.push({ id: s.product, qty: 1 });
+        this.setState({ bag: next, added: true });
+        setTimeout(() => this.setState({ added: false }), 1600);
+      },
+
+      // ── checkout ──
+      coSteps: [str.stDetails, str.stDelivery, str.stPayment],
+      bagCount: bagCount,
+      bagItems: fmt(str.shItems, String(bagCount)),
+      bagLines: bagRows.map((b) => ({
+        name: b.name,
+        variant: b.life,
+        price: money(b.price * b.qty),
+        qty: b.qty,
+        src: b.src,
+        alt: b.alt,
+      })),
+      totalLines: [
+        { label: str.shSubtotal, value: money(subtotal) },
+        { label: fmt(str.shDeliveryDash, shipLabel), value: shipCost === 0 ? str.shFree : money(shipCost) },
+        { label: str.shVat, value: money(total / 6) },
+      ],
+      assurances: [str.sfGuarantee],
+      total: money(total),
+      shipOptions: [
+        { label: str.shStandardRow, price: str.shFree, on: s.shipping === 'Standard', pick: () => this.setState({ shipping: 'Standard' }) },
+        { label: str.shExpressRow, price: '£6.00', on: s.shipping === 'Express', pick: () => this.setState({ shipping: 'Express' }) },
+        { label: str.shCollectRow, price: str.shFree, on: s.shipping === 'Workshop collection', pick: () => this.setState({ shipping: 'Workshop collection' }) },
+      ],
+      searchOpen: s.searchOpen,
+      query: s.query,
+      onQuery: (e) => this.setState({ query: e.target.value }),
+      clearSearch: () => this.setState({ query: '', searchOpen: false }),
+      email: s.email,
+      onEmail: (e) => this.setState({ email: e.target.value, error: '' }),
+      error: s.error,
+      hasError: !!s.error,
+      busy: s.busy,
+      payLabel: s.busy ? str.shTakingPayment : fmt(str.shPay, money(total)),
+      placeOrder: () => {
+        if (!/^[^@\s]+@[^@\s.]+\.[^@\s]+$/.test(s.email)) { this.setState({ error: str.shErrEmail }); return; }
+        this.setState({ busy: true, error: '' });
+        setTimeout(() => { this.setState({ busy: false }); this.go('confirmed'); }, 900);
+      },
+      confirmLead: fmt(str.shConfirmLead, s.email || 'you@example.com'),
+
+      // ── routing ──
+      goPlp: () => this.go('plp'),
+      goCheckout: () => this.go('checkout'),
+      navigate: (dest, payload) => {
+        if (typeof dest === 'string' && dest.indexOf('item:') === 0) {
+          this.setState({ screen: 'product', product: parseInt(dest.slice(5), 10) });
+          this.top();
+          return;
+        }
+        if (dest === 'sort') { this.setState({ sort: payload }); return; }
+        if (dest === 'filter') {
+          const item = payload && payload.item;
+          const grades = {};
+          grades[str.sfAllGrades] = 'all';
+          grades[str.sfGradeA] = 'A';
+          grades[str.sfGradeB] = 'B';
+          grades[str.sfGradeC] = 'C';
+          if (payload && payload.group === str.sfAllGrades) { this.setState({ grade: grades[item] || 'all' }); return; }
+          const cats = {};
+          cats[str.sfEverything] = 'all';
+          cats[str.sfCatJerseys] = 'Jerseys';
+          cats[str.sfCatOuterwear] = 'Outerwear';
+          cats[str.accessories] = 'Accessories';
+          if (cats[item]) { this.setState({ cat: cats[item] }); return; }
+          if (payload && payload.group === str.shSize) {
+            const next = Object.assign({}, this.state.sizes);
+            if (next[item]) delete next[item]; else next[item] = true;
+            this.setState({ sizes: next });
+            return;
+          }
+          if (payload && payload.group === str.shColour) {
+            const next = Object.assign({}, this.state.swatch);
+            if (next[item]) delete next[item]; else next[item] = true;
+            this.setState({ swatch: next });
+            return;
+          }
+          if (payload && payload.group === str.shAvailability) { this.setState({ inStock: !this.state.inStock }); return; }
+          return;
+        }
+        if (dest === 'clearfilters') { this.setState({ grade: 'all', cat: 'all', sizes: {}, swatch: {}, inStock: false }); return; }
+        if (dest === 'qty') {
+          this.setState({ bag: this.state.bag.map((b, i) => (i === payload.index ? { id: b.id, qty: Math.max(1, b.qty + payload.delta) } : b)) });
+          return;
+        }
+        if (dest === 'remove') { this.setState({ bag: this.state.bag.filter((b, i) => i !== payload) }); return; }
+        if (dest === 'newsletter') {
+          if (typeof this.props.onNewsletter === 'function') { this.props.onNewsletter(); return; }
+          window.location.href = 'ShiftNotices.dc.html';
+          return;
+        }
+        if (dest === 'search') {
+          if (typeof this.props.onSearch === 'function') { this.props.onSearch(payload); return; }
+          window.location.href = 'ShiftSearch.dc.html';
+          return;
+        }
+        if (dest === 'signin') {
+          if (typeof this.props.onSignIn === 'function') { this.props.onSignIn(); return; }
+          window.location.href = 'ShiftLogin.dc.html';
+          return;
+        }
+        if (dest === 'checkout') { this.go('checkout'); return; }
+        if (dest === 'plp') { this.go('plp'); return; }
+        // repair / trade-in / materials / journal / home all live on the SHIFT landing page
+        if (typeof this.props.onHome === 'function') { this.props.onHome(dest); return; }
+        window.location.href = 'ShiftHome.dc.html' + (dest && dest !== 'home' ? '#shift-' + dest : '');
+      },
+    };
+  }
+}
+</script>
+</body>
+</html>

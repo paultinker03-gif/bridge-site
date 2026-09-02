@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="brands.css">
+<script src="locale.js"></script>
+<style>
+  body { margin: 0; }
+  a { color: var(--color-accent); }
+  a:hover { color: var(--color-accent-700); }
+</style>
+</helmet>
+
+<div data-brand="shift" dir="{{ dir }}" style="background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); min-height: 100vh; display: flex; flex-direction: column;">
+
+  <dc-import name="Blocks" brand="shift" block="nav" device="{{ device }}" bag-count="0" account-label="Account" on-navigate="{{ navigate }}" hint-size="100%,140px"></dc-import>
+
+  <div style="flex: 1; display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); align-items: stretch;">
+
+    <div style="padding: clamp(32px, 5vw, 80px) clamp(16px, 5vw, 64px); border-inline-end: 1px solid var(--color-divider); display: flex; flex-direction: column; justify-content: space-between; gap: 48px;">
+
+      <sc-if value="{{ isForm }}" hint-placeholder-val="{{ true }}">
+        <div>
+          <div style="font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 24px;">Drop notices</div>
+          <h1 style="margin: 0 0 18px; font-size: clamp(34px, 4.4vw, 68px); max-width: 18ch;">Graded stock, twelve hours early.</h1>
+          <p style="margin: 0 0 36px; font-size: clamp(14px, 1.1vw, 17px); line-height: 1.5; color: var(--color-neutral-800); max-width: 46ch; text-wrap: pretty;">A fortnightly note: what came back from the bench, what has been regraded, and the field note we published. No campaigns.</p>
+
+          <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}">
+            <div class="alert alert-error" style="margin-bottom: 24px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></svg><p class="alert-body">{{ error }}</p></div>
+          </sc-if>
+
+          <div style="display: flex; flex-direction: column; gap: 24px; max-width: 460px;">
+            <div class="field">
+              <label for="nl-email">Email address</label>
+              <input class="input" id="nl-email" type="email" placeholder="you@example.com" value="{{ email }}" onChange="{{ onEmail }}">
+            </div>
+            <div>
+              <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 12px;">What to send you</div>
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <sc-for list="{{ topics }}" as="tp" hint-placeholder-count="3">
+                  <label class="radio" style="min-height: 44px; gap: 12px;"><input type="checkbox" checked="{{ tp.on }}" onChange="{{ tp.toggle }}"><span class="dot"></span><span>{{ tp.label }}</span></label>
+                </sc-for>
+              </div>
+            </div>
+            <div>
+              <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 12px;">Sizes you wear</div>
+              <div class="seg">
+                <sc-for list="{{ sizes }}" as="sz" hint-placeholder-count="5">
+                  <label class="seg-opt" style="min-height: 44px;"><input type="radio" name="nl-size" checked="{{ sz.on }}" onChange="{{ sz.pick }}"><span>{{ sz.label }}</span></label>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px;">
+              <button class="btn btn-primary" style="min-height: 52px; padding-inline: 26px;" onClick="{{ submit }}">{{ submitLabel }}</button>
+              <button class="btn btn-ghost" style="min-height: 52px;" onClick="{{ goShop }}">Browse instead</button>
+            </div>
+            <p style="margin: 0; font-size: 12px; color: var(--color-neutral-700); max-width: 44ch;">Double opt-in. One tap to leave, and we delete the record rather than suppress it.</p>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isConfirm }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 24px;">One more tap</div>
+          <h1 style="margin: 0 0 18px; font-size: clamp(32px, 4vw, 60px); max-width: 20ch;">Confirm it from your inbox.</h1>
+          <p style="margin: 0 0 28px; font-size: 15px; line-height: 1.5; color: var(--color-neutral-800); max-width: 44ch;">{{ confirmLine }}</p>
+          <div style="border-top: 1px solid var(--color-divider); border-bottom: 1px solid var(--color-divider); padding: 20px 0; display: grid; grid-template-columns: 130px 1fr; gap: 12px; font-size: 13px; max-width: 460px;">
+            <span style="color: var(--color-neutral-700);">Sent to</span><span dir="ltr">{{ email }}</span>
+            <span style="color: var(--color-neutral-700);">Sending</span><span>{{ topicLine }}</span>
+            <span style="color: var(--color-neutral-700);">Sizes</span><span>{{ sizeLine }}</span>
+          </div>
+          <div style="margin-top: 32px; display: flex; gap: 10px; flex-wrap: wrap;">
+            <button class="btn btn-primary" style="min-height: 52px;" onClick="{{ fakeConfirm }}">I&rsquo;ve confirmed</button>
+            <button class="btn btn-ghost" onClick="{{ backToForm }}">Change details</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 24px;">You&rsquo;re on the list</div>
+          <h1 style="margin: 0 0 18px; font-size: clamp(32px, 4vw, 60px); max-width: 18ch;">Next drop: 12 September.</h1>
+          <p style="margin: 0 0 32px; font-size: 15px; line-height: 1.5; color: var(--color-neutral-800); max-width: 44ch;">Forty-one pieces come off the bench that week. You&rsquo;ll see them at 07:00, twelve hours before they go public.</p>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button class="btn btn-primary" style="min-height: 52px;" onClick="{{ goShop }}">Shop what&rsquo;s live now</button>
+            <button class="btn btn-secondary" style="min-height: 52px;" onClick="{{ goLanding }}">Back to SHIFT</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 24px; border-top: 1px solid var(--color-divider); padding-top: 24px;">
+        <sc-for list="{{ stats }}" as="st" hint-placeholder-count="3">
+          <div>
+            <div dir="ltr" style="font-family: var(--font-heading); font-weight: 800; font-size: clamp(24px, 2.4vw, 34px); letter-spacing: -0.04em; line-height: 1;">{{ st.value }}</div>
+            <div style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-neutral-700); margin-top: 8px;">{{ st.label }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="min-height: 460px; position: relative; background: var(--color-surface);">
+      <img src="bridge/E2-folded-stack-repair-label.jpeg" alt="Freshly graded kit with paper tags" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+      <div style="position: absolute; inset-inline-start: 0; bottom: 0; background: var(--color-text); color: var(--color-bg); padding: 14px 20px; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;">Drop 24 · 41 pieces</div>
+    </div>
+  </div>
+
+  <dc-import name="Blocks" brand="shift" block="footer" device="{{ device }}" on-navigate="{{ navigate }}" hint-size="100%,420px"></dc-import>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
+const TOPICS = [
+  { k: 'drops', label: 'Pre-owned drops, fortnightly' },
+  { k: 'notes', label: 'Field notes and method write-ups' },
+  { k: 'ledger', label: 'The quarterly ledger' },
+];
+
+class Component extends DCLogic {
+  state = { screen: 'form', email: '', topics: { drops: true, notes: true, ledger: false }, size: 'M', error: '', busy: false, tick: 0, vw: 1440 };
+
+  componentDidMount() {
+    this.onResize = () => this.setState({ vw: window.innerWidth });
+    window.addEventListener('resize', this.onResize);
+    this.onResize();
+    const attach = () => {
+      const s = window.BridgeLocale;
+      if (!s) { this._retry = setTimeout(attach, 60); return; }
+      this._unsub = s.subscribe(() => this.setState({ tick: this.state.tick + 1 }));
+      this.setState({ tick: this.state.tick + 1 });
+    };
+    attach();
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onResize);
+    clearTimeout(this._retry);
+    clearTimeout(this._busyT);
+    if (this._unsub) this._unsub();
+  }
+
+  submitForm() {
+    const s = this.state;
+    if (!/.+@.+\..+/.test(s.email)) { this.setState({ error: 'A working email address, please — we send one link to confirm.' }); return; }
+    const any = TOPICS.some((t) => s.topics[t.k]);
+    if (!any) { this.setState({ error: 'Pick at least one thing for us to send.' }); return; }
+    this.setState({ error: '', busy: true });
+    this._busyT = setTimeout(() => this.setState({ busy: false, screen: 'confirm' }), 600);
+  }
+
+  renderVals() {
+    const s = this.state;
+    const store = window.BridgeLocale;
+    const loc = store ? store.get() : { dir: 'ltr' };
+    const picked = TOPICS.filter((t) => s.topics[t.k]);
+
+    return {
+      dir: loc.dir || 'ltr',
+      device: (s.vw || 1440) < 760 ? 'mobile' : 'desktop',
+      navigate: (dest) => {
+        const f = this.props.onExit;
+        if (typeof f === 'function') { f(dest); return; }
+        if (dest === 'search') { window.location.href = 'ShiftSearch.dc.html'; return; }
+        if (dest === 'plp') { window.location.href = 'ShiftShop.dc.html'; return; }
+        if (dest === 'checkout') { window.location.href = 'ShiftShop.dc.html?screen=checkout'; return; }
+        if (dest === 'signin') { window.location.href = 'ShiftLogin.dc.html'; return; }
+        if (dest === 'account') { window.location.href = 'ShiftAccount.dc.html'; return; }
+        window.location.href = 'ShiftHome.dc.html';
+      },
+      isForm: s.screen === 'form',
+      isConfirm: s.screen === 'confirm',
+      isDone: s.screen === 'done',
+      email: s.email,
+      error: s.error,
+      hasError: !!s.error,
+      onEmail: (e) => this.setState({ email: e.target.value, error: '' }),
+      topics: TOPICS.map((t) => ({
+        label: t.label,
+        on: !!s.topics[t.k],
+        toggle: (e) => {
+          const next = Object.assign({}, this.state.topics);
+          next[t.k] = e.target.checked;
+          this.setState({ topics: next, error: '' });
+        },
+      })),
+      sizes: ['XS', 'S', 'M', 'L', 'XL'].map((z) => ({
+        label: z, on: s.size === z, pick: () => this.setState({ size: z }),
+      })),
+      submitLabel: s.busy ? 'Sending link…' : 'Send me drops',
+      submit: () => this.submitForm(),
+      confirmLine: 'We sent a confirmation link. Tap it and the first drop notice arrives on 12 September.',
+      topicLine: picked.length ? picked.map((t) => t.label.split(',')[0]).join(' · ') : 'Nothing selected',
+      sizeLine: s.size + ' · we only flag pieces in your size',
+      fakeConfirm: () => this.setState({ screen: 'done' }),
+      backToForm: () => this.setState({ screen: 'form' }),
+      goShop: () => { const f = this.props.onExit; if (typeof f === 'function') { f('plp'); return; } window.location.href = 'ShiftShop.dc.html'; },
+      goLanding: () => { const f = this.props.onExit; if (typeof f === 'function') { f('home'); return; } window.location.href = 'ShiftHome.dc.html'; },
+      stats: [
+        { value: '41', label: 'pieces in the next drop' },
+        { value: '12 h', label: 'early access' },
+        { value: '2 / month', label: 'nothing more' },
+      ],
+    };
+  }
+}
+
+</script>
+</body>
+</html>

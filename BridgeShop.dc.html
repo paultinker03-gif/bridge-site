@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="brands.css">
+<script src="locale.js"></script>
+<style>
+  body { margin: 0; }
+  a { color: var(--color-accent); }
+  a:hover { color: var(--color-accent-700); }
+</style>
+</helmet>
+
+<div data-brand="bridge" dir="{{ dir }}" style="background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); min-height: 100vh;">
+
+  <div style="position: sticky; top: 0; z-index: 20;">
+    <dc-import name="Blocks" brand="bridge" block="nav" device="{{ device }}" bag-count="{{ bagCount }}" on-navigate="{{ navigate }}" hint-size="100%,100px"></dc-import>
+  </div>
+
+  <!-- ============ HOME ============ -->
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+    <div>
+      <dc-import name="Blocks" brand="bridge" block="hero" device="{{ device }}" hero="{{ homeHero }}" on-navigate="{{ navigate }}" hint-size="100%,880px"></dc-import>
+
+      <div style="max-width: 1680px; margin: {{ homeGap }} auto 0; padding: 0 {{ homeCatsPad }}; display: grid; grid-template-columns: {{ cols3 }}; gap: 40px;">
+        <sc-for list="{{ homeCats }}" as="hc" hint-placeholder-count="3">
+          <div style="cursor: pointer;" onClick="{{ hc.go }}">
+            <div style="aspect-ratio: 4 / 5; background: var(--color-surface);"><img src="{{ hc.src }}" alt="{{ hc.alt }}" style="width: 100%; height: 100%; object-fit: cover; display: block;"></div>
+            <div style="padding: 24px 0 0;">
+              <h3 style="margin: 0 0 6px;">{{ hc.name }}</h3>
+              <p style="margin: 0 0 16px; font-size: 13px; color: var(--color-neutral-800);">{{ hc.desc }}</p>
+              <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+                <button class="btn btn-ghost" style="padding-inline-start: 0; min-height: {{ tapH }};" onClick="{{ hc.goMen }}">{{ hc.men }}</button>
+                <button class="btn btn-ghost" style="padding-inline-start: 0; min-height: {{ tapH }};" onClick="{{ hc.goWomen }}">{{ hc.women }}</button>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="max-width: 1680px; margin: {{ homeGap }} auto 0;">
+        <dc-import name="Blocks" brand="bridge" block="crosssell" device="{{ device }}" cross-sell-title="{{ str.shNewSeason }}" cross-sell-cta="{{ str.shSeeAll }}" cross-sell-dest="plp" products="{{ newIn }}" card-height="320px" card-min="260px" on-navigate="{{ navigate }}" hint-size="100%,480px"></dc-import>
+      </div>
+
+      <div style="margin-top: {{ homeGap }};">
+        <dc-import name="Blocks" brand="bridge" block="crossover" device="{{ device }}" hint-size="100%,460px"></dc-import>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ============ PLP ============ -->
+  <sc-if value="{{ isPlp }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width: 1680px; margin: 0 auto;">
+      <div style="padding: {{ padHead }};">
+        <div style="font-size: 12px; color: var(--color-neutral-700); margin-bottom: 16px;">{{ str.shHome }} / <span style="color: var(--color-text);">{{ plpTitle }}</span></div>
+        <h1 style="margin: 0 0 12px; font-size: {{ h1Size }}; line-height: 1;">{{ plpTitle }}</h1>
+        <p style="margin: 0; font-size: 15px; max-width: 60ch; text-wrap: pretty;">{{ str.shPlpLead }}</p>
+      </div>
+
+      <dc-import name="Blocks" brand="bridge" block="plp" device="{{ device }}" filters="{{ plpFilters }}" products="{{ plpItems }}" sorts="{{ plpSorts }}" count-label="{{ showingLine }}" card-height="{{ plpCardH }}" load-more="{{ plpLoadMore }}" on-navigate="{{ navigate }}" hint-size="100%,900px"></dc-import>
+    </div>
+  </sc-if>
+
+  <!-- ============ PRODUCT ============ -->
+  <sc-if value="{{ isProduct }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width: 1680px; margin: 0 auto;">
+      <div style="display: grid; grid-template-columns: {{ split75 }}; align-items: start;">
+        <div style="position: sticky; top: 0; align-self: start;">
+          <dc-import name="Blocks" brand="bridge" block="gallery" device="{{ device }}" images="{{ pdpShots }}" hero-height="{{ pdpHeroH }}" hint-size="100%,620px"></dc-import>
+        </div>
+        <div>
+          <dc-import name="Blocks" brand="bridge" block="productHero" pdp-demo="false" device="{{ device }}" hero-back-label="{{ plpTitle }}" hero-back-dest="plp" hero-crumb-current="{{ pdpName }}" hero-kicker="{{ str.shRaceFitSeries }}" hero-title="{{ pdpName }}" hero-price="{{ pdpPrice }}" on-navigate="{{ navigate }}" hint-size="100%,180px"></dc-import>
+        <div style="padding: {{ padPdp }}; display: flex; flex-direction: column; gap: 28px; align-self: start;">
+          <p style="margin: 0; font-size: 15px; text-wrap: pretty;">{{ str.shPdpBody }}</p>
+
+          <div>
+            <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 12px;">{{ colourLine }}</div>
+            <div style="display: flex; gap: 6px;">
+              <sc-for list="{{ pdpColours }}" as="pc" hint-placeholder-count="4">
+                <button aria-label="{{ pc.label }}" aria-pressed="{{ pc.on }}" onClick="{{ pc.pick }}" style="{{ pc.ring }}">
+                  <span style="{{ pc.swatch }}"></span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+
+          <div>
+            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 12px;">
+              <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700);">{{ sizeLine }}</span>
+              <button class="btn btn-ghost" style="font-size: 12px;">{{ str.shSizeGuide }}</button>
+            </div>
+            <div class="seg" style="{{ segStyleWide }}">
+              <sc-for list="{{ pdpSizes }}" as="ps" hint-placeholder-count="5">
+                <label class="seg-opt" style="min-height: {{ tapH }};"><input type="radio" name="pdp-size" checked="{{ ps.on }}" onChange="{{ ps.pick }}"><span>{{ ps.label }}</span></label>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <button class="btn btn-primary btn-block" style="min-height: {{ tapH }};" onClick="{{ addToBag }}"><span>{{ addLabel }}</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+            <button class="btn btn-secondary btn-block" style="min-height: {{ tapH }};" onClick="{{ goCheckout }}"><span>{{ str.shGoCheckout }}</span></button>
+          </div>
+
+          <div style="border-top: 1px solid var(--color-divider);">
+            <div style="display: grid; grid-template-columns: 130px 1fr; gap: 8px 16px; padding: 20px 0; font-size: 13px; border-bottom: 1px solid var(--color-divider);">
+              <span style="color: var(--color-neutral-700);">{{ str.shFabric }}</span><span>{{ str.shFabricVal }}</span>
+              <span style="color: var(--color-neutral-700);">{{ str.shFit }}</span><span>{{ str.shFitVal }}</span>
+              <span style="color: var(--color-neutral-700);">{{ str.shWeight }}</span><span>{{ str.shWeightVal }}</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px; padding: 20px 0; font-size: 13px;">
+              <span>{{ str.shFreeDelivery }}</span>
+              <span>{{ str.shReturns90 }}</span>
+              <span>{{ str.shFreeRepairs }}</span>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <div style="max-width: 1680px; margin: 0 auto;">
+        <dc-import name="Blocks" brand="bridge" block="crosssell" device="{{ device }}" cross-sell-title="{{ str.shCompletes }}" cross-sell-dest="plp" products="{{ pdpRelated }}" card-height="280px" card-min="240px" on-navigate="{{ navigate }}" hint-size="100%,440px"></dc-import>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ============ CHECKOUT ============ -->
+  <sc-if value="{{ isCheckout }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width: 1680px; margin: 0 auto; display: grid; grid-template-columns: {{ split75 }};">
+      <div style="border-inline-end: 1px solid var(--color-divider); padding: {{ padCheckout }};">
+        <div style="margin-bottom: 36px;">
+          <dc-import name="Components" comp="stepper" brand="bridge" steps="{{ coSteps }}" current-step="{{ coStep }}" hint-size="100%,54px"></dc-import>
+        </div>
+
+        <h1 style="margin: 0 0 36px; font-size: {{ h1Size }}; line-height: 1;">{{ str.shCheckout }}</h1>
+
+        <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}">
+          <div class="alert alert-error" style="margin-bottom: 28px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></svg><p class="alert-body">{{ error }}</p></div>
+        </sc-if>
+
+        <div style="display: flex; flex-direction: column; gap: 36px;">
+          <div>
+            <h3 style="margin: 0 0 4px;">{{ str.shContact }}</h3>
+            <p style="margin: 0 0 20px; font-size: 13px; color: var(--color-neutral-800);">{{ str.shContactLead }}</p>
+            <div style="display: grid; grid-template-columns: {{ cols2 }}; gap: 20px;">
+              <div class="field" style="grid-column: 1 / -1;">
+                <label for="co-email">{{ str.acEmailRow }}</label>
+                <input class="input" id="co-email" type="email" placeholder="you@example.com" value="{{ email }}" onChange="{{ onEmail }}">
+              </div>
+              <div class="field"><label for="co-first">{{ str.firstName }}</label><input class="input" id="co-first" placeholder="Anni"></div>
+              <div class="field"><label for="co-last">{{ str.lastName }}</label><input class="input" id="co-last" placeholder="Albers"></div>
+            </div>
+          </div>
+
+          <div style="border-top: 1px solid var(--color-divider); padding-top: 32px;">
+            <h3 style="margin: 0 0 20px;">{{ str.shDeliveryAddress }}</h3>
+            <div style="display: grid; grid-template-columns: {{ cols2 }}; gap: 20px;">
+              <div class="field" style="grid-column: 1 / -1;"><label for="co-addr">{{ str.shAddress }}</label><input class="input" id="co-addr" placeholder="14 Colston Street"></div>
+              <div class="field"><label for="co-city">{{ str.shTownCity }}</label><input class="input" id="co-city" placeholder="Bristol"></div>
+              <div class="field"><label for="co-post">{{ str.shPostcode }}</label><input class="input" id="co-post" placeholder="BS1 5AP"></div>
+            </div>
+          </div>
+
+          <div style="border-top: 1px solid var(--color-divider); padding-top: 32px;">
+            <h3 style="margin: 0 0 20px;">{{ str.shDeliveryMethod }}</h3>
+            <div style="display: flex; flex-direction: column;">
+              <sc-for list="{{ shipOptions }}" as="so" hint-placeholder-count="3">
+                <label class="radio" style="justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--color-divider);">
+                  <span style="display: flex; align-items: center; gap: 10px;"><input type="radio" name="co-ship" checked="{{ so.on }}" onChange="{{ so.pick }}"><span class="dot"></span><span>{{ so.label }}</span></span>
+                  <span style="font-size: 13px;">{{ so.price }}</span>
+                </label>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="border-top: 1px solid var(--color-divider); padding-top: 32px;">
+            <h3 style="margin: 0 0 20px;">{{ str.shPayment }}</h3>
+            <div style="display: grid; grid-template-columns: {{ cols3card }}; gap: 20px;">
+              <div class="field" style="grid-column: 1 / -1;"><label for="co-card">{{ str.shCardNumber }}</label><input class="input" id="co-card" inputMode="numeric" placeholder="0000 0000 0000 0000"></div>
+              <div class="field"><label for="co-exp">{{ str.shExpiry }}</label><input class="input" id="co-exp" placeholder="MM / YY"></div>
+              <div class="field"><label for="co-cvc">{{ str.shCVC }}</label><input class="input" id="co-cvc" placeholder="123"></div>
+              <div class="field"><label for="co-zip">{{ str.shBillingPost }}</label><input class="input" id="co-zip" placeholder="BS1 5AP"></div>
+            </div>
+            <label class="radio" style="margin-top: 18px;"><input type="checkbox" defaultChecked="{{ yes }}"><span class="dot"></span><span>{{ str.shBillingSame }}</span></label>
+          </div>
+
+          <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+            <button class="btn btn-primary" style="min-height: {{ tapH }};" onClick="{{ placeOrder }}" disabled="{{ busy }}">{{ payLabel }}</button>
+            <button class="btn btn-ghost" onClick="{{ goPlp }}">{{ str.shKeepShopping }}</button>
+          </div>
+        </div>
+      </div>
+
+      <aside style="padding: {{ padSummary }}; align-self: start;">
+        <dc-import name="Blocks" brand="bridge" block="summary" device="{{ device }}" bag="{{ bagLines }}" lines="{{ totalLines }}" total="{{ total }}" summary-count="{{ bagItems }}" assurances="{{ assurances }}" on-navigate="{{ navigate }}" hint-size="100%,680px"></dc-import>
+      </aside>
+    </div>
+  </sc-if>
+
+  <!-- ============ ORDER CONFIRMED ============ -->
+  <sc-if value="{{ isConfirmed }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width: 1680px; margin: 0 auto; display: grid; grid-template-columns: {{ split75 }}; min-height: 70vh;">
+      <div style="border-inline-end: 1px solid var(--color-divider); padding: {{ padHero }};">
+        <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent-700); margin-bottom: 20px;">{{ str.shOrderConfirmed }}</div>
+        <h1 style="margin: 0 0 16px; font-size: {{ h1Size }}; line-height: 1;">{{ str.shThanks }}</h1>
+        <p style="margin: 0 0 32px; font-size: 15px; max-width: 46ch; text-wrap: pretty;">{{ confirmLead }}</p>
+        <div style="border-top: 1px solid var(--color-divider); border-bottom: 1px solid var(--color-divider); padding: 24px 0; display: grid; grid-template-columns: 150px 1fr; gap: 10px 20px; font-size: 14px; max-width: 520px;">
+          <span style="color: var(--color-neutral-700);">{{ str.shOrderRow }}</span><span>MER-40912</span>
+          <span style="color: var(--color-neutral-700);">{{ str.shTotalPaid }}</span><span>{{ total }}</span>
+          <span style="color: var(--color-neutral-700);">{{ str.shDeliveryRow }}</span><span>{{ shippingLabel }}</span>
+        </div>
+        <div style="margin-top: 32px; display: flex; gap: 12px; flex-wrap: wrap;">
+          <button class="btn btn-primary" style="min-height: {{ tapH }};" onClick="{{ goPlp }}"><span>{{ str.shKeepShopping }}</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          <button class="btn btn-secondary" style="min-height: {{ tapH }};" onClick="{{ goHome }}">{{ str.shBackHome }}</button>
+        </div>
+      </div>
+      <div style="background: var(--color-surface);"><img src="bridge/E2-folded-stack-repair-label.jpeg" alt="A packed order folded on the workshop bench" style="width: 100%; height: 100%; object-fit: cover; display: block; min-height: 320px;"></div>
+    </div>
+  </sc-if>
+
+  <dc-import name="Blocks" brand="bridge" block="footer" device="{{ device }}" on-navigate="{{ navigate }}" hint-size="100%,380px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;responsive&quot;,&quot;desktop&quot;,&quot;mobile&quot;],&quot;default&quot;:&quot;responsive&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;startScreen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;home&quot;,&quot;plp&quot;,&quot;product&quot;,&quot;checkout&quot;,&quot;confirmed&quot;],&quot;default&quot;:&quot;home&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;onSignIn&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onSearch&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(q?: string) =&gt; void&quot;}}">
+const IMG = 'bridge/';
+const JIMG = 'bridge-jerseys/';
+
+/* Jersey line — shot in the studio, one full-length front shot and one fabric
+   close-up per piece. code, name, gender, colour, price, was-price. */
+const JERSEYS = [
+  ['M01', 'Contour Jersey — Tidewater', 'men', 'Teal', 85],
+  ['M02', 'Weave Jersey — Fern', 'men', 'Green', 80, 95],
+  ['M03', 'Magma Jersey — Ember', 'men', 'Rust', 90],
+  ['M04', 'Kolam Jersey — Emerald', 'men', 'Green', 90],
+  ['M05', 'Series 01 Jersey — Claret', 'men', 'Burgundy', 75],
+  ['M06', 'Facet Jersey — Harbour', 'men', 'Blue', 85],
+  ['M07', 'Series 01 Jersey — Cobalt', 'men', 'Blue', 75],
+  ['M08', 'Contour Jersey — Copper', 'men', 'Teal', 85, 100],
+  ['M09', 'Canopy Jersey — Woodland', 'men', 'Green', 90],
+  ['M10', 'Series 01 Jersey — Slate', 'men', 'Grey', 75],
+  ['M11', 'Spot Jersey — Chalk', 'men', 'Grey', 80],
+  ['M12', 'Series 01 Jersey — Ink', 'men', 'Black', 75],
+  ['W01', 'Deco Jersey — Lagoon', 'women', 'Teal', 90],
+  ['W02', 'Tropicana Jersey — Canopy', 'women', 'Green', 90],
+  ['W03', 'Sashiko Jersey — Indigo', 'women', 'Navy', 85],
+  ['W04', 'Pinstripe Jersey — Chalk', 'women', 'White', 80],
+  ['W05', 'Petroglyph Jersey — Oxide', 'women', 'Rust', 85, 100],
+  ['W06', 'Orchard Jersey — Ochre', 'women', 'Ochre', 90],
+  ['W07', 'Tapestry Jersey — Sovereign', 'women', 'Navy', 95],
+  ['W08', 'Breton Jersey — Navy', 'women', 'White', 85],
+  ['W09', 'Strata Jersey — Canyon', 'women', 'Rust', 90],
+  ['W10', 'Swallow Jersey — Claret', 'women', 'Burgundy', 85],
+  ['W11', 'Pinstripe Jersey — Silver', 'women', 'White', 80, 90],
+  ['W12', 'Ridgeline Jersey — Moorland', 'women', 'Teal', 90],
+  ['W13', 'Script Jersey — Sand', 'women', 'Ochre', 95],
+  ['W14', 'Chevron Jersey — Signal', 'women', 'Blue', 85],
+].map((j, i) => ({
+  id: j[0].toLowerCase(),
+  name: j[1],
+  cat: 'jersey',
+  gender: j[2],
+  colour: j[3],
+  price: j[4],
+  was: j[5] || 0,
+  colours: 2,
+  tag: i < 2 ? 'New' : j[5] ? 'Sale' : '',
+  tagTone: i < 2 ? 'accent' : (j[5] ? 'sale' : 'quiet'),
+  src: JIMG + j[0] + '.jpeg',
+  hoverSrc: JIMG + j[0] + '-closeup.jpeg',
+  alt: j[1] + ', ' + (j[2] === 'men' ? "men's" : "women's") + ' fit, front',
+}));
+
+const OIMG = 'bridge-outerwear/';
+
+/* Outerwear — thermal jackets and featherweight shells, shot the same way as
+   the jerseys: full front shot plus a fabric close-up for the rollover.
+   file, name, gender, colour, price */
+const OUTERWEAR = [
+  ['mens-mosaic-thermal-jacket-blue', 'Mosaic Thermal Jacket — Harbour', 'men', 'Blue', 115],
+  ['mens-jacquard-thermal-jacket-copper', 'Jacquard Thermal Jacket — Copper', 'men', 'Rust', 120],
+  ['mens-jacquard-thermal-jacket-forest', 'Jacquard Thermal Jacket — Forest', 'men', 'Green', 120],
+  ['mens-jacquard-thermal-jacket-navy', 'Jacquard Thermal Jacket — Navy', 'men', 'Navy', 120],
+  ['mens-featherweight-shell-rust', 'Featherweight Shell — Rust', 'men', 'Rust', 90],
+  ['mens-featherweight-shell-forest', 'Featherweight Shell — Forest', 'men', 'Green', 90],
+  ['womens-swirl-thermal-jacket-teal', 'Swirl Thermal Jacket — Lagoon', 'women', 'Teal', 115],
+  ['womens-mosaic-thermal-jacket-multi', 'Mosaic Thermal Jacket — Glasshouse', 'women', 'Blue', 115],
+  ['womens-confetti-thermal-jacket-blue', 'Confetti Thermal Jacket — Bloom', 'women', 'Blue', 115],
+  ['womens-paisley-thermal-jacket-indigo', 'Paisley Thermal Jacket — Indigo', 'women', 'Navy', 125],
+  ['womens-folk-floral-thermal-jacket-blue', 'Folk Floral Thermal Jacket — Meadow', 'women', 'Blue', 125],
+].map((o, i) => ({
+  id: o[0],
+  name: o[1],
+  cat: 'outerwear',
+  gender: o[2],
+  colour: o[3],
+  price: o[4],
+  was: 0,
+  colours: 3,
+  tag: i === 0 || i === 6 ? 'New' : '',
+  tagTone: 'accent',
+  src: OIMG + o[0] + '.jpeg',
+  hoverSrc: OIMG + o[0] + '-detail.jpeg',
+  alt: o[1] + ', ' + (o[2] === 'men' ? "men's" : "women's") + ' fit, front',
+}));
+
+const OTHERS = [
+  { id: 'race-sock', name: 'Race Sock — 15cm', cat: 'accessories', gender: 'accessories', colour: 'Green', price: 10, colours: 5, src: 'A6-race-sock-lime.jpeg', alt: 'Race Sock, lime' },
+  { id: 'winter-glove', name: 'Deep Winter Glove', cat: 'accessories', gender: 'accessories', colour: 'Black', price: 35, colours: 1, src: 'A11-winter-gloves-black.jpeg', alt: 'Deep Winter Glove, black' },
+  { id: 'neck-warmer', name: 'Merino Neck Warmer', cat: 'accessories', gender: 'accessories', colour: 'Navy', price: 15, colours: 3, src: 'A13-merino-neck-warmer-navy.jpeg', alt: 'Merino Neck Warmer, navy' },
+  { id: 'race-cap', name: 'Cotton Race Cap', cat: 'accessories', gender: 'accessories', colour: 'White', price: 20, colours: 4, src: 'A17-cotton-cap-white.jpeg', alt: 'Cotton Race Cap, white' },
+  { id: 'overshoe', name: 'Thermal Overshoe', cat: 'accessories', gender: 'accessories', colour: 'Black', price: 25, colours: 2, src: 'A18-overshoes-black.jpeg', alt: 'Thermal Overshoe, black' },
+].map((p) => Object.assign({}, p, { src: IMG + p.src, was: 0 }));
+
+const CATALOGUE = JERSEYS.concat(OUTERWEAR).concat(OTHERS);
+
+/* Swatches read off the jersey line, so the rail can never offer a colour the
+   catalogue does not carry. */
+const COLOURS = [
+  { key: 'Teal', value: '#1f6b74' },
+  { key: 'Green', value: '#245c3c' },
+  { key: 'Blue', value: '#28418f' },
+  { key: 'Navy', value: '#1e2a4a' },
+  { key: 'Burgundy', value: '#6d2233' },
+  { key: 'Rust', value: '#b4501f' },
+  { key: 'Ochre', value: '#b78530' },
+  { key: 'Grey', value: '#6f6f70' },
+  { key: 'Black', value: '#1a1918' },
+  { key: 'White', value: '#e9e7e2' },
+];
+
+class Component extends DCLogic {
+  state = {
+    screen: this.queryScreen() || this.props.startScreen || 'home',
+    section: this.querySection() || 'men',
+    bag: [
+      { id: 'm01', qty: 1 },
+      { id: 'winter-glove', qty: 1 },
+    ],
+    sort: 'newest',
+    shown: 8,
+    loadingMore: false,
+    product: 'm01',
+    colour: 'Teal',
+    size: 'M',
+    shipping: 'Standard',
+    types: this.queryType() ? { [this.queryType()]: true } : (this.props.initialType ? { [this.props.initialType]: true } : { jersey: true, outerwear: false, accessories: false, base: false }),
+    sizes: { M: true },
+    swatch: { 'Deep blue': false },
+    email: '',
+    error: '',
+    busy: false,
+    added: false,
+  };
+
+  queryScreen() {
+    if (typeof window === 'undefined') return '';
+    const m = /[?&]screen=([a-z]+)/.exec(window.location.search || '');
+    return m ? m[1] : '';
+  }
+  queryType() {
+    if (typeof window === 'undefined') return '';
+    const m = /[?&]type=(jersey|outerwear|accessories)/.exec(window.location.search || '');
+    return m ? m[1] : '';
+  }
+  querySection() {
+    if (typeof window === 'undefined') return '';
+    const m = /[?&]section=(men|women|accessories)/.exec(window.location.search || '');
+    return m ? m[1] : '';
+  }
+  queryView() {
+    if (typeof window === 'undefined') return '';
+    const m = /[?&]view=(desktop|mobile|responsive)/.exec(window.location.search || '');
+    return m ? m[1] : '';
+  }
+
+  componentDidMount() {
+    this.onResize = () => this.setState({ vw: window.innerWidth });
+    window.addEventListener('resize', this.onResize);
+    this.onResize();
+    const attach = () => {
+      const s = window.BridgeLocale;
+      if (!s) { this._lRetry = setTimeout(attach, 60); return; }
+      this._lUnsub = s.subscribe(() => this.setState({ localeTick: (this.state.localeTick || 0) + 1 }));
+      this.setState({ localeTick: (this.state.localeTick || 0) + 1 });
+    };
+    attach();
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onResize);
+    clearTimeout(this._lRetry);
+    if (this._lUnsub) this._lUnsub();
+  }
+
+  top() { try { window.scrollTo(0, 0); } catch (e) {} }
+  go(screen) { this.setState({ screen: screen, error: '' }); this.top(); }
+
+  ring(sel) {
+    return 'width: 44px; height: 44px; padding: 0; display: grid; place-items: center; cursor: pointer;'
+      + ' background: transparent; border-radius: 50%;'
+      + ' border: 2px solid ' + (sel ? 'var(--color-text)' : 'transparent') + ';'
+      + (sel ? ' box-shadow: inset 0 0 0 3px var(--color-bg);' : '');
+  }
+
+  item(id) {
+    return CATALOGUE.filter((p) => p.id === id)[0] || CATALOGUE[0];
+  }
+
+  visible() {
+    const s = this.state;
+    const active = Object.keys(s.types).filter((k) => s.types[k]);
+    const swatches = Object.keys(s.swatch).filter((k) => s.swatch[k]);
+    let list = CATALOGUE.slice();
+    if (s.section === 'women') list = list.filter((p) => p.gender === 'women');
+    else if (s.section === 'accessories') list = list.filter((p) => p.gender === 'accessories');
+    else if (s.section === 'men') list = list.filter((p) => p.gender === 'men');
+    if (active.length) {
+      const narrowed = list.filter((p) => active.indexOf(p.cat) !== -1);
+      if (narrowed.length) list = narrowed;
+    }
+    if (swatches.length) {
+      const byColour = list.filter((p) => swatches.indexOf(p.colour) !== -1);
+      if (byColour.length) list = byColour;
+    }
+    if (s.sort === 'price') list = list.slice().sort((a, b) => a.price - b.price);
+    if (s.sort === 'popular') list = list.slice().sort((a, b) => b.colours - a.colours);
+    return list;
+  }
+
+  card(p, str, colours) {
+    return {
+      id: p.id,
+      name: p.name,
+      meta: p.tag === 'Low stock' ? (str.shSoldOutM || 'Sold out in M') : p.colour || colours(p.colours),
+      price: '£' + p.price,
+      was: p.was ? '£' + p.was : '',
+      tag: p.tag || '',
+      tagTone: p.tagTone || 'solid',
+      src: p.src,
+      hoverSrc: p.hoverSrc || '',
+      alt: p.alt,
+      dest: 'product:' + p.id,
+    };
+  }
+
+  /* The cross-brand advert. Dropped into the product grid at a fixed slot so it
+     reads as an occasional placement rather than a banner. */
+  promoCard(str) {
+    return {
+      kind: 'promo',
+      kicker: str.xbKicker || 'SHIFT',
+      name: str.xbTitle || 'Every Bridge piece has a second life',
+      body: str.xbBody || 'Repair it, trade it in, or buy one already ridden. SHIFT runs the workshop behind the label.',
+      cta: str.xbCta || 'Visit SHIFT',
+      href: 'ShiftHome.dc.html',
+      src: IMG + 'E2-folded-stack-repair-label.jpeg',
+      alt: 'Folded kit with a repair label on the workshop bench',
+    };
+  }
+
+  /* the host's variant picker changes the prop after mount — mirror it into state
+     so choosing a screen in Tweaks actually moves the flow. */
+  componentDidUpdate(prev) {
+    const f = this.props.startScreen;
+    if (f && prev.startScreen !== f) this.setState({ screen: f });
+    const t = this.props.initialType;
+    if (t && prev.initialType !== t) this.setState({ screen: 'plp', types: { [t]: true }, shown: 8 });
+  }
+
+  renderVals() {
+    const s = this.state;
+    const L = window.BridgeLocale;
+    const loc = L ? L.get() : { dir: 'ltr' };
+    const str = L ? L.strings() : {};
+    const fmt = L ? L.fmt : ((x) => x);
+    const colours = (n) => (n === 1 ? str.seColourOne : fmt(str.seColours, n));
+    const shopMen = (str.shShop || 'Shop') + ' ' + (str.nvMen || 'Men');
+    const shopWomen = (str.shShop || 'Shop') + ' ' + (str.nvWomen || 'Women');
+    const cat = (type, section) => () => this.setState(
+      { screen: 'plp', section: section, types: { [type]: true }, shown: 8 },
+      this.top()
+    );
+    const money = (n) => '£' + n.toFixed(2);
+
+    const view = this.props.view || this.queryView() || 'responsive';
+    const vw = s.vw || (typeof window !== 'undefined' ? window.innerWidth : 1440);
+    const mobile = view === 'mobile' ? true : view === 'desktop' ? false : vw < 720;
+    const tablet = !mobile && vw < 1080;
+    const two = 'minmax(0, 1fr) minmax(0, 1fr)';
+
+    const shipCost = s.shipping === 'Express' ? 9 : 0;
+    const bagRows = s.bag.map((b) => Object.assign({}, this.item(b.id), { qty: b.qty }));
+    const subtotal = bagRows.reduce((t, b) => t + b.price * b.qty, 0);
+    const bagCount = bagRows.reduce((t, b) => t + b.qty, 0);
+    const total = subtotal + shipCost;
+
+    const shipName = { Standard: 'shShipStandard', Express: 'shShipExpress', 'Workshop collection': 'shShipCollect' };
+    const shipLabel = str[shipName[s.shipping]] || s.shipping;
+
+    const sectionTitle = s.section === 'women' ? (str.nvWomen || 'Women')
+      : s.section === 'accessories' ? str.accessories
+      : (str.nvMen || 'Men');
+
+    const list = this.visible();
+    const shown = list.slice(0, s.shown);
+    const p = this.item(s.product);
+
+    // counts read off the catalogue so the rail never disagrees with the grid
+    const catCount = (k) => String(CATALOGUE.filter((p) => p.cat === k).length);
+
+    const setType = (k) => {
+      const next = Object.assign({}, this.state.types);
+      next[k] = !next[k];
+      this.setState({ types: next });
+    };
+
+    return {
+      str: str,
+      dir: loc.dir || 'ltr',
+      yes: true,
+      device: mobile ? 'mobile' : 'desktop',
+
+      isHome: s.screen === 'home',
+      isPlp: s.screen === 'plp',
+      isProduct: s.screen === 'product',
+      isCheckout: s.screen === 'checkout',
+      isConfirmed: s.screen === 'confirmed',
+
+      // ── measure ──
+      split57: mobile ? '1fr' : tablet ? two : 'minmax(0, 5fr) minmax(0, 7fr)',
+      split75: mobile ? '1fr' : tablet ? two : 'minmax(0, 7fr) minmax(0, 5fr)',
+      cols3: mobile ? '1fr' : tablet ? two : 'repeat(3, minmax(0, 1fr))',
+      cols3card: mobile ? '1fr' : 'minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr)',
+      cols2: mobile ? '1fr' : two,
+      plpCols: mobile || tablet ? '1fr' : '270px minmax(0, 1fr)',
+      padHero: mobile ? '28px 16px 32px' : '56px 40px',
+      padSection: mobile ? '28px 16px 32px' : '48px 40px 56px',
+      padHead: mobile ? '24px 16px 20px' : '40px 40px 32px',
+      padGrid: mobile ? '20px 16px 28px' : '32px 40px 40px 32px',
+      padToolbar: mobile ? '14px 16px' : '18px 40px 18px 32px',
+      padLoadMore: mobile ? '0 16px 32px' : '0 40px 48px 32px',
+      padCheckout: mobile ? '28px 16px 40px' : '48px 40px 64px',
+      padSummary: mobile ? '8px 16px 40px' : '48px 40px',
+      padPdp: mobile ? '24px 16px 32px' : '40px',
+      padPdpGallery: mobile ? '20px 0 8px' : '40px',
+      pdpHeroH: mobile ? '440px' : tablet ? '520px' : '620px',
+      plpCardH: mobile ? '210px' : '340px',
+      h1Size: mobile ? '38px' : tablet ? '48px' : '66px',
+      h2Size: mobile ? '28px' : '40px',
+      tapH: mobile ? '48px' : '38px',
+      segStyleWide: mobile ? 'min-height: 48px; width: 100%;' : 'min-height: 36px;',
+
+      homeGap: mobile ? '40px' : '80px',
+      homeCatsPad: mobile ? '16px' : '40px',
+
+      // ── home ──
+      homeHero: {
+        kicker: str.shSeriesKicker,
+        title: str.shHeroTitle,
+        body: str.shHeroBody,
+        primary: shopMen,
+        primaryDest: 'men',
+        secondary: shopWomen,
+        secondaryDest: 'women',
+        secondaryTone: 'primary',
+        layout: 'stacked',
+        img: IMG + 'hero-three-riders-cobalt.jpeg',
+        alt: 'Three riders in Bridge jerseys and bibs standing with road bikes against a cobalt ground',
+      },
+      homeCats: [
+        { name: str.catJerseys, desc: str.catJerseysDesc, men: shopMen, women: shopWomen, src: JIMG + 'M06.jpeg', alt: 'Facet Jersey, Harbour', go: cat('jersey', 'men'), goMen: cat('jersey', 'men'), goWomen: cat('jersey', 'women') },
+        { name: str.catOuterwear, desc: str.catOuterwearDesc, men: shopMen, women: shopWomen, src: OIMG + 'womens-mosaic-thermal-jacket-multi.jpeg', alt: 'Mosaic Thermal Jacket, glasshouse, women\'s fit', go: cat('outerwear', 'women'), goMen: cat('outerwear', 'men'), goWomen: cat('outerwear', 'women') },
+        { name: str.accessories, desc: str.catAccessoriesDesc || str.catOuterwearDesc, men: shopMen, women: shopWomen, src: IMG + 'A11-winter-gloves-black.jpeg', alt: 'Deep Winter Glove, black', go: cat('accessories', 'accessories'), goMen: cat('accessories', 'men'), goWomen: cat('accessories', 'women') },
+      ],
+      newIn: ['w01', 'm03', 'winter-glove', 'race-cap'].map((id) => this.card(this.item(id), str, colours)),
+
+      // ── plp ──
+      plpTitle: sectionTitle,
+      showingLine: fmt(str.shShowingOf, String(shown.length), String(list.length)),
+      plpItems: (function () {
+        const cards = shown.map((x) => this.card(x, str, colours));
+        // one advert after the second row on a full page of results
+        if (cards.length >= 6) cards.splice(6, 0, this.promoCard(str));
+        return cards;
+      }).call(this),
+      plpSorts: [
+        { key: 'newest', label: str.seNewest, on: s.sort === 'newest' },
+        { key: 'price', label: str.sePrice, on: s.sort === 'price' },
+        { key: 'popular', label: str.shPopularSort, on: s.sort === 'popular' },
+      ],
+      plpFilters: [
+        {
+          label: str.shProductType, kind: 'check',
+          items: [
+            { label: str.catJerseys, on: s.types.jersey, count: catCount('jersey') },
+            { label: str.catOuterwear, on: s.types.outerwear, count: catCount('outerwear') },
+            { label: str.accessories, on: s.types.accessories, count: catCount('accessories') },
+          ],
+        },
+        {
+          label: str.shSize, kind: 'chip',
+          items: ['XS', 'S', 'M', 'L', 'XL', 'XXL'].map((z) => ({ label: z, on: !!s.sizes[z] })),
+        },
+        {
+          label: str.shColour, kind: 'swatch',
+          items: COLOURS.map((c) => ({ label: c.key, value: c.value, on: !!s.swatch[c.key] })),
+        },
+        {
+          label: str.shAvailability, kind: 'check',
+          items: [{ label: str.shInStock, on: false }],
+        },
+      ],
+      plpLoadMore: {
+        label: s.loadingMore ? str.loading : (s.shown >= list.length ? fmt(str.shAllShown, String(list.length)) : str.shLoadMore),
+        disabled: !!s.loadingMore || s.shown >= list.length,
+      },
+      loadMoreLabel: s.loadingMore ? str.loading : (s.shown >= list.length ? fmt(str.shAllShown, String(list.length)) : str.shLoadMore),
+      loadingMore: !!s.loadingMore || s.shown >= list.length,
+      loadMore: () => {
+        if (this.state.shown >= list.length) return;
+        this.setState({ loadingMore: true });
+        setTimeout(() => this.setState({ loadingMore: false, shown: Math.min(this.state.shown + 8, list.length) }), 450);
+      },
+
+      // ── product ──
+      pdpName: p.name,
+      pdpPrice: '£' + p.price,
+      colourLine: fmt(str.shColourDash, s.colour),
+      sizeLine: fmt(str.shSizeDash, s.size),
+      pdpColours: COLOURS.slice(0, 6).map((c) => ({
+        label: c.key,
+        on: s.colour === c.key,
+        pick: () => this.setState({ colour: c.key }),
+        ring: this.ring(s.colour === c.key),
+        swatch: 'width: 30px; height: 30px; border-radius: 50%; background: ' + c.value + '; border: 1px solid var(--color-divider);',
+      })),
+      pdpSizes: ['XS', 'S', 'M', 'L', 'XL'].map((z) => ({
+        label: z, on: s.size === z, pick: () => this.setState({ size: z }),
+      })),
+      pdpShots: [
+        { src: p.src, alt: p.alt },
+        p.hoverSrc ? { src: p.hoverSrc, alt: p.name + ', fabric close-up' } : { src: IMG + 'B2-collar-zip-detail-blue.jpeg', alt: 'Collar and hidden zip detail' },
+      ],
+      pdpRelated: ['race-sock', 'neck-warmer', 'race-cap', 'overshoe'].map((id) => this.card(this.item(id), str, colours)),
+      addLabel: s.added ? str.shAdded : str.shAddToBag,
+      addToBag: () => {
+        const next = this.state.bag.slice();
+        const hit = next.filter((b) => b.id === s.product)[0];
+        if (hit) hit.qty += 1; else next.push({ id: s.product, qty: 1 });
+        this.setState({ bag: next, added: true });
+        setTimeout(() => this.setState({ added: false }), 1600);
+      },
+
+      // ── checkout ──
+      coSteps: [str.stDetails, str.stDelivery, str.stPayment],
+      coStep: 1,
+      bagCount: bagCount,
+      bagItems: fmt(str.shItems, String(bagCount)),
+      bagLines: bagRows.map((b) => ({
+        name: b.name,
+        variant: s.colour + ' · ' + s.size,
+        price: money(b.price * b.qty),
+        qty: b.qty,
+        src: b.src,
+        alt: b.alt,
+      })),
+      totalLines: [
+        { label: str.shSubtotal, value: money(subtotal) },
+        { label: fmt(str.shDeliveryDash, shipLabel), value: shipCost === 0 ? str.shFree : money(shipCost) },
+        { label: str.shVat, value: money(total / 6) },
+      ],
+      assurances: [str.shReturns90, str.shFreeRepairs, str.shSecure],
+      total: money(total),
+      shipOptions: [
+        { label: str.shStandardRow, price: str.shFree, on: s.shipping === 'Standard', pick: () => this.setState({ shipping: 'Standard' }) },
+        { label: str.shExpressRow, price: '£9.00', on: s.shipping === 'Express', pick: () => this.setState({ shipping: 'Express' }) },
+        { label: str.shCollectRow, price: str.shFree, on: s.shipping === 'Workshop collection', pick: () => this.setState({ shipping: 'Workshop collection' }) },
+      ],
+      shippingLabel: shipLabel,
+      email: s.email,
+      onEmail: (e) => this.setState({ email: e.target.value, error: '' }),
+      error: s.error,
+      hasError: !!s.error,
+      busy: s.busy,
+      payLabel: s.busy ? str.shTakingPayment : fmt(str.shPay, money(total)),
+      placeOrder: () => {
+        if (!/^[^@\s]+@[^@\s.]+\.[^@\s]+$/.test(s.email)) {
+          this.setState({ error: str.shErrEmail });
+          return;
+        }
+        this.setState({ busy: true, error: '' });
+        setTimeout(() => { this.setState({ busy: false }); this.go('confirmed'); }, 900);
+      },
+      confirmLead: fmt(str.shConfirmLead, s.email || 'you@example.com'),
+
+      // ── routing ──
+      goHome: () => this.go('home'),
+      goPlp: () => this.go('plp'),
+      goCheckout: () => this.go('checkout'),
+      navigate: (dest, payload) => {
+        if (typeof dest === 'string' && dest.indexOf('product:') === 0) {
+          this.setState({ screen: 'product', product: dest.slice(8) });
+          this.top();
+          return;
+        }
+        if (dest === 'men' || dest === 'women' || dest === 'accessories') {
+          this.setState({ screen: 'plp', section: dest, types: {}, shown: 8 });
+          this.top();
+          return;
+        }
+        if (dest === 'loadmore') {
+          if (this.state.shown >= list.length) return;
+          this.setState({ loadingMore: true });
+          setTimeout(() => this.setState({ loadingMore: false, shown: Math.min(this.state.shown + 8, list.length) }), 450);
+          return;
+        }
+        if (dest === 'sort') { this.setState({ sort: payload }); return; }
+        if (dest === 'filter') {
+          if (payload && payload.group === (str.shGender || 'Fit')) {
+            const which = payload.item === (str.nvWomen || 'Women') ? 'women'
+              : payload.item === str.accessories ? 'accessories' : 'men';
+            this.setState({ section: which, shown: 8 });
+            return;
+          }
+          const map = { [str.catJerseys]: 'jersey', [str.catOuterwear]: 'outerwear', [str.accessories]: 'accessories' };
+          const key = map[payload && payload.item];
+          if (key) { setType(key); return; }
+          if (payload && payload.group === str.shSize) {
+            const next = Object.assign({}, this.state.sizes);
+            next[payload.item] = !next[payload.item];
+            this.setState({ sizes: next });
+            return;
+          }
+          if (payload && payload.group === str.shColour) {
+            const next = Object.assign({}, this.state.swatch);
+            next[payload.item] = !next[payload.item];
+            this.setState({ swatch: next });
+            return;
+          }
+          return;
+        }
+        if (dest === 'clearfilters') { this.setState({ types: {}, sizes: {}, swatch: {} }); return; }
+        if (dest === 'qty') {
+          const next = this.state.bag.map((b, i) => (i === payload.index ? { id: b.id, qty: Math.max(1, b.qty + payload.delta) } : b));
+          this.setState({ bag: next });
+          return;
+        }
+        if (dest === 'remove') {
+          this.setState({ bag: this.state.bag.filter((b, i) => i !== payload) });
+          return;
+        }
+        if (dest === 'journal') {
+          if (typeof this.props.onJournal === 'function') { this.props.onJournal(); return; }
+          window.location.href = 'BridgeJournal.dc.html';
+          return;
+        }
+        if (dest === 'signin') {
+          if (typeof this.props.onSignIn === 'function') { this.props.onSignIn(); return; }
+          window.location.href = 'BridgeLogin.dc.html';
+          return;
+        }
+        if (dest === 'search') {
+          if (typeof this.props.onSearch === 'function') { this.props.onSearch(payload); return; }
+          window.location.href = 'BridgeSearch.dc.html';
+          return;
+        }
+        if (dest === 'product') { this.setState({ screen: 'product' }); this.top(); return; }
+        this.go(dest);
+      },
+    };
+  }
+}
+</script>
+</body>
+</html>

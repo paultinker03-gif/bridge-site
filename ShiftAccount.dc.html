@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="brands.css">
+<script src="locale.js"></script>
+<style>
+  body { margin: 0; }
+  a { color: var(--color-accent); }
+  a:hover { color: var(--color-accent-700); }
+</style>
+</helmet>
+
+<div data-brand="shift" dir="{{ dir }}" style="background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); min-height: 100vh;">
+
+  <dc-import name="Blocks" brand="shift" block="nav" device="{{ device }}" bag-count="1" account-label="A. Albers" on-navigate="{{ navigate }}" hint-size="100%,140px"></dc-import>
+
+  <!-- ══ HEADER + CREDIT ══ -->
+  <div style="border-bottom: 1px solid var(--color-divider);">
+    <div style="max-width: 1760px; margin: 0 auto; padding: clamp(28px, 4vw, 56px) clamp(16px, 5vw, 64px); display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: clamp(24px, 4vw, 56px); align-items: end;">
+      <div>
+        <div style="font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 16px;">Your record</div>
+        <h1 style="margin: 0 0 8px; font-size: clamp(30px, 4vw, 56px);">Anni Albers</h1>
+        <p style="margin: 0; font-size: 14px; color: var(--color-neutral-800);">Member since 2019 · 14 pieces owned · 9 repairs logged</p>
+      </div>
+      <div style="border: 1px solid var(--color-divider); padding: 22px 24px; display: flex; flex-direction: column; gap: 6px;">
+        <span style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-neutral-700);">Circular credit</span>
+        <span dir="ltr" style="font-family: var(--font-heading); font-weight: 800; font-size: clamp(38px, 4vw, 54px); letter-spacing: -0.05em; line-height: 1; color: var(--color-accent);">£64</span>
+        <span style="font-size: 12px; color: var(--color-neutral-700);">Spends at Bridge or SHIFT · Never expires</span>
+        <div style="display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap;">
+          <button class="btn btn-primary" style="min-height: 44px;" onClick="{{ goShop }}">Spend it</button>
+          <button class="btn btn-secondary" style="min-height: 44px;" onClick="{{ goBridge }}">At Bridge</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ TABS ══ -->
+  <div style="border-bottom: 1px solid var(--color-divider); position: sticky; top: 0; z-index: 30; background: var(--color-bg);">
+    <div style="max-width: 1760px; margin: 0 auto; padding: 0 clamp(16px, 5vw, 64px); display: flex; gap: 4px; overflow-x: auto;">
+      <sc-for list="{{ tabs }}" as="tb" hint-placeholder-count="4">
+        <button onClick="{{ tb.pick }}" style="{{ tb.style }}">{{ tb.label }}</button>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="max-width: 1760px; margin: 0 auto; padding: clamp(28px, 4vw, 56px) clamp(16px, 5vw, 64px) clamp(40px, 6vw, 88px);">
+
+    <!-- ── AT THE BENCH ── -->
+    <sc-if value="{{ isBench }}" hint-placeholder-val="{{ true }}">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: clamp(20px, 3vw, 40px);">
+        <sc-for list="{{ repairs }}" as="rp" hint-placeholder-count="2">
+          <div style="border: 1px solid var(--color-divider); display: flex; flex-direction: column;">
+            <div style="display: flex; gap: 16px; padding: 20px; border-bottom: 1px solid var(--color-divider);">
+              <div style="flex: none; width: 84px; aspect-ratio: 3 / 4; background: var(--color-surface); position: relative;">
+                <img src="{{ rp.src }}" alt="{{ rp.name }}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+              </div>
+              <div style="min-width: 0;">
+                <div dir="ltr" class="brand-lockup" style="font-family: var(--font-heading); font-weight: 700; font-size: 18px; letter-spacing: -0.025em;">{{ rp.name }}</div>
+                <div style="font-size: 12px; color: var(--color-neutral-700); margin-top: 4px;">{{ rp.job }}</div>
+                <div style="margin-top: 10px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                  <span class="tag tag-accent">{{ rp.stage }}</span>
+                  <span style="font-size: 12px; color: var(--color-neutral-700);">{{ rp.eta }}</span>
+                </div>
+              </div>
+            </div>
+            <div style="padding: 20px;">
+              <dc-import name="Components" comp="stepper" brand="shift" steps="{{ rp.stepLabels }}" current-step="{{ rp.stepIndex }}" hint-size="100%,54px"></dc-import>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <!-- ── TRADE-INS ── -->
+    <sc-if value="{{ isTrades }}" hint-placeholder-val="{{ false }}">
+      <div>
+        <table class="table">
+          <thead><tr><th>Piece</th><th>Sent</th><th>Grade</th><th style="text-align: end;">Credit</th><th>Stage</th></tr></thead>
+          <tbody>
+            <sc-for list="{{ trades }}" as="tr" hint-placeholder-count="4">
+              <tr>
+                <td dir="ltr">{{ tr.name }}</td>
+                <td dir="ltr" style="font-variant-numeric: tabular-nums;">{{ tr.sent }}</td>
+                <td>{{ tr.grade }}</td>
+                <td dir="ltr" style="text-align: end; font-variant-numeric: tabular-nums;">{{ tr.credit }}</td>
+                <td><span class="{{ tr.tagClass }}">{{ tr.stage }}</span></td>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+        <div style="margin-top: 28px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-top: 1px solid var(--color-divider); padding-top: 20px;">
+          <span style="font-size: 13px; color: var(--color-neutral-800);">Have something else to send in? Estimate it first — the bench confirms within 48 hours.</span>
+          <button class="btn btn-primary" style="min-height: 46px; margin-inline-start: auto;" onClick="{{ goTradeIn }}">Start a trade-in</button>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ── PIECES OWNED ── -->
+    <sc-if value="{{ isPieces }}" hint-placeholder-val="{{ false }}">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: clamp(20px, 2.4vw, 36px);">
+        <sc-for list="{{ pieces }}" as="pc" hint-placeholder-count="4">
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="aspect-ratio: 3 / 4; position: relative; background: var(--color-surface);">
+              <img src="{{ pc.src }}" alt="{{ pc.name }}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+              <span class="{{ pc.tagClass }}">{{ pc.tag }}</span>
+            </div>
+            <span style="font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-neutral-700);">{{ pc.life }}</span>
+            <span dir="ltr" class="brand-lockup" style="font-family: var(--font-heading); font-weight: 700; font-size: 16px; letter-spacing: -0.02em;">{{ pc.name }}</span>
+            <span style="font-size: 12px; color: var(--color-neutral-700);">{{ pc.meta }}</span>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 2px;">
+              <button class="btn btn-secondary" style="min-height: 40px;" onClick="{{ pc.repair }}">Repair</button>
+              <button class="btn btn-ghost" style="min-height: 40px;" onClick="{{ pc.trade }}">Trade in</button>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <!-- ── IMPACT ── -->
+    <sc-if value="{{ isImpact }}" hint-placeholder-val="{{ false }}">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: clamp(24px, 4vw, 56px); align-items: start;">
+        <div>
+          <h2 style="margin: 0 0 12px; font-size: clamp(24px, 2.6vw, 36px); max-width: 20ch;">What your account has kept in use.</h2>
+          <p style="margin: 0; font-size: 14px; color: var(--color-neutral-800); max-width: 40ch; text-wrap: pretty;">Counted the same way as the public ledger — repairs completed, pieces resold, fibre recovered. No estimates.</p>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: var(--color-divider); border: 1px solid var(--color-divider);">
+          <sc-for list="{{ impact }}" as="im" hint-placeholder-count="4">
+            <div style="background: var(--color-bg); padding: 22px;">
+              <div dir="ltr" style="font-family: var(--font-heading); font-weight: 800; font-size: 30px; letter-spacing: -0.04em;">{{ im.value }}</div>
+              <div style="font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-neutral-700); margin-top: 8px;">{{ im.label }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+  </div>
+
+  <dc-import name="Blocks" brand="shift" block="footer" device="{{ device }}" on-navigate="{{ navigate }}" hint-size="100%,420px"></dc-import>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  state = { tab: 'bench', tick: 0, vw: 1440 };
+
+  componentDidMount() {
+    this.onResize = () => this.setState({ vw: window.innerWidth });
+    window.addEventListener('resize', this.onResize);
+    this.onResize();
+    const attach = () => {
+      const s = window.BridgeLocale;
+      if (!s) { this._retry = setTimeout(attach, 60); return; }
+      this._unsub = s.subscribe(() => this.setState({ tick: this.state.tick + 1 }));
+      this.setState({ tick: this.state.tick + 1 });
+    };
+    attach();
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onResize);
+    clearTimeout(this._retry);
+    if (this._unsub) this._unsub();
+  }
+
+  renderVals() {
+    const s = this.state;
+    const store = window.BridgeLocale;
+    const loc = store ? store.get() : { dir: 'ltr' };
+    const tabStyle = (on) =>
+      'appearance: none; background: transparent; border: 0; border-bottom: 2px solid ' + (on ? 'var(--color-accent)' : 'transparent') +
+      '; cursor: pointer; font: inherit; font-family: var(--font-heading); font-weight: 600; font-size: 12px;' +
+      ' letter-spacing: 0.08em; text-transform: uppercase; color: ' + (on ? 'var(--color-text)' : 'var(--color-neutral-700)') +
+      '; min-height: 52px; padding: 0 14px; flex: none;';
+    const step = (state, label, when) => ({
+      label: label,
+      when: when,
+      ink: state === 'todo' ? 'var(--color-neutral-600)' : 'var(--color-text)',
+      dot: 'flex: none; width: 9px; height: 9px; border: 1px solid ' +
+        (state === 'todo' ? 'var(--color-divider)' : 'var(--color-text)') + '; background: ' +
+        (state === 'now' ? 'var(--color-accent)' : state === 'done' ? 'var(--color-text)' : 'transparent') + ';',
+    });
+
+    return {
+      dir: loc.dir || 'ltr',
+      device: (s.vw || 1440) < 760 ? 'mobile' : 'desktop',
+      navigate: (dest) => {
+        const f = this.props.onExit;
+        if (typeof f === 'function') { f(dest); return; }
+        if (dest === 'search') { window.location.href = 'ShiftSearch.dc.html'; return; }
+        if (dest === 'plp') { window.location.href = 'ShiftShop.dc.html'; return; }
+        if (dest === 'checkout') { window.location.href = 'ShiftShop.dc.html?screen=checkout'; return; }
+        if (dest === 'signin') { window.location.href = 'ShiftLogin.dc.html'; return; }
+        window.location.href = 'ShiftHome.dc.html';
+      },
+      goShop: () => { const f = this.props.onExit; if (typeof f === 'function') { f('plp'); return; } window.location.href = 'ShiftShop.dc.html'; },
+      goBridge: () => { window.location.href = 'BridgeShop.dc.html'; },
+      goTradeIn: () => { const f = this.props.onExit; if (typeof f === 'function') { f('home'); return; } window.location.href = 'ShiftHome.dc.html#shift-tradein'; },
+
+      tabs: [['bench', 'At the bench'], ['trades', 'Trade-ins'], ['pieces', 'Pieces owned'], ['impact', 'Your impact']].map((t) => ({
+        label: t[1], style: tabStyle(s.tab === t[0]), pick: () => this.setState({ tab: t[0] }),
+      })),
+      isBench: s.tab === 'bench',
+      isTrades: s.tab === 'trades',
+      isPieces: s.tab === 'pieces',
+      isImpact: s.tab === 'impact',
+
+      repairs: [
+        {
+          name: 'Winterline Jacket', job: 'Re-waterproofing · Bench 04, Girona',
+          stage: 'In progress', eta: 'Back with you 08 Sep',
+          src: 'bridge/A10-rain-shell-translucent.jpeg',
+          steps: [step('done', 'Collected', '28 Aug'), step('done', 'Inspected at bench', '30 Aug'), step('now', 'Re-waterproofing', '31 Aug'), step('todo', 'Posted back', '—')],
+          stepLabels: ['Collected', 'Inspected', 'At the bench', 'Posted back'],
+          stepIndex: 2,
+        },
+        {
+          name: 'Tapestry Jersey — Sovereign', job: 'Cuff repair · Bench 01, Bristol',
+          stage: 'Awaiting parts', eta: 'Estimate 11 Sep',
+          src: 'bridge-jerseys/W07.jpeg',
+          steps: [step('done', 'Dropped off', '25 Aug'), step('done', 'Inspected at bench', '26 Aug'), step('now', 'Waiting on thread', '29 Aug'), step('todo', 'Ready to collect', '—')],
+          stepLabels: ['Dropped off', 'Inspected', 'On the bench', 'Ready'],
+          stepIndex: 2,
+        },
+      ],
+
+      trades: [
+        { name: 'Cadence Jersey', sent: '12 Aug', grade: 'Grade B', credit: '£38', stage: 'Credited', tagClass: 'tag tag-neutral' },
+        { name: 'Series 01 Pro Jersey', sent: '02 Aug', grade: 'Grade A', credit: '£64', stage: 'Listed', tagClass: 'tag tag-accent' },
+        { name: 'Mesh Base Layer', sent: '19 Jul', grade: 'Grade C', credit: '£12', stage: 'Recovered to fibre', tagClass: 'tag tag-outline' },
+        { name: 'Race Sock — 15cm', sent: '19 Jul', grade: 'Grade C', credit: '£4', stage: 'Recovered to fibre', tagClass: 'tag tag-outline' },
+      ],
+
+      pieces: [
+        { name: 'Meridian Bib Short', life: 'Second life no. 04117', meta: 'Bought pre-owned, Mar 2025 · 4,200 km', tag: 'Grade A', tagClass: 'tag tag-on-image tag-accent', src: 'bridge/A2-bib-short-black-side.jpeg' },
+        { name: 'Winterline Jacket', life: 'First life · bought new 2021', meta: 'At the bench · 2 repairs logged', tag: 'At bench', tagClass: 'tag tag-on-image tag-solid', src: 'bridge/A10-rain-shell-translucent.jpeg' },
+        { name: 'Featherweight Gilet', life: 'First life · bought new 2023', meta: 'Eligible for trade-in · est. £48', tag: 'Trade-in ready', tagClass: 'tag tag-on-image tag-quiet', src: 'bridge/A4-womens-gilet-orange-front.jpeg' },
+        { name: "Women's Winter Tight", life: 'Second life no. 03844', meta: 'At the bench · awaiting parts', tag: 'At bench', tagClass: 'tag tag-on-image tag-solid', src: 'bridge/A9-womens-winter-tights-black.jpeg' },
+      ].map((p) => ({
+        name: p.name, life: p.life, meta: p.meta, tag: p.tag, tagClass: p.tagClass, src: p.src,
+        repair: () => { const f = this.props.onExit; if (typeof f === 'function') { f('home'); return; } window.location.href = 'ShiftHome.dc.html#shift-repair'; },
+        trade: () => { const f = this.props.onExit; if (typeof f === 'function') { f('home'); return; } window.location.href = 'ShiftHome.dc.html#shift-tradein'; },
+      })),
+
+      impact: [
+        { value: '9', label: 'repairs logged' },
+        { value: '4', label: 'pieces traded in' },
+        { value: '£118', label: 'credit earned' },
+        { value: '6.4 kg', label: 'kept out of landfill' },
+      ],
+    };
+  }
+}
+
+</script>
+</body>
+</html>

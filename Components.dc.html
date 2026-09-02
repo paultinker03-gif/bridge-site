@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="brands.css">
+<script src="locale.js"></script>
+<style>
+  body { margin: 0; }
+  a { color: var(--color-accent); }
+  a:hover { color: var(--color-accent-700); }
+</style>
+</helmet>
+
+<div data-brand="{{ brandKey }}" style="font-family: var(--font-body); color: var(--color-text); background: var(--color-bg); padding: {{ pad }};">
+
+  <!-- ===== BUTTON ===== -->
+  <sc-if value="{{ isButton }}" hint-placeholder-val="{{ true }}">
+    <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+      <sc-if value="{{ btnPrimary }}" hint-placeholder-val="{{ true }}">
+        <button class="btn btn-primary">{{ label }}</button>
+      </sc-if>
+      <sc-if value="{{ btnSecondary }}" hint-placeholder-val="{{ false }}">
+        <button class="btn btn-secondary">{{ label }}</button>
+      </sc-if>
+      <sc-if value="{{ btnGhost }}" hint-placeholder-val="{{ false }}">
+        <button class="btn btn-ghost">{{ label }}</button>
+      </sc-if>
+      <sc-if value="{{ btnIcon }}" hint-placeholder-val="{{ false }}">
+        <button class="btn btn-icon btn-secondary" aria-label="Search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg></button>
+      </sc-if>
+      <sc-if value="{{ btnBlock }}" hint-placeholder-val="{{ false }}">
+        <button class="btn btn-primary btn-block" style="max-width: 380px;"><span>{{ label }}</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      </sc-if>
+      <sc-if value="{{ btnDisabled }}" hint-placeholder-val="{{ false }}">
+        <button class="btn btn-primary" disabled="disabled">{{ label }}</button>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <!-- ===== TAG ===== -->
+  <sc-if value="{{ isTag }}" hint-placeholder-val="{{ false }}">
+    <div style="display: flex; flex-direction: column; gap: 20px; align-items: flex-start;">
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+        <sc-if value="{{ tagAccent }}" hint-placeholder-val="{{ true }}"><span class="tag tag-accent">{{ label }}</span></sc-if>
+        <sc-if value="{{ tagNeutral }}" hint-placeholder-val="{{ false }}"><span class="tag tag-neutral">{{ label }}</span></sc-if>
+        <sc-if value="{{ tagSolid }}" hint-placeholder-val="{{ false }}"><span class="tag tag-solid">{{ label }}</span></sc-if>
+      </div>
+      <sc-if value="{{ tagOnImage }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; gap: 12px;">
+          <div style="position: relative; width: 132px; aspect-ratio: 3 / 4; background: var(--color-surface);"><span class="tag tag-solid tag-on-image">New</span></div>
+          <div style="position: relative; width: 132px; aspect-ratio: 3 / 4; background: var(--color-surface);"><span class="tag tag-quiet tag-on-image">Low stock</span></div>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <!-- ===== BADGE ===== -->
+  <sc-if value="{{ isBadge }}" hint-placeholder-val="{{ false }}">
+    <div style="display: flex; flex-direction: column; gap: 24px; align-items: flex-start;">
+      <div style="display: flex; flex-wrap: wrap; gap: 14px; align-items: center;">
+        <sc-if value="{{ badgeCount }}" hint-placeholder-val="{{ true }}"><span class="badge">2</span></sc-if>
+        <sc-if value="{{ badgeCount }}" hint-placeholder-val="{{ true }}"><span class="badge">12</span></sc-if>
+      </div>
+      <sc-if value="{{ badgeOnIcon }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; gap: 18px; align-items: center;">
+          <span style="position: relative; display: inline-flex;">
+            <button class="btn btn-icon btn-secondary" aria-label="Bag — 2 items"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"><path d="M4 8h16l-1.2 12H5.2L4 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg></button>
+            <span class="badge badge-sm badge-pin">2</span>
+          </span>
+          <span style="font-size: 12px; color: var(--color-neutral-700);">.badge.badge-sm.badge-pin on a .btn-icon</span>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <!-- ===== ALERT ===== -->
+  <sc-if value="{{ isAlert }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width: 520px; display: flex; flex-direction: column; gap: 16px;">
+      <sc-if value="{{ alertInfo }}" hint-placeholder-val="{{ true }}">
+        <div class="alert alert-info">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>
+          <div><div class="alert-title">Ships from Bristol</div><p class="alert-body">Orders placed before 2pm go out the same working day.</p></div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ alertSuccess }}" hint-placeholder-val="{{ false }}">
+        <div class="alert alert-success">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square"><path d="m5 13 5 5 9-11"/></svg>
+          <div><div class="alert-title">Added to your bag</div><p class="alert-body">Series 01 Pro Jersey, size M.</p></div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ alertWarning }}" hint-placeholder-val="{{ false }}">
+        <div class="alert alert-warning">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M12 4l8.5 15H3.5L12 4Z"/><path d="M12 10v4M12 16.5v.5"/></svg>
+          <div><div class="alert-title">Two left in this size</div><p class="alert-body">We restock the race fit every six weeks.</p></div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ alertError }}" hint-placeholder-val="{{ false }}">
+        <div class="alert alert-error">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><circle cx="12" cy="12" r="9"/><path d="m8.5 8.5 7 7M15.5 8.5l-7 7"/></svg>
+          <div><div class="alert-title">That card was declined</div><p class="alert-body">Check the number and expiry, or try another card.</p></div>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <!-- ===== QUANTITY PICKER ===== -->
+  <sc-if value="{{ isQty }}" hint-placeholder-val="{{ false }}">
+    <div style="display: flex; flex-direction: column; gap: 24px; align-items: flex-start;">
+      <sc-if value="{{ qtyDefault }}" hint-placeholder-val="{{ true }}">
+        <div class="qty">
+          <button type="button" aria-label="Decrease quantity"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><path d="M5 12h14"/></svg></button>
+          <span class="qty-value">2</span>
+          <button type="button" aria-label="Increase quantity"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><path d="M12 5v14M5 12h14"/></svg></button>
+        </div>
+      </sc-if>
+      <sc-if value="{{ qtyAtMin }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; gap: 16px; align-items: center;">
+          <div class="qty">
+            <button type="button" aria-label="Decrease quantity" disabled="disabled"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><path d="M5 12h14"/></svg></button>
+            <span class="qty-value">1</span>
+            <button type="button" aria-label="Increase quantity"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><path d="M12 5v14M5 12h14"/></svg></button>
+          </div>
+          <span style="font-size: 12px; color: var(--color-neutral-700);">At the minimum — decrease is disabled, not hidden.</span>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <!-- ===== FIELD ===== -->
+  <sc-if value="{{ isField }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width: 420px; display: flex; flex-direction: column; gap: 18px;">
+      <sc-if value="{{ fieldDefault }}" hint-placeholder-val="{{ true }}">
+        <div class="field"><label for="c-f1">Email</label><input class="input" id="c-f1" placeholder="you@example.com"></div>
+      </sc-if>
+      <sc-if value="{{ fieldFilled }}" hint-placeholder-val="{{ false }}">
+        <div class="field"><label for="c-f2">Town or city</label><input class="input" id="c-f2" value="Bristol"></div>
+      </sc-if>
+      <sc-if value="{{ fieldError }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div class="field"><label for="c-f3">Postcode</label><input class="input" id="c-f3" value="BS1" style="border-color: var(--color-accent);"></div>
+          <div style="font-size: 12px; color: var(--color-accent-700); margin-top: 6px;">That postcode is incomplete.</div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ fieldDisabled }}" hint-placeholder-val="{{ false }}">
+        <div class="field"><label for="c-f4">Country</label><input class="input" id="c-f4" value="United Kingdom" disabled="disabled"></div>
+      </sc-if>
+      <sc-if value="{{ fieldTextarea }}" hint-placeholder-val="{{ false }}">
+        <div class="field"><label for="c-f5">Repair notes</label><textarea class="input" id="c-f5" placeholder="What needs mending?"></textarea></div>
+      </sc-if>
+      <sc-if value="{{ fieldAction }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; gap: 8px; align-items: flex-end;">
+          <div class="field" style="flex: 1;"><label for="c-f6">Promotion code</label><input class="input" id="c-f6" placeholder="Enter code"></div>
+          <button class="btn btn-secondary">Apply</button>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <!-- ===== CHOICE ===== -->
+  <sc-if value="{{ isChoice }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width: 480px;">
+      <sc-if value="{{ choiceRadio }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <label class="radio"><input type="radio" name="c-r" checked="checked"><span class="dot"></span><span>Standard — 2–4 working days</span></label>
+          <label class="radio"><input type="radio" name="c-r"><span class="dot"></span><span>Express — next working day</span></label>
+          <label class="radio"><input type="radio" name="c-r" disabled="disabled"><span class="dot"></span><span>Same day — unavailable</span></label>
+        </div>
+      </sc-if>
+      <sc-if value="{{ choiceCheck }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <label class="radio"><input type="checkbox" checked="checked"><span class="dot"></span><span>Jerseys (7)</span></label>
+          <label class="radio"><input type="checkbox"><span class="dot"></span><span>Shorts &amp; bibs (5)</span></label>
+          <label class="radio"><input type="checkbox"><span class="dot"></span><span>In stock only</span></label>
+        </div>
+      </sc-if>
+      <sc-if value="{{ choicePriced }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <label class="radio" style="justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--color-divider);">
+            <span style="display: flex; align-items: center; gap: 10px;"><input type="radio" name="c-p" checked="checked"><span class="dot"></span><span>Standard delivery</span></span>
+            <span style="font-size: 13px;">Free</span>
+          </label>
+          <label class="radio" style="justify-content: space-between; gap: 16px; padding: 14px 0;">
+            <span style="display: flex; align-items: center; gap: 10px;"><input type="radio" name="c-p"><span class="dot"></span><span>Express delivery</span></span>
+            <span style="font-size: 13px;">£9.00</span>
+          </label>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <!-- ===== SEGMENTED ===== -->
+  <sc-if value="{{ isSeg }}" hint-placeholder-val="{{ false }}">
+    <div style="display: flex; flex-direction: column; gap: 16px; align-items: flex-start;">
+      <sc-if value="{{ segThree }}" hint-placeholder-val="{{ true }}">
+        <div class="seg" style="max-width: 340px;">
+          <label class="seg-opt"><input type="radio" name="c-s1" checked="checked"><span>Newest</span></label>
+          <label class="seg-opt"><input type="radio" name="c-s1"><span>Price</span></label>
+          <label class="seg-opt"><input type="radio" name="c-s1"><span>Popular</span></label>
+        </div>
+      </sc-if>
+      <sc-if value="{{ segFive }}" hint-placeholder-val="{{ false }}">
+        <div class="seg" style="max-width: 420px;">
+          <label class="seg-opt"><input type="radio" name="c-s3"><span>XS</span></label>
+          <label class="seg-opt"><input type="radio" name="c-s3"><span>S</span></label>
+          <label class="seg-opt"><input type="radio" name="c-s3" checked="checked"><span>M</span></label>
+          <label class="seg-opt"><input type="radio" name="c-s3"><span>L</span></label>
+          <label class="seg-opt"><input type="radio" name="c-s3"><span>XL</span></label>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <!-- ===== CARD ===== -->
+  <sc-if value="{{ isCard }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width: 340px; display: flex; flex-direction: column; gap: 20px;">
+      <sc-if value="{{ cardFlat }}" hint-placeholder-val="{{ true }}">
+        <div class="card">
+          <div class="card-kicker">Flat — default</div>
+          <div class="card-title">No shadow at rest</div>
+          <p class="card-body">The surface tone and the grid separate it from the ground.</p>
+          <div class="card-meta"><span>.card</span></div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ cardSm }}" hint-placeholder-val="{{ false }}">
+        <div class="card elev-sm">
+          <div class="card-kicker">Raised</div>
+          <div class="card-title">Interactive surfaces</div>
+          <p class="card-body">A card the reader can act on, or one that lifts on hover.</p>
+          <div class="card-meta"><span>.elev-sm</span></div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ cardLg }}" hint-placeholder-val="{{ false }}">
+        <div class="card elev-lg">
+          <div class="card-kicker">Top layer</div>
+          <div class="card-title">Dialogs and sheets</div>
+          <p class="card-body">Reserved for content floating over the whole page.</p>
+          <div class="card-meta"><span>.elev-lg</span></div>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <!-- ===== PRODUCT CARD ===== -->
+  <sc-if value="{{ isProduct }}" hint-placeholder-val="{{ false }}">
+    <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start;">
+      <sc-if value="{{ prodDefault }}" hint-placeholder-val="{{ true }}">
+        <div style="width: 260px; display: flex; flex-direction: column; gap: 10px;">
+          <a href="#" style="position: relative; display: block; aspect-ratio: 4 / 5; background: var(--color-surface); text-decoration: none;">
+            <img src="bridge-jerseys/M04.jpeg" alt="Kolam Jersey in emerald, kolam line pattern in gold" style="width: 100%; height: 100%; object-fit: cover;">
+            <span class="tag tag-on-image tag-solid">New</span>
+          </a>
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-700);">Jerseys · 3 colours</span>
+            <a href="#" style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 16px; text-decoration: none; color: var(--color-text);">Kolam Jersey — Emerald</a>
+            <span style="font-size: 14px;">£180</span>
+          </div>
+          <button class="btn btn-secondary" style="width: 100%;">Add to bag</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{ prodSale }}" hint-placeholder-val="{{ false }}">
+        <div style="width: 260px; display: flex; flex-direction: column; gap: 10px;">
+          <a href="#" style="position: relative; display: block; aspect-ratio: 4 / 5; background: var(--color-surface); text-decoration: none;">
+            <img src="bridge-jerseys/M02.jpeg" alt="Weave Jersey in fern green, woven geometric pattern" style="width: 100%; height: 100%; object-fit: cover;">
+            <span class="tag tag-on-image tag-accent">Sale</span>
+          </a>
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-700);">Jerseys · 2 colours</span>
+            <a href="#" style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 16px; text-decoration: none; color: var(--color-text);">Weave Jersey — Fern</a>
+            <span style="display: flex; gap: 8px; align-items: baseline; font-size: 14px;"><span style="color: var(--color-signal-700);">£155</span><s style="color: var(--color-neutral-600); font-size: 13px;">£185</s></span>
+          </div>
+          <button class="btn btn-secondary" style="width: 100%;">Add to bag</button>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <!-- ===== PROMO / ADVERT CARD — cross-brand advertising cell, the whole card is the link ===== -->
+  <sc-if value="{{ isPromo }}" hint-placeholder-val="{{ false }}">
+    <a href="#" style="display: flex; flex-direction: column; gap: 14px; background: var(--color-surface); padding: 0 0 18px; max-width: 340px; text-decoration: none; color: inherit;">
+      <div style="height: 260px; background: var(--color-text);"><img src="bridge/C2-rider-mountain-road.jpeg" alt="A rider on an open mountain road in Bridge kit" style="width: 100%; height: 100%; object-fit: cover; display: block;"></div>
+      <div style="display: flex; flex-direction: column; gap: 8px; padding: 0 16px;">
+        <span style="font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-accent);">Circularity at Bridge</span>
+        <span style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 18px; line-height: 1.14;">Trade in your kit</span>
+        <p style="margin: 0; font-size: 13px; color: var(--color-neutral-800); text-wrap: pretty;">SHIFT repairs, regrades and resells Bridge gear after the first owner.</p>
+      </div>
+    </a>
+  </sc-if>
+
+  <!-- ===== TABLE ===== -->
+  <sc-if value="{{ isTable }}" hint-placeholder-val="{{ false }}">
+    <div style="display: flex; flex-direction: column; gap: 28px;">
+      <sc-if value="{{ tableDefault }}" hint-placeholder-val="{{ true }}">
+        <table class="table">
+          <thead><tr><th>Order</th><th>Placed</th><th>Items</th><th>Total</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>MER-40912</td><td>28 Aug</td><td>2</td><td>£380.00</td><td><span class="tag tag-neutral">Packed</span></td></tr>
+            <tr><td>MER-40871</td><td>21 Aug</td><td>1</td><td>£165.00</td><td><span class="tag tag-accent">Delayed</span></td></tr>
+            <tr><td>MER-40802</td><td>09 Aug</td><td>4</td><td>£512.00</td><td><span class="tag tag-outline">Delivered</span></td></tr>
+          </tbody>
+        </table>
+      </sc-if>
+      <sc-if value="{{ tableCompact }}" hint-placeholder-val="{{ false }}">
+        <table class="table" style="max-width: 520px; font-size: 13px;">
+          <thead><tr><th>Size</th><th>Chest</th><th>Waist</th><th>Height</th></tr></thead>
+          <tbody>
+            <tr><td>S</td><td>92–97cm</td><td>76–81cm</td><td>170–178cm</td></tr>
+            <tr><td>M</td><td>97–102cm</td><td>81–86cm</td><td>175–183cm</td></tr>
+            <tr><td>L</td><td>102–107cm</td><td>86–91cm</td><td>180–188cm</td></tr>
+          </tbody>
+        </table>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <!-- ===== DIALOG ===== -->
+  <sc-if value="{{ isDialog }}" hint-placeholder-val="{{ false }}">
+    <div style="padding: 28px; background: color-mix(in srgb, var(--color-neutral-900) 50%, transparent); display: flex; flex-direction: column; gap: 24px; align-items: center;">
+      <sc-if value="{{ dialogConfirm }}" hint-placeholder-val="{{ true }}">
+        <div class="dialog">
+          <div class="dialog-title">Remove this item?</div>
+          <div class="dialog-body">The Series 01 Pro Jersey will come out of your bag. Your other item stays.</div>
+          <div class="dialog-actions">
+            <button class="btn btn-secondary">Keep it</button>
+            <button class="btn btn-primary">Remove</button>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ dialogSheet }}" hint-placeholder-val="{{ false }}">
+        <div class="dialog">
+          <div class="dialog-title">Race fit — sizing</div>
+          <div class="dialog-body">Cut close through the chest and sleeve. If you ride between sizes, take the larger.</div>
+          <table class="table" style="font-size: 12px; margin-bottom: 12px;">
+            <thead><tr><th>Size</th><th>Chest</th></tr></thead>
+            <tbody>
+              <tr><td>S</td><td>92–97cm</td></tr>
+              <tr><td>M</td><td>97–102cm</td></tr>
+            </tbody>
+          </table>
+          <div class="dialog-actions">
+            <button class="btn btn-ghost">Close</button>
+            <button class="btn btn-primary">Choose M</button>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <!-- ===== LOCALE PICKER — country/language switcher, documented here alongside
+       the other components (it lives in its own LocalePicker.dc.html file so pages
+       can dc-import it, but it belongs in this reference) ===== -->
+  <sc-if value="{{ isLocale }}" hint-placeholder-val="{{ false }}">
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+      <div style="background: var(--color-text); padding: 12px 16px; display: flex; justify-content: flex-end;">
+        <dc-import name="LocalePicker" variant="trigger" tone="dark" device="desktop" hint-size="180px,20px"></dc-import>
+      </div>
+      <div style="border: 1px solid var(--color-divider); padding: 12px 16px; display: flex; justify-content: flex-start;">
+        <dc-import name="LocalePicker" variant="trigger" tone="light" device="desktop" hint-size="180px,20px"></dc-import>
+      </div>
+      <div style="border: 1px solid var(--color-divider); max-width: 390px;">
+        <dc-import name="LocalePicker" variant="inline" device="mobile" hint-size="100%,52px"></dc-import>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ===== STEPPER ===== -->
+  <sc-if value="{{ isStepper }}" hint-placeholder-val="{{ false }}">
+    <div style="display: flex; flex-direction: column; gap: 32px; align-items: flex-start; width: 100%;">
+      <div style="width: 100%; max-width: 520px;">
+        <div class="stepper">
+          <sc-for list="{{ stepperItems }}" as="sp" hint-placeholder-count="3">
+            <div class="stepper-step" data-state="{{ sp.state }}">
+              <div class="stepper-rail">
+                <span class="stepper-mark">
+                  <sc-if value="{{ sp.done }}" hint-placeholder-val="{{ false }}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"><path d="m5 13 5 5 9-11"/></svg></sc-if>
+                  <sc-if value="{{ sp.pending }}" hint-placeholder-val="{{ true }}"><span>{{ sp.num }}</span></sc-if>
+                </span>
+                <span class="stepper-line"></span>
+              </div>
+              <span class="stepper-label">{{ sp.label }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:560,&quot;height&quot;:300},&quot;brand&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;bridge&quot;,&quot;shift&quot;],&quot;default&quot;:&quot;bridge&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Component&quot;},&quot;comp&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;button&quot;,&quot;tag&quot;,&quot;badge&quot;,&quot;alert&quot;,&quot;field&quot;,&quot;choice&quot;,&quot;seg&quot;,&quot;qty&quot;,&quot;stepper&quot;,&quot;card&quot;,&quot;product&quot;,&quot;table&quot;,&quot;dialog&quot;,&quot;promo&quot;,&quot;locale&quot;],&quot;default&quot;:&quot;button&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Component&quot;},&quot;label&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Component&quot;},&quot;steps&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;string[]&quot;,&quot;section&quot;:&quot;Stepper&quot;},&quot;currentStep&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:1,&quot;min&quot;:0,&quot;max&quot;:10,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Stepper&quot;}}">
+class Component extends DCLogic {
+  componentDidMount() {
+    this.onResize = () => this.setState({ vw: window.innerWidth });
+    window.addEventListener('resize', this.onResize);
+    this.onResize();
+  }
+  componentWillUnmount() { window.removeEventListener('resize', this.onResize); }
+
+  renderVals() {
+    const comp = this.props.comp || 'button';
+    const is = (c) => comp === c;
+    const v = () => true;
+    const vw = this.state.vw || (typeof window !== 'undefined' ? window.innerWidth : 1024);
+    const hasStepData = Array.isArray(this.props.steps) && this.props.steps.length > 0;
+    const demoSteps = ['Bag', 'Delivery', 'Payment'];
+    const steps = hasStepData ? this.props.steps : demoSteps;
+    const current = hasStepData ? (this.props.currentStep == null ? 0 : this.props.currentStep) : 1;
+    return {
+      pad: vw < 760 ? '16px' : '24px',
+      label: this.props.label || this.defaultLabel(comp),
+      brandKey: this.props.brand === 'shift' ? 'shift' : 'bridge',
+
+      isButton: is('button'), isTag: is('tag'), isField: is('field'), isChoice: is('choice'),
+      isSeg: is('seg'), isCard: is('card'), isTable: is('table'), isDialog: is('dialog'), isStepper: is('stepper'),
+      isBadge: is('badge'), isAlert: is('alert'), isQty: is('qty'), isProduct: is('product'), isPromo: is('promo'),
+      isLocale: is('locale'),
+
+      btnPrimary: v('primary', true),
+      btnSecondary: v('secondary'), btnGhost: v('ghost'), btnIcon: v('icon'),
+      btnBlock: v('block'), btnDisabled: v('disabled'),
+
+      tagAccent: v('accent', true), tagNeutral: v('neutral'), tagSolid: v('solid'), tagOnImage: v('on-image'),
+
+      badgeCount: v('count', true), badgeOnIcon: v('on-icon'),
+
+      alertInfo: v('info', true), alertSuccess: v('success'), alertWarning: v('warning'), alertError: v('error'),
+
+      qtyDefault: v('default', true), qtyAtMin: v('at-min'),
+
+      prodDefault: v('default', true), prodSale: v('sale'),
+
+      fieldDefault: v('default', true), fieldFilled: v('filled'), fieldError: v('error'),
+      fieldDisabled: v('disabled'), fieldTextarea: v('textarea'), fieldAction: v('with-action'),
+
+      choiceRadio: v('radio', true), choiceCheck: v('checkbox'), choicePriced: v('priced-row'),
+
+      segThree: v('three', true), segFive: v('five'),
+
+      cardFlat: v('flat', true), cardSm: v('elev-sm'), cardLg: v('elev-lg'),
+
+      tableDefault: v('default', true), tableCompact: v('compact'),
+
+      dialogConfirm: v('confirm', true), dialogSheet: v('sheet'),
+
+      stepperItems: steps.map((label, i) => {
+        const state = i < current ? 'done' : i === current ? 'current' : 'todo';
+        return { label: label, num: String(i + 1), state: state, done: state === 'done', pending: state !== 'done' };
+      }),
+    };
+  }
+
+  defaultLabel(comp) {
+    if (comp === 'tag') return 'Low stock';
+    return 'Add to bag';
+  }
+}
+
+</script>
+</body>
+</html>

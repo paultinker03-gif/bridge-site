@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="brands.css">
+<script src="locale.js"></script>
+<style>
+  body { margin: 0; }
+  a { color: var(--color-accent); }
+  a:hover { color: var(--color-accent-700); }
+</style>
+</helmet>
+
+<sc-if value="{{ isSingle }}" hint-placeholder-val="{{ true }}">
+<div data-brand="bridge" style="background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); min-height: var(--lf-min-h, 100vh); display: flex; flex-direction: column;">
+
+  <dc-import name="Blocks" brand="bridge" block="nav" device="{{ device }}" bag-count="0" account-label="{{ accountLabel }}" on-navigate="{{ navigateOut }}" hint-size="100%,100px"></dc-import>
+
+  <div style="flex: 1; display: grid; grid-template-columns: {{ splitCols }};">
+
+  <!-- LEFT: brand plate -->
+  <div style="border-inline-end: 1px solid var(--color-divider); display: flex; flex-direction: column;">
+    <div style="padding: {{ padPlateTop }}; border-bottom: 1px solid var(--color-divider); display: flex; align-items: baseline; gap: 12px;">
+      <span class="brand-lockup" style="font-family: var(--font-heading); font-weight: 800; font-size: 20px; display: flex; align-items: center; gap: 10px;"><span>Bridge</span></span>
+      <span style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-neutral-700);">{{ str.accountWord }}</span>
+    </div>
+    <div style="flex: 1; min-height: 320px; overflow: hidden; position: relative;">
+      <img src="bridge/D1-rider-empty-road-dusk.jpeg" alt="A single rider on an empty road at dusk" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+    </div>
+    <div style="padding: {{ padPlate }}; border-top: 1px solid var(--color-divider);">
+      <div style="font-family: var(--font-heading); font-weight: 800; font-size: 34px; line-height: 1.02; letter-spacing: -0.02em; max-width: 20ch;">{{ str.lgPlateHead }}</div>
+      <p style="margin: 16px 0 0; font-size: 13px; color: var(--color-neutral-800); max-width: 40ch;">{{ str.lgPlateBody }}</p>
+    </div>
+  </div>
+
+  <!-- RIGHT: the flow -->
+  <div style="display: flex; flex-direction: column;">
+
+    <div style="padding: {{ padRail }}; border-bottom: 1px solid var(--color-divider); display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+      <div style="flex: 1 1 100%; min-width: 0;">
+        <dc-import name="Components" comp="stepper" brand="bridge" steps="{{ flowSteps }}" current-step="{{ flowStep }}" hint-size="100%,54px"></dc-import>
+      </div>
+      <button class="btn btn-ghost" style="flex: none; margin-inline-start: auto;" onClick="{{ reset }}">{{ str.restartFlow }}</button>
+    </div>
+
+    <div style="flex: 1; display: flex; align-items: flex-start; padding: {{ padForm }};">
+
+      <!-- SIGN IN -->
+      <sc-if value="{{ isSignIn }}" hint-placeholder-val="{{ true }}">
+        <div style="width: 100%; max-width: 420px;">
+          <div style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 16px;">{{ str.signIn }}</div>
+          <h1 style="font-size: {{ h1Size }}; margin: 0 0 8px;">{{ str.lgWelcome }}</h1>
+          <p style="margin: 0 0 32px; font-size: 14px; color: var(--color-neutral-800);">{{ str.lgLead }}</p>
+
+          <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}">
+            <div class="alert alert-error" style="margin-bottom: 24px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></svg><p class="alert-body">{{ error }}</p></div>
+          </sc-if>
+
+          <div style="display: flex; flex-direction: column; gap: 20px;">
+            <div class="field">
+              <label for="lf-email">{{ str.emailAddress }}</label>
+              <input class="input" id="lf-email" type="email" placeholder="you@example.com" value="{{ email }}" onChange="{{ onEmail }}">
+            </div>
+            <div class="field">
+              <div style="display: flex; align-items: baseline; justify-content: space-between;">
+                <label for="lf-pass">{{ str.password }}</label>
+                <button class="btn btn-ghost" style="font-size: 12px;" onClick="{{ goForgot }}">{{ str.lgForgot }}</button>
+              </div>
+              <input class="input" id="lf-pass" type="password" placeholder="{{ str.passMin }}" value="{{ password }}" onChange="{{ onPassword }}">
+            </div>
+            <label class="radio" style="margin-top: 4px;"><input type="checkbox" checked="{{ remember }}" onChange="{{ onRemember }}"><span class="dot"></span><span>{{ str.lgKeepSigned }}</span></label>
+          </div>
+
+          <div style="margin-top: 32px; display: flex; gap: 12px; align-items: center;">
+            <button class="btn btn-primary" style="min-height: {{ tapH }};" onClick="{{ submitSignIn }}" disabled="{{ busy }}">{{ signInLabel }}</button>
+            <button class="btn btn-secondary" style="min-height: {{ tapH }};">{{ str.continueApple }}</button>
+          </div>
+
+          <div style="height: 1px; background: var(--color-divider); margin: 40px 0 20px;"></div>
+          <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 12px; color: var(--color-neutral-700);"><span>{{ str.lgNoAccount }}</span><button class="btn btn-ghost" style="padding-inline-start: 0; font-size: 12px;" onClick="{{ toCreate }}">{{ str.lgCreateOne }}</button><span>{{ str.lgCreateTail }}</span></div>
+        </div>
+      </sc-if>
+
+      <!-- VERIFY CODE -->
+      <sc-if value="{{ isVerify }}" hint-placeholder-val="{{ false }}">
+        <div style="width: 100%; max-width: 420px;">
+          <div style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 16px;">{{ str.lgTwoFactor }}</div>
+          <h1 style="font-size: {{ h1Size }}; margin: 0 0 8px;">{{ str.lgEnterCode }}</h1>
+          <p style="margin: 0 0 32px; font-size: 14px; color: var(--color-neutral-800);">{{ codeLead }}</p>
+
+          <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}">
+            <div class="alert alert-error" style="margin-bottom: 24px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></svg><p class="alert-body">{{ error }}</p></div>
+          </sc-if>
+
+          <div class="field">
+            <label for="lf-code">{{ str.verificationCode }}</label>
+            <input class="input" id="lf-code" inputMode="numeric" placeholder="000000" style="font-family: var(--font-heading); font-size: 22px; letter-spacing: 0.4em; min-height: 52px;" value="{{ code }}" onChange="{{ onCode }}">
+          </div>
+
+          <div style="margin-top: 32px; display: flex; gap: 12px; align-items: center;">
+            <button class="btn btn-primary" style="min-height: {{ tapH }};" onClick="{{ submitCode }}" disabled="{{ busy }}">{{ verifyLabel }}</button>
+            <button class="btn btn-ghost" onClick="{{ resend }}">{{ str.resendCode }}</button>
+          </div>
+
+          <div style="height: 1px; background: var(--color-divider); margin: 40px 0 20px;"></div>
+          <button class="btn btn-ghost" style="padding-inline-start: 0;" onClick="{{ reset }}">{{ str.lgBackToSignIn }}</button>
+        </div>
+      </sc-if>
+
+      <!-- FORGOT -->
+      <sc-if value="{{ isForgot }}" hint-placeholder-val="{{ false }}">
+        <div style="width: 100%; max-width: 420px;">
+          <div style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 16px;">{{ str.lgRecovery }}</div>
+          <h1 style="font-size: {{ h1Size }}; margin: 0 0 8px;">{{ str.lgResetPass }}</h1>
+          <p style="margin: 0 0 32px; font-size: 14px; color: var(--color-neutral-800);">{{ str.lgResetLead }}</p>
+
+          <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}">
+            <div class="alert alert-error" style="margin-bottom: 24px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></svg><p class="alert-body">{{ error }}</p></div>
+          </sc-if>
+
+          <div class="field">
+            <label for="lf-recover">{{ str.emailAddress }}</label>
+            <input class="input" id="lf-recover" type="email" placeholder="you@example.com" value="{{ email }}" onChange="{{ onEmail }}">
+          </div>
+
+          <div style="margin-top: 32px; display: flex; gap: 12px; align-items: center;">
+            <button class="btn btn-primary" style="min-height: {{ tapH }};" onClick="{{ submitReset }}" disabled="{{ busy }}">{{ resetLabel }}</button>
+            <button class="btn btn-secondary" onClick="{{ reset }}">{{ str.cancel }}</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- LINK SENT -->
+      <sc-if value="{{ isSent }}" hint-placeholder-val="{{ false }}">
+        <div style="width: 100%; max-width: 420px;">
+          <div style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 16px;">{{ str.lgRecoverySent }}</div>
+          <h1 style="font-size: {{ h1Size }}; margin: 0 0 8px;">{{ str.lgCheckInbox }}</h1>
+          <p style="margin: 0 0 24px; font-size: 14px; color: var(--color-neutral-800);">{{ sentLead }}</p>
+          <div style="border-top: 1px solid var(--color-divider); border-bottom: 1px solid var(--color-divider); padding: 20px 0; display: grid; grid-template-columns: 120px 1fr; gap: 12px; font-size: 13px;">
+            <span style="color: var(--color-neutral-700);">{{ str.lgSentTo }}</span><span>{{ email }}</span>
+            <span style="color: var(--color-neutral-700);">{{ str.lgExpires }}</span><span>{{ str.lgOneHour }}</span>
+          </div>
+          <div style="margin-top: 32px; display: flex; gap: 12px;">
+            <button class="btn btn-primary" onClick="{{ reset }}">{{ str.lgBackSignIn }}</button>
+            <button class="btn btn-ghost" onClick="{{ goForgot }}">{{ str.lgUseAnother }}</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- SIGNED IN -->
+      <sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+        <div style="width: 100%; max-width: 460px;">
+          <div style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 16px;">{{ str.lgSignedIn }}</div>
+          <h1 style="font-size: {{ h1Size }}; margin: 0 0 8px;">{{ str.lgWelcome }}</h1>
+          <p style="margin: 0 0 32px; font-size: 14px; color: var(--color-neutral-800);">{{ signedInLead }}</p>
+          <table class="table">
+            <thead><tr><th>{{ str.lgOrder }}</th><th>{{ str.lgPlaced }}</th><th>{{ str.lgStatus }}</th></tr></thead>
+            <tbody>
+              <tr><td>MER-40912</td><td>28 Aug</td><td><span class="tag tag-neutral">{{ str.lgPacked }}</span></td></tr>
+              <tr><td>MER-40871</td><td>21 Aug</td><td><span class="tag tag-accent">{{ str.lgInRepair }}</span></td></tr>
+              <tr><td>MER-40802</td><td>09 Aug</td><td><span class="tag tag-outline">{{ str.lgDelivered }}</span></td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top: 32px;">
+            <button class="btn btn-primary btn-block" style="max-width: 300px;" onClick="{{ exitToShop }}"><span>{{ str.lgContinueShopping }}</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          </div>
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+  </div>
+
+  <dc-import name="Blocks" brand="bridge" block="footer" device="{{ device }}" on-navigate="{{ navigateOut }}" hint-size="100%,380px"></dc-import>
+</div>
+</sc-if>
+
+<sc-if value="{{ isBoth }}" hint-placeholder-val="{{ false }}">
+  <div data-brand="bridge" style="background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); padding: 40px; min-height: 100vh;">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; border-bottom: 1px solid var(--color-divider); padding-bottom: 18px; margin-bottom: 40px; flex-wrap: wrap;">
+      <div>
+        <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent-700); margin-bottom: 10px;">Bridge — login</div>
+        <h1 style="margin: 0 0 6px; font-size: 46px; line-height: 0.96; letter-spacing: -0.02em;">Login — all screens</h1>
+        <p style="margin: 0; font-size: 13px; color: var(--color-neutral-800); max-width: 64ch;">Every state of the sign-in flow, both breakpoints, full pages end to end.</p>
+      </div>
+      <div style="font-size: 12px; color: var(--color-neutral-700); text-align: end; flex: none;">Desktop 1440 at 0.45×<br>Mobile 390 at 1× — full height, no scroll</div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 56px;">
+      <sc-for list="{{ screens }}" as="s" hint-placeholder-count="3">
+        <div>
+          <div style="display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid var(--color-divider); padding-bottom: 10px; margin-bottom: 18px;">
+            <span style="font-family: var(--font-heading); font-weight: 800; font-size: 13px; background: var(--color-text); color: var(--color-bg); padding: 2px 8px;">{{ s.index }}</span>
+            <span style="font-family: var(--font-heading); font-weight: 800; font-size: 20px;">{{ s.label }}</span>
+            <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700);">{{ s.key }}</span>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 28px; flex-wrap: wrap;">
+            <div style="flex: none;">
+              <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 8px;">Desktop</div>
+              <div style="width: 648px; overflow: hidden; border: 1px solid var(--color-divider); background: var(--color-bg);">
+                <div data-scale="0.45" style="width: 1440px; transform: scale(0.45); transform-origin: top left;">
+                  <iframe src="{{ s.urlD }}" title="{{ s.label }} desktop" scrolling="no" onLoad="{{ fitFrame }}" style="width: 1440px; height: 900px; border: 0; display: block;"></iframe>
+                </div>
+              </div>
+            </div>
+            <div style="flex: none;">
+              <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 8px;">Mobile — 390</div>
+              <div style="width: 390px; border: 1px solid var(--color-divider); overflow: hidden; background: var(--color-bg);">
+                <iframe src="{{ s.urlM }}" title="{{ s.label }} mobile" scrolling="no" onLoad="{{ fitFrame }}" style="width: 390px; height: 700px; border: 0; display: block;"></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</sc-if>
+
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:840},&quot;forceScreen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;&quot;,&quot;signin&quot;,&quot;verify&quot;,&quot;forgot&quot;,&quot;sent&quot;,&quot;done&quot;],&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;forceError&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;}}">
+class Component extends DCLogic {
+  state = {
+    screen: this.queryScreen() || this.props.forceScreen || 'signin',
+    email: (this.queryScreen() || this.props.forceScreen) ? 'a.albers@example.com' : '',
+    password: (this.queryScreen() || this.props.forceScreen) ? 'timetable24' : '',
+    code: (this.queryScreen() || this.props.forceScreen) === 'verify' ? '408' : '',
+    error: this.props.forceError || '',
+    busy: false,
+    remember: true,
+  };
+
+  queryScreen() {
+    if (typeof window === 'undefined') return '';
+    const m = /[?&]screen=([a-z]+)/.exec(window.location.search || '');
+    return m ? m[1] : '';
+  }
+
+  queryView() {
+    if (typeof window === 'undefined') return '';
+    const m = /[?&]view=(desktop|mobile|responsive)/.exec(window.location.search || '');
+    return m ? m[1] : '';
+  }
+
+
+  componentDidMount() {
+    this.onResize = () => this.setState({ vw: window.innerWidth });
+    window.addEventListener('resize', this.onResize);
+    this.onResize();
+    const attach = () => {
+      const s = window.BridgeLocale;
+      if (!s) { this._lRetry = setTimeout(attach, 60); return; }
+      this._lUnsub = s.subscribe(() => this.setState({ localeTick: (this.state.localeTick || 0) + 1 }));
+      this.setState({ localeTick: (this.state.localeTick || 0) + 1 });
+    };
+    attach();
+    this._fitTimers = [800, 2000, 4000].map((ms) => setTimeout(() => this.fitAllFrames(), ms));
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onResize);
+    clearTimeout(this._lRetry);
+    if (this._lUnsub) this._lUnsub();
+  }
+
+  set(patch) { this.setState(patch); }
+
+  wait(ms, then) {
+    this.setState({ busy: true, error: '' });
+    setTimeout(() => this.setState(Object.assign({ busy: false }, then)), ms);
+  }
+
+  masked() {
+    const e = this.state.email;
+    if (!e || e.indexOf('@') < 1) return 'your address';
+    const [u, d] = e.split('@');
+    return u.slice(0, 2) + '\u2022'.repeat(Math.max(2, u.length - 2)) + '@' + d;
+  }
+
+  step() {
+    const s = this.state.screen;
+    if (s === 'verify') return 2;
+    if (s === 'done') return 3;
+    return 1;
+  }
+
+  stepStyle(n) {
+    const cur = this.step();
+    const active = n === cur;
+    const past = n < cur;
+    return {
+      color: active || past ? 'var(--color-text)' : 'var(--color-neutral-600)',
+      bg: active ? 'var(--color-accent)' : past ? 'var(--color-neutral-300)' : 'transparent',
+      ink: active ? 'var(--color-bg)' : 'var(--color-text)',
+    };
+  }
+
+  fitAllFrames() {
+    const root = this.hostEl || document;
+    const frames = root.querySelectorAll ? root.querySelectorAll('iframe') : [];
+    for (let i = 0; i < frames.length; i++) this.fitFrame({ target: frames[i] });
+  }
+
+  fitFrame(e) {
+    const f = e.target;
+    const measure = () => {
+      try {
+        const d = f.contentDocument;
+        if (!d || !d.body) return;
+        f.style.height = '0px';
+        const h = Math.max(d.body.scrollHeight, d.documentElement ? d.documentElement.scrollHeight : 0);
+        if (!h) { f.style.height = '700px'; return; }
+        f.style.height = h + 'px';
+        const inner = f.parentElement;
+        if (inner && inner.dataset && inner.dataset.scale) {
+          const sc = parseFloat(inner.dataset.scale) || 1;
+          inner.style.height = h + 'px';
+          if (inner.parentElement) inner.parentElement.style.height = Math.round(h * sc) + 'px';
+        }
+      } catch (err) {}
+    };
+    measure();
+    setTimeout(measure, 350);
+    setTimeout(measure, 1200);
+  }
+
+  showcaseScreens() {
+    const list = [["signin","Sign in"],["verify","Two-factor"],["forgot","Recovery"],["sent","Link sent"],["done","Signed in"]];
+    return list.map((row, i) => ({
+      key: row[0],
+      label: row[1],
+      index: (i + 1) < 10 ? '0' + (i + 1) : String(i + 1),
+      urlD: 'BridgeLogin.dc.html?view=desktop&screen=' + row[0],
+      urlM: 'BridgeLogin.dc.html?view=mobile&screen=' + row[0],
+    }));
+  }
+
+  /* the host's variant picker changes the prop after mount — mirror it into state
+     so choosing a screen in Tweaks actually moves the flow. */
+  componentDidUpdate(prev) {
+    const f = this.props.forceScreen;
+    if (f && prev.forceScreen !== f) this.setState({ screen: f });
+  }
+
+  renderVals() {
+    const s = this.state;
+    const valid = (e) => /^[^@\s]+@[^@\s.]+\.[^@\s]+$/.test(e);
+    const one = this.stepStyle(1), two = this.stepStyle(2), three = this.stepStyle(3);
+    const view = this.props.view || this.queryView() || 'responsive';
+    const vw = s.vw || (typeof window !== 'undefined' ? window.innerWidth : 1280);
+    const mobile = view === 'mobile' ? true : view === 'desktop' ? false : vw < 720;
+
+    const L = window.BridgeLocale;
+    const str = L ? L.strings() : {};
+    const fmt = L ? L.fmt : ((x) => x);
+    return {
+      str: str,
+      codeLead: fmt(str.codeLead, this.masked()),
+      sentLead: fmt(str.lgSentLead, this.masked()),
+      signedInLead: fmt(str.lgSignedInLead, s.email),
+      screens: this.showcaseScreens(),
+      fitFrame: (e) => this.fitFrame(e),
+      frameDesktop: 'BridgeLogin.dc.html?view=desktop&screen=' + (this.props.forceScreen || 'signin'),
+      frameMobile: 'BridgeLogin.dc.html?view=mobile&screen=' + (this.props.forceScreen || 'signin'),
+      isBoth: view === 'both',
+      isSingle: view !== 'both',
+      device: mobile ? 'mobile' : 'desktop',
+      splitCols: mobile ? '1fr' : 'minmax(0, 1fr) minmax(0, 1fr)',
+      padForm: mobile ? '28px 16px 40px' : '56px 40px',
+      padPlate: mobile ? '24px 16px 28px' : '40px',
+      padPlateTop: mobile ? '18px 16px' : '32px 40px',
+      padRail: mobile ? '18px 16px' : '24px 40px',
+      h1Size: mobile ? '30px' : '40px',
+      tapH: mobile ? '48px' : '34px',
+      isSignIn: s.screen === 'signin',
+      isVerify: s.screen === 'verify',
+      isForgot: s.screen === 'forgot',
+      isSent: s.screen === 'sent',
+      isDone: s.screen === 'done',
+      email: s.email, password: s.password, code: s.code,
+      remember: s.remember,
+      busy: s.busy,
+      error: s.error, hasError: !!s.error,
+      maskedEmail: this.masked(),
+      signInLabel: s.busy ? str.checking : str.signIn,
+      verifyLabel: s.busy ? str.verifying : str.lgVerifyContinue,
+      resetLabel: s.busy ? str.sending : str.lgSendReset,
+      stepOneColor: one.color, stepOneBg: one.bg, stepOneInk: one.ink,
+      stepTwoColor: two.color, stepTwoBg: two.bg, stepTwoInk: two.ink,
+      stepThreeColor: three.color, stepThreeBg: three.bg, stepThreeInk: three.ink,
+      flowSteps: [str.lgCredentials, str.verifyStep, str.accountWord],
+      flowStep: this.step() - 1,
+
+      accountLabel: s.screen === 'done' ? str.accountWord : str.signIn,
+      navigateOut: (dest) => {
+        const f = this.props.onExit;
+        if (typeof f === 'function') { f(dest); return; }
+        if (dest === 'men' || dest === 'women' || dest === 'accessories') { window.location.href = 'BridgeShop.dc.html?screen=plp&section=' + dest; return; }
+        if (dest === 'journal') { window.location.href = 'BridgeJournal.dc.html'; return; }
+        if (dest === 'search') { window.location.href = 'BridgeSearch.dc.html'; return; }
+        if (dest === 'signin') { window.location.href = 'BridgeLogin.dc.html'; return; }
+        if (dest === 'checkout') { window.location.href = 'BridgeShop.dc.html?screen=checkout'; return; }
+        window.location.href = 'BridgeShop.dc.html';
+      },
+      exitToShop: () => { const f = this.props.onExit; if (typeof f === 'function') f('home'); else window.location.href = 'BridgeShop.dc.html'; },
+      toCreate: () => { const f = this.props.onCreate; if (typeof f === 'function') f(); },
+
+      onEmail: (e) => this.set({ email: e.target.value, error: '' }),
+      onPassword: (e) => this.set({ password: e.target.value, error: '' }),
+      onCode: (e) => this.set({ code: e.target.value.replace(/\D/g, '').slice(0, 6), error: '' }),
+      onRemember: (e) => this.set({ remember: e.target.checked }),
+      goForgot: () => this.set({ screen: 'forgot', error: '' }),
+      reset: () => this.set({ screen: 'signin', code: '', password: '', error: '', busy: false }),
+      resend: () => this.set({ code: '', error: '' }),
+
+      submitSignIn: () => {
+        if (!valid(s.email)) return this.set({ error: str.errEmail });
+        if (s.password.length < 8) return this.set({ error: str.errPassShort });
+        this.wait(700, { screen: 'verify', code: '' });
+      },
+      submitCode: () => {
+        if (s.code.length !== 6) return this.set({ error: str.errCode });
+        this.wait(700, { screen: 'done' });
+      },
+      submitReset: () => {
+        if (!valid(s.email)) return this.set({ error: str.errEmail });
+        this.wait(700, { screen: 'sent' });
+      },
+    };
+  }
+}
+
+</script>
+</body>
+</html>

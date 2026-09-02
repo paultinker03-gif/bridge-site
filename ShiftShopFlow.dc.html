@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="brands.css">
+<script src="locale.js"></script>
+<style>
+  body { margin: 0; background: #e7e5e2; }
+  a { color: var(--color-accent); }
+  a:hover { color: var(--color-accent-700); }
+</style>
+</helmet>
+
+<div data-brand="shift" style="width: 3440px; background: #e7e5e2; color: var(--color-text); font-family: var(--font-body); padding: 72px 80px 96px; box-sizing: border-box;">
+
+  <header style="display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 80px; align-items: end; border-bottom: 2px solid var(--color-text); padding-bottom: 40px; margin-bottom: 56px;">
+    <div>
+      <div style="font-size: 14px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 22px;">SHIFT · Shop flow</div>
+      <h1 style="margin: 0; font-size: 92px; line-height: 0.98; letter-spacing: -0.02em;">Pre-owned, listing to checkout</h1>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+      <div style="display: flex; gap: 40px; font-size: 15px; color: var(--color-neutral-800);">
+        <span>Desktop · 1440 × 900</span>
+        <span>Mobile · 390 × 844</span>
+        <span>Scale · 40%, full page height</span>
+      </div>
+    </div>
+  </header>
+
+  <div style="display: flex; align-items: stretch; gap: 28px;">
+
+    <div style="width: 752px; flex: none; display: flex; flex-direction: column; gap: 18px;">
+      <div style="display: flex; align-items: baseline; gap: 14px; border-top: 2px solid var(--color-text); padding-top: 16px;">
+        <span style="font-family: var(--font-heading); font-weight: 800; font-size: 16px; letter-spacing: 0.14em; color: var(--color-accent);">01</span>
+        <h3 style="margin: 0; font-size: 28px;">Home</h3>
+      </div>
+      <p style="margin: 0; font-size: 16px; line-height: 1.5; color: var(--color-neutral-800); min-height: 96px; text-wrap: pretty;">The case for buying used: certified stock, grade explainers and trade-in, with field notes closing the page. Entry point for riders arriving from Bridge.</p>
+      <div style="display: flex; align-items: flex-start; gap: 20px;">
+        <sc-if value="{{ showMobile }}" hint-placeholder-val="{{ true }}">
+          <div style="width: 156px; flex: none; display: flex; flex-direction: column; gap: 10px;">
+            <span style="font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700);">Mobile</span>
+            <div style="width: 156px; height: 338px; overflow: hidden; background: var(--color-bg); border: 1px solid var(--color-divider); box-shadow: var(--shadow-md);">
+              <iframe src="ShiftHome.dc.html?view=mobile" title="Mobile frame" onLoad="{{ fitFrame }}" style="width: 390px; height: 844px; border: 0; display: block; transform: scale(0.4); transform-origin: top left;"></iframe>
+            </div>
+          </div>
+        </sc-if>
+        <div style="width: 576px; flex: none; display: flex; flex-direction: column; gap: 10px;">
+          <span style="font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700);">Desktop</span>
+          <div style="width: 576px; height: 360px; overflow: hidden; background: var(--color-bg); border: 1px solid var(--color-divider); box-shadow: var(--shadow-md);">
+            <iframe src="ShiftHome.dc.html?view=desktop" title="Desktop frame" onLoad="{{ fitFrame }}" style="width: 1440px; height: 900px; border: 0; display: block; transform: scale(0.4); transform-origin: top left;"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex: none; display: flex; align-items: center; padding-top: 120px; color: var(--color-neutral-500);">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+    </div>
+
+    <div style="width: 752px; flex: none; display: flex; flex-direction: column; gap: 18px;">
+      <div style="display: flex; align-items: baseline; gap: 14px; border-top: 2px solid var(--color-text); padding-top: 16px;">
+        <span style="font-family: var(--font-heading); font-weight: 800; font-size: 16px; letter-spacing: 0.14em; color: var(--color-accent);">02</span>
+        <h3 style="margin: 0; font-size: 28px;">Listing</h3>
+      </div>
+      <p style="margin: 0; font-size: 16px; line-height: 1.5; color: var(--color-neutral-800); min-height: 96px; text-wrap: pretty;">Argument first, then the rail: grade, size and price filters over one-of-one stock. Each card carries its condition grade and what it saves against new.</p>
+      <div style="display: flex; align-items: flex-start; gap: 20px;">
+        <sc-if value="{{ showMobile }}" hint-placeholder-val="{{ true }}">
+          <div style="width: 156px; flex: none; display: flex; flex-direction: column; gap: 10px;">
+            <span style="font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700);">Mobile</span>
+            <div style="width: 156px; height: 338px; overflow: hidden; background: var(--color-bg); border: 1px solid var(--color-divider); box-shadow: var(--shadow-md);">
+              <iframe src="ShiftShop.dc.html?view=mobile&screen=plp" title="Mobile frame" onLoad="{{ fitFrame }}" style="width: 390px; height: 844px; border: 0; display: block; transform: scale(0.4); transform-origin: top left;"></iframe>
+            </div>
+          </div>
+        </sc-if>
+        <div style="width: 576px; flex: none; display: flex; flex-direction: column; gap: 10px;">
+          <span style="font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700);">Desktop</span>
+          <div style="width: 576px; height: 360px; overflow: hidden; background: var(--color-bg); border: 1px solid var(--color-divider); box-shadow: var(--shadow-md);">
+            <iframe src="ShiftShop.dc.html?view=desktop&screen=plp" title="Desktop frame" onLoad="{{ fitFrame }}" style="width: 1440px; height: 900px; border: 0; display: block; transform: scale(0.4); transform-origin: top left;"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex: none; display: flex; align-items: center; padding-top: 120px; color: var(--color-neutral-500);">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+    </div>
+
+    <div style="width: 752px; flex: none; display: flex; flex-direction: column; gap: 18px;">
+      <div style="display: flex; align-items: baseline; gap: 14px; border-top: 2px solid var(--color-text); padding-top: 16px;">
+        <span style="font-family: var(--font-heading); font-weight: 800; font-size: 16px; letter-spacing: 0.14em; color: var(--color-accent);">03</span>
+        <h3 style="margin: 0; font-size: 28px;">Product</h3>
+      </div>
+      <p style="margin: 0; font-size: 16px; line-height: 1.5; color: var(--color-neutral-800); min-height: 96px; text-wrap: pretty;">Provenance record sits above the buy block — grade, previous owner, repairs logged — because on SHIFT the history is the product. One unit, no size picker.</p>
+      <div style="display: flex; align-items: flex-start; gap: 20px;">
+        <sc-if value="{{ showMobile }}" hint-placeholder-val="{{ true }}">
+          <div style="width: 156px; flex: none; display: flex; flex-direction: column; gap: 10px;">
+            <span style="font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700);">Mobile</span>
+            <div style="width: 156px; height: 338px; overflow: hidden; background: var(--color-bg); border: 1px solid var(--color-divider); box-shadow: var(--shadow-md);">
+              <iframe src="ShiftShop.dc.html?view=mobile&screen=product" title="Mobile frame" onLoad="{{ fitFrame }}" style="width: 390px; height: 844px; border: 0; display: block; transform: scale(0.4); transform-origin: top left;"></iframe>
+            </div>
+          </div>
+        </sc-if>
+        <div style="width: 576px; flex: none; display: flex; flex-direction: column; gap: 10px;">
+          <span style="font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700);">Desktop</span>
+          <div style="width: 576px; height: 360px; overflow: hidden; background: var(--color-bg); border: 1px solid var(--color-divider); box-shadow: var(--shadow-md);">
+            <iframe src="ShiftShop.dc.html?view=desktop&screen=product" title="Desktop frame" onLoad="{{ fitFrame }}" style="width: 1440px; height: 900px; border: 0; display: block; transform: scale(0.4); transform-origin: top left;"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex: none; display: flex; align-items: center; padding-top: 120px; color: var(--color-neutral-500);">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+    </div>
+
+    <div style="width: 752px; flex: none; display: flex; flex-direction: column; gap: 18px;">
+      <div style="display: flex; align-items: baseline; gap: 14px; border-top: 2px solid var(--color-text); padding-top: 16px;">
+        <span style="font-family: var(--font-heading); font-weight: 800; font-size: 16px; letter-spacing: 0.14em; color: var(--color-accent);">04</span>
+        <h3 style="margin: 0; font-size: 28px;">Checkout</h3>
+      </div>
+      <p style="margin: 0; font-size: 16px; line-height: 1.5; color: var(--color-neutral-800); min-height: 96px; text-wrap: pretty;">Same three-step page as Bridge, retuned: the summary restates grade and the one-of-one warning, so a rider knows the piece cannot be re-added if they leave.</p>
+      <div style="display: flex; align-items: flex-start; gap: 20px;">
+        <sc-if value="{{ showMobile }}" hint-placeholder-val="{{ true }}">
+          <div style="width: 156px; flex: none; display: flex; flex-direction: column; gap: 10px;">
+            <span style="font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700);">Mobile</span>
+            <div style="width: 156px; height: 338px; overflow: hidden; background: var(--color-bg); border: 1px solid var(--color-divider); box-shadow: var(--shadow-md);">
+              <iframe src="ShiftShop.dc.html?view=mobile&screen=checkout" title="Mobile frame" onLoad="{{ fitFrame }}" style="width: 390px; height: 844px; border: 0; display: block; transform: scale(0.4); transform-origin: top left;"></iframe>
+            </div>
+          </div>
+        </sc-if>
+        <div style="width: 576px; flex: none; display: flex; flex-direction: column; gap: 10px;">
+          <span style="font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700);">Desktop</span>
+          <div style="width: 576px; height: 360px; overflow: hidden; background: var(--color-bg); border: 1px solid var(--color-divider); box-shadow: var(--shadow-md);">
+            <iframe src="ShiftShop.dc.html?view=desktop&screen=checkout" title="Desktop frame" onLoad="{{ fitFrame }}" style="width: 1440px; height: 900px; border: 0; display: block; transform: scale(0.4); transform-origin: top left;"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+
+      </div>
+
+  <sc-if value="{{ showNotes }}" hint-placeholder-val="{{ true }}">
+    <div style="margin-top: 72px; border-top: 1px solid var(--color-divider); padding-top: 36px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 64px; max-width: 2400px;">
+      <div>
+        <h4 style="margin: 0 0 10px; font-size: 20px;">Where the flow forks</h4>
+        <p style="margin: 0; font-size: 16px; line-height: 1.5; color: var(--color-neutral-800); text-wrap: pretty;">Search opens inline above the grid rather than on its own screen. Trade-in and Your record leave the purchase path; the bag jumps to checkout from anywhere.</p>
+      </div>
+      <div>
+        <h4 style="margin: 0 0 10px; font-size: 20px;">Mobile differences</h4>
+        <p style="margin: 0; font-size: 16px; line-height: 1.5; color: var(--color-neutral-800); text-wrap: pretty;">Filters collapse into a sheet, the two-column splits stack, tap targets rise to 48px and headline sizes drop a step. Same screens, same order — no separate mobile path.</p>
+      </div>
+      <div>
+        <h4 style="margin: 0 0 10px; font-size: 20px;">Validation</h4>
+        <p style="margin: 0; font-size: 16px; line-height: 1.5; color: var(--color-neutral-800); text-wrap: pretty;">Single-unit stock means checkout is time-sensitive: a malformed email blocks with an inline alert, then a taking-payment state before the piece is released.</p>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:3440,&quot;height&quot;:1500},&quot;showMobile&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Board&quot;},&quot;showNotes&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Board&quot;}}">
+class Component extends DCLogic {
+  /* An iframe has no intrinsic height, and the DC inside carries min-height:100vh
+     so body/documentElement never grow past the viewport — the only honest measure
+     is the scroll height, watched until it settles. */
+  fit(e) {
+    const el = e.target;
+    const scale = 0.4;
+    let stable = 0;
+    let last = 0;
+    const measure = () => {
+      let d = null;
+      try { d = el.contentDocument; } catch (err) { return 0; }
+      if (!d || !d.body) return 0;
+      const kids = [...d.body.children];
+      const bottom = kids.reduce((m, k) => Math.max(m, k.offsetTop + k.offsetHeight), 0);
+      return Math.max(d.body.scrollHeight, d.documentElement ? d.documentElement.scrollHeight : 0, bottom);
+    };
+    const apply = () => {
+      const h = measure();
+      if (!h) return;
+      if (Math.abs(h - last) > 1) {
+        last = h;
+        stable = 0;
+        el.style.height = h + 'px';
+        if (el.parentElement) el.parentElement.style.height = Math.round(h * scale) + 'px';
+      } else {
+        stable += 1;
+      }
+    };
+    apply();
+    const started = Date.now();
+    const timer = setInterval(() => {
+      apply();
+      if (stable >= 6 || Date.now() - started > 25000) clearInterval(timer);
+    }, 400);
+    this._timers = (this._timers || []).concat(timer);
+    try {
+      const w = el.contentWindow;
+      const d = el.contentDocument;
+      if (w) w.addEventListener('load', apply);
+      if (w && w.ResizeObserver) {
+        const ro = new w.ResizeObserver(apply);
+        const root = d.querySelector('[data-brand]');
+        if (root) ro.observe(root);
+        ro.observe(d.body);
+      }
+      if (d && d.fonts && d.fonts.ready) d.fonts.ready.then(apply);
+    } catch (err) {}
+  }
+  componentWillUnmount() {
+    (this._timers || []).forEach(clearInterval);
+  }
+  renderVals() {
+    return {
+      fitFrame: (e) => this.fit(e),
+      showMobile: this.props.showMobile ?? true,
+      showNotes: this.props.showNotes ?? true,
+    };
+  }
+}
+</script>
+</body>
+</html>

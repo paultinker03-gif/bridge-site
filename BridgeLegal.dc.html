@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="brands.css">
+<script src="locale.js"></script>
+<style>
+  body { margin: 0; }
+  a { color: var(--color-accent); }
+  a:hover { color: var(--color-accent-700); }
+</style>
+</helmet>
+
+<div data-brand="{{ brandKey }}" dir="{{ dir }}" style="background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); min-height: 100vh;">
+
+  <div style="position: sticky; top: 0; z-index: 20;">
+    <dc-import name="Blocks" brand="{{ brandKey }}" block="nav" device="{{ device }}" bag-count="{{ bagCount }}" show-announcement="{{ no }}" on-navigate="{{ navigate }}" hint-size="100%,70px"></dc-import>
+  </div>
+
+  <div style="max-width: 1680px; margin: 0 auto; border-top: 1px solid var(--color-divider);">
+    <div style="padding: {{ padHead }}; border-bottom: 1px solid var(--color-divider);">
+      <div style="font-size: 12px; color: var(--color-neutral-700); margin-bottom: 16px;">{{ homeLabel }} / <span style="color: var(--color-text);">{{ docTitle }}</span></div>
+      <h1 style="margin: 0 0 12px; font-size: {{ h1Size }}; line-height: 1;">{{ docTitle }}</h1>
+      <p style="margin: 0; font-size: 14px; color: var(--color-neutral-800);">{{ updatedLine }}</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: {{ cols }};">
+      <aside style="border-inline-end: 1px solid var(--color-divider); padding: 32px 32px 48px 40px; align-self: start;">
+        <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 14px;">{{ railLabel }}</div>
+        <nav style="display: flex; flex-direction: column; gap: 2px; margin-bottom: 32px;">
+          <sc-for list="{{ docs }}" as="d" hint-placeholder-count="3">
+            <a href="{{ d.href }}" style="{{ d.style }}">{{ d.label }}</a>
+          </sc-for>
+        </nav>
+        <div style="border-top: 1px solid var(--color-divider); padding-top: 20px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700);">{{ onThisPageLabel }}</div>
+          <sc-for list="{{ sections }}" as="s" hint-placeholder-count="6">
+            <a href="{{ s.anchor }}" style="font-size: 13px; text-decoration: none;">{{ s.num }}. {{ s.head }}</a>
+          </sc-for>
+        </div>
+      </aside>
+
+      <article style="padding: {{ padBody }}; max-width: 76ch;">
+        <p style="margin: 0 0 32px; font-size: 17px; line-height: 1.5; text-wrap: pretty;">{{ lead }}</p>
+        <sc-for list="{{ sections }}" as="s" hint-placeholder-count="6">
+          <section id="{{ s.id }}" style="border-top: 1px solid var(--color-divider); padding: 28px 0 4px;">
+            <h2 style="margin: 0 0 14px; font-size: 22px;">{{ s.num }}. {{ s.head }}</h2>
+            <sc-for list="{{ s.paras }}" as="p" hint-placeholder-count="2">
+              <p style="margin: 0 0 16px; font-size: 15px; line-height: 1.6; text-wrap: pretty; color: var(--color-neutral-900);">{{ p.text }}</p>
+            </sc-for>
+          </section>
+        </sc-for>
+        <div style="border-top: 1px solid var(--color-divider); margin-top: 32px; padding-top: 24px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+          <span style="font-size: 13px; color: var(--color-neutral-800);">{{ contactLine }}</span>
+          <a class="btn btn-secondary" href="{{ contactHref }}" style="text-decoration: none;">{{ contactCta }}</a>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <dc-import name="Blocks" brand="{{ brandKey }}" block="footer" device="{{ device }}" on-navigate="{{ navigate }}" hint-size="100%,380px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;doc&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;terms&quot;,&quot;privacy&quot;,&quot;cookies&quot;],&quot;default&quot;:&quot;terms&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Document&quot;},&quot;brand&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;bridge&quot;,&quot;shift&quot;],&quot;default&quot;:&quot;bridge&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Document&quot;}}">
+const LOREM = [
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+  'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+  'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
+  'Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est qui dolorem ipsum quia dolor sit amet.',
+  'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.',
+  'Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae.',
+];
+
+const DOCS = {
+  terms: {
+    label: 'Terms',
+    title: 'Terms of sale',
+    lead: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. These terms govern every order placed through this site, in placeholder Latin until legal copy lands.',
+    heads: ['Interpretation', 'Placing an order', 'Price and payment', 'Delivery and risk', 'Returns and repairs', 'Liability', 'Governing law'],
+  },
+  privacy: {
+    label: 'Privacy',
+    title: 'Privacy notice',
+    lead: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. This notice explains, in placeholder copy, what we collect, why we collect it, and how long we keep it.',
+    heads: ['What we collect', 'How we use it', 'Lawful basis', 'Sharing and processors', 'Retention', 'Your rights'],
+  },
+  cookies: {
+    label: 'Cookies',
+    title: 'Cookie policy',
+    lead: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. A placeholder account of the cookies this site sets and the choices available to you.',
+    heads: ['What cookies are', 'Strictly necessary', 'Analytics', 'Preference cookies', 'Managing cookies'],
+  },
+};
+
+class Component extends DCLogic {
+  state = { localeTick: 0 };
+
+  componentDidMount() {
+    this.onResize = () => this.setState({ vw: window.innerWidth });
+    window.addEventListener('resize', this.onResize);
+    this.onResize();
+    const attach = () => {
+      const s = window.BridgeLocale;
+      if (!s) { this._lRetry = setTimeout(attach, 60); return; }
+      this._lUnsub = s.subscribe(() => this.setState({ localeTick: this.state.localeTick + 1 }));
+      this.setState({ localeTick: this.state.localeTick + 1 });
+    };
+    attach();
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onResize);
+    clearTimeout(this._lRetry);
+    if (this._lUnsub) this._lUnsub();
+  }
+
+  query(key) {
+    if (typeof window === 'undefined') return '';
+    const m = new RegExp('[?&]' + key + '=([a-z]+)').exec(window.location.search || '');
+    return m ? m[1] : '';
+  }
+
+  renderVals() {
+    const L = window.BridgeLocale;
+    const loc = L ? L.get() : { dir: 'ltr' };
+    const str = L ? L.strings() : {};
+    const key = this.query('doc') || this.props.doc || 'terms';
+    const doc = DOCS[key] || DOCS.terms;
+    const brand = this.query('brand') || this.props.brand || 'bridge';
+    const shift = brand === 'shift';
+    const vw = this.state.vw || 1440;
+    const mobile = vw < 720;
+    const tablet = !mobile && vw < 1080;
+
+    const labels = { terms: str.terms || 'Terms', privacy: str.privacy || 'Privacy', cookies: str.cookies || 'Cookies' };
+
+    return {
+      brandKey: brand,
+      dir: loc.dir || 'ltr',
+      no: false,
+      device: mobile ? 'mobile' : 'desktop',
+      bagCount: 2,
+      homeLabel: str.shHome || 'Home',
+      railLabel: str.legalLabel || 'Legal',
+      onThisPageLabel: str.onThisPage || 'On this page',
+      docTitle: doc.title,
+      lead: doc.lead,
+      updatedLine: (str.lastUpdated || 'Last updated') + ' · 12 August 2026',
+      cols: mobile || tablet ? '1fr' : '270px minmax(0, 1fr)',
+      padHead: mobile ? '24px 16px 20px' : '40px 40px 32px',
+      padBody: mobile ? '24px 16px 40px' : '8px 40px 64px 32px',
+      h1Size: mobile ? '38px' : tablet ? '48px' : '58px',
+      docs: Object.keys(DOCS).map((k) => ({
+        label: labels[k] || DOCS[k].label,
+        href: 'BridgeLegal.dc.html?doc=' + k + (shift ? '&brand=shift' : ''),
+        style: 'font-size: 15px; text-decoration: none; padding: 8px 0; border-bottom: 1px solid var(--color-divider);'
+          + (k === key ? ' color: var(--color-text); font-family: var(--font-heading); font-weight: var(--font-heading-weight);' : ''),
+      })),
+      sections: doc.heads.map((h, i) => ({
+        id: 's' + (i + 1),
+        anchor: '#s' + (i + 1),
+        num: String(i + 1),
+        head: h,
+        paras: [
+          { text: LOREM[i % LOREM.length] },
+          { text: LOREM[(i + 2) % LOREM.length] },
+        ],
+      })),
+      contactLine: str.legalContact || 'Questions about this document?',
+      contactCta: str.contact || 'Contact us',
+      contactHref: shift ? 'ShiftHome.dc.html' : 'BridgeShop.dc.html',
+      navigate: (dest, payload) => {
+        if (dest === 'signin') { window.location.href = shift ? 'ShiftLogin.dc.html' : 'BridgeLogin.dc.html'; return; }
+        if (dest === 'search') { window.location.href = shift ? 'ShiftShop.dc.html?screen=plp' : 'BridgeSearch.dc.html'; return; }
+        if (dest === 'journal') { window.location.href = shift ? 'ShiftHome.dc.html#shift-journal' : 'BridgeJournal.dc.html'; return; }
+        if (dest === 'checkout') { window.location.href = shift ? 'ShiftShop.dc.html?screen=checkout' : 'BridgeShop.dc.html?screen=checkout'; return; }
+        if (dest === 'home') { window.location.href = shift ? 'ShiftHome.dc.html' : 'BridgeShop.dc.html'; return; }
+        window.location.href = (shift ? 'ShiftShop.dc.html' : 'BridgeShop.dc.html') + '?screen=plp';
+      },
+    };
+  }
+}
+</script>
+</body>
+</html>

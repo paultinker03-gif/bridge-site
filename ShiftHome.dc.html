@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="brands.css">
+<script src="locale.js"></script>
+<style>
+  body { margin: 0; }
+  a { color: var(--color-accent); }
+  a:hover { color: var(--color-accent-700); }
+</style>
+<template id="__bundler_thumbnail" data-bg-color="#ece7dd">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+    <rect width="400" height="400" fill="#ece7dd"></rect>
+    <text x="200" y="220" text-anchor="middle" font-family="Archivo, Helvetica, Arial, sans-serif" font-size="72" font-weight="800" letter-spacing="-3" fill="#1b1a17">SHIFT</text>
+    <rect x="120" y="248" width="160" height="6" fill="#a83e1e"></rect>
+  </svg>
+</template>
+</helmet>
+
+<div data-brand="shift" dir="{{ dir }}" style="background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); min-height: 100vh;">
+
+  <dc-import name="Blocks" brand="shift" block="nav" device="{{ device }}" bag-count="2" account-label="Account" on-navigate="{{ navigate }}" hint-size="100%,140px"></dc-import>
+
+  <!-- ══ HERO ══ -->
+  <section id="shift-hero">
+    <dc-import name="Blocks" brand="shift" block="hero" device="{{ device }}" hero-layout="split" hero="{{ shiftHomeHero }}" on-navigate="{{ navigate }}" hint-size="100%,560px"></dc-import>
+  </section>
+
+  <!-- ══ MANIFESTO ══ -->
+  <section style="background: var(--color-text); color: var(--color-bg);">
+    <div style="max-width: 1760px; margin: 0 auto; padding: clamp(40px, 5vw, 72px) clamp(16px, 5vw, 64px); display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: clamp(24px, 4vw, 64px);">
+      <sc-for list="{{ manifesto }}" as="m" hint-placeholder-count="3">
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <span style="font-size: 11px; letter-spacing: 0.2em; opacity: 0.5;">{{ m.num }}</span>
+          <div style="font-family: var(--font-heading); font-weight: 700; font-size: clamp(22px, 2.2vw, 30px); letter-spacing: -0.035em; line-height: 1.05;">{{ m.head }}</div>
+          <p style="margin: 0; font-size: 14px; line-height: 1.55; opacity: 0.72; max-width: 34ch; text-wrap: pretty;">{{ m.body }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ══ PILLARS ══ -->
+  <section id="shift-pillars" style="max-width: 1760px; margin: 0 auto; padding: clamp(40px, 6vw, 96px) clamp(16px, 5vw, 64px);">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; flex-wrap: wrap; margin-bottom: 40px;">
+      <h2 style="margin: 0; font-size: clamp(28px, 3.4vw, 48px); max-width: 24ch;">Three ways a Bridge product stays in use.</h2>
+      <span style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-neutral-700);">01 — 03</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: clamp(20px, 2.4vw, 36px);">
+      <sc-for list="{{ pillars }}" as="p" hint-placeholder-count="3">
+        <div class="card" style="background: var(--color-bg); padding: 0; gap: 0;">
+          <div style="aspect-ratio: 4 / 3; position: relative; overflow: hidden; background: var(--color-surface);">
+            <img src="{{ p.src }}" alt="{{ p.alt }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;">
+          </div>
+          <div style="padding: 24px 24px 28px; display: flex; flex-direction: column; gap: 12px; flex: 1;">
+            <span class="card-kicker">{{ p.kicker }}</span>
+            <div style="font-family: var(--font-heading); font-weight: 700; font-size: 26px; letter-spacing: -0.035em; line-height: 1.05;">{{ p.title }}</div>
+            <p style="margin: 0; font-size: 14px; line-height: 1.55; color: var(--color-neutral-800); flex: 1; text-wrap: pretty;">{{ p.body }}</p>
+            <div style="display: flex; align-items: center; gap: 12px; margin-top: 10px;">
+              <span style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-neutral-700);">{{ p.meta }}</span>
+              <button class="btn btn-ghost" style="margin-inline-start: auto; padding-inline: 0;" onClick="{{ p.go }}"><span>{{ p.cta }}</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ══ TRADE-IN ESTIMATOR ══ -->
+  <section id="shift-tradein" style="border-block: 1px solid var(--color-divider); background: var(--color-surface);">
+    <div style="max-width: 1760px; margin: 0 auto; padding: clamp(40px, 6vw, 88px) clamp(16px, 5vw, 64px); display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: clamp(32px, 5vw, 72px); align-items: start;">
+      <div>
+        <div style="font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 22px;">Trade-in</div>
+        <h2 style="margin: 0 0 16px; font-size: clamp(28px, 3.4vw, 46px); max-width: 22ch;">Tell us what you have. We&rsquo;ll tell you what it&rsquo;s worth.</h2>
+        <p style="margin: 0 0 36px; font-size: 15px; line-height: 1.55; color: var(--color-neutral-800); max-width: 46ch; text-wrap: pretty;">Credit is issued the day your kit is graded at the bench, and spends across Bridge and SHIFT alike. Nothing is rejected — anything that can&rsquo;t be resold is recovered for fibre.</p>
+
+        <div style="display: flex; flex-direction: column; gap: 28px;">
+          <div>
+            <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 12px;">What is it</div>
+            <div class="seg" style="width: 100%;">
+              <sc-for list="{{ categories }}" as="c" hint-placeholder-count="5">
+                <label class="seg-opt" style="min-height: 46px;"><input type="radio" name="shift-cat" checked="{{ c.on }}" onChange="{{ c.pick }}"><span>{{ c.label }}</span></label>
+              </sc-for>
+            </div>
+          </div>
+          <div>
+            <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 12px;">Condition</div>
+            <div style="display: flex; flex-direction: column; gap: 4px;">
+              <sc-for list="{{ conditions }}" as="cd" hint-placeholder-count="3">
+                <label class="radio" style="min-height: 44px; gap: 12px;"><input type="radio" name="shift-cond" checked="{{ cd.on }}" onChange="{{ cd.pick }}"><span class="dot"></span><span>{{ cd.label }}</span><span style="margin-inline-start: auto; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-neutral-700);">{{ cd.grade }}</span></label>
+              </sc-for>
+            </div>
+          </div>
+          <div>
+            <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 12px;">How old</div>
+            <div class="seg" style="width: 100%;">
+              <sc-for list="{{ ages }}" as="a" hint-placeholder-count="3">
+                <label class="seg-opt" style="min-height: 46px;"><input type="radio" name="shift-age" checked="{{ a.on }}" onChange="{{ a.pick }}"><span>{{ a.label }}</span></label>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: var(--color-bg); border: 1px solid var(--color-divider); position: sticky; top: 140px;">
+        <div style="padding: 28px 28px 24px; border-bottom: 1px solid var(--color-divider);">
+          <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-neutral-700);">Estimated credit</div>
+          <div style="display: flex; align-items: flex-end; gap: 14px; margin-top: 10px; flex-wrap: wrap;">
+            <span style="font-family: var(--font-heading); font-weight: 800; font-size: clamp(48px, 6vw, 78px); letter-spacing: -0.05em; line-height: 0.9; color: var(--color-accent);">{{ creditLabel }}</span>
+            <span class="tag tag-outline" style="margin-bottom: 12px;">{{ gradeLabel }}</span>
+          </div>
+          <p style="margin: 14px 0 0; font-size: 13px; color: var(--color-neutral-800); text-wrap: pretty;">{{ creditLine }}</p>
+        </div>
+        <div style="padding: 24px 28px; display: flex; flex-direction: column; gap: 16px; border-bottom: 1px solid var(--color-divider);">
+          <sc-for list="{{ tradeSteps }}" as="ts" hint-placeholder-count="3">
+            <div style="display: flex; gap: 14px; align-items: flex-start;">
+              <span style="flex: none; width: 22px; height: 22px; display: grid; place-items: center; font-size: 11px; font-weight: 700; background: var(--color-text); color: var(--color-bg);">{{ ts.num }}</span>
+              <div>
+                <div style="font-size: 14px; font-weight: 600;">{{ ts.head }}</div>
+                <div style="font-size: 13px; color: var(--color-neutral-700);">{{ ts.body }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="padding: 20px 28px 28px; display: flex; flex-direction: column; gap: 10px;">
+          <button class="btn btn-primary" style="min-height: 52px; width: 100%;">Start this trade-in</button>
+          <span style="font-size: 11px; color: var(--color-neutral-700); text-align: center;">Free postage both ways · Credit never expires</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CERTIFIED PRE-OWNED ══ -->
+  <section id="shift-resale" style="max-width: 1760px; margin: 0 auto; padding: clamp(40px, 6vw, 96px) clamp(16px, 5vw, 64px);">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; flex-wrap: wrap; border-bottom: 1px solid var(--color-divider); padding-bottom: 20px; margin-bottom: 32px;">
+      <div>
+        <div style="font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 14px;">Certified pre-owned</div>
+        <h2 style="margin: 0; font-size: clamp(28px, 3.4vw, 46px);">Graded, repaired, guaranteed for two years.</h2>
+      </div>
+      <button class="btn btn-secondary" style="min-height: 48px; flex: none;" onClick="{{ goShop }}">All 412 pieces</button>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: clamp(16px, 2vw, 32px);">
+      <sc-for list="{{ preOwned }}" as="po" hint-placeholder-count="4">
+        <div style="display: flex; flex-direction: column; gap: 14px; cursor: pointer;" onClick="{{ goShop }}">
+          <div style="aspect-ratio: 3 / 4; position: relative; background: var(--color-surface);">
+            <img src="{{ po.src }}" alt="{{ po.alt }}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+            <span class="tag tag-solid tag-on-image">{{ po.grade }}</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <span style="font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-neutral-700);">{{ po.life }}</span>
+            <div dir="ltr" class="brand-lockup" style="font-family: var(--font-heading); font-weight: 700; font-size: 16px; letter-spacing: -0.02em;">{{ po.name }}</div>
+            <div style="display: flex; align-items: baseline; gap: 10px;">
+              <span dir="ltr" style="font-size: 15px; font-weight: 600;">{{ po.price }}</span>
+              <span dir="ltr" style="font-size: 13px; color: var(--color-neutral-600); text-decoration: line-through;">{{ po.was }}</span>
+            </div>
+            <span style="font-size: 12px; color: var(--color-neutral-700);">{{ po.note }}</span>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ══ REPAIR BENCH ══ -->
+  <section id="shift-repair" style="background: var(--color-text); color: var(--color-bg);">
+    <div style="max-width: 1760px; margin: 0 auto; padding: clamp(40px, 6vw, 88px) clamp(16px, 5vw, 64px); display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: clamp(32px, 5vw, 72px); align-items: start;">
+      <div>
+        <div style="font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-accent-300); margin-bottom: 22px;">The bench</div>
+        <h2 style="margin: 0 0 16px; font-size: clamp(28px, 3.4vw, 46px); max-width: 20ch;">Book a repair in under a minute.</h2>
+        <p style="margin: 0 0 32px; font-size: 15px; line-height: 1.55; opacity: 0.72; max-width: 44ch; text-wrap: pretty;">Twelve benches across Europe, staffed by people who have made this kit. Every repair is logged against the product, so its record travels with it to the next owner.</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: rgba(236,231,221,0.18); border: 1px solid rgba(236,231,221,0.18);">
+          <sc-for list="{{ benchStats }}" as="b" hint-placeholder-count="3">
+            <div style="background: var(--color-text); padding: 20px;">
+              <div style="font-family: var(--font-heading); font-weight: 800; font-size: 28px; letter-spacing: -0.04em;">{{ b.value }}</div>
+              <div style="font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.6; margin-top: 6px;">{{ b.label }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="background: var(--color-bg); color: var(--color-text); border: 1px solid var(--color-divider);">
+        <div style="padding: 24px 28px; border-bottom: 1px solid var(--color-divider);">
+          <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 14px;">What needs doing</div>
+          <div style="display: flex; flex-direction: column;">
+            <sc-for list="{{ services }}" as="sv" hint-placeholder-count="4">
+              <button aria-pressed="{{ sv.on }}" onClick="{{ sv.pick }}" style="{{ sv.rowStyle }}">
+                <span style="width: 9px; height: 9px; flex: none; border: 1px solid var(--color-text); background: {{ sv.dot }};"></span>
+                <span style="font-size: 14px;">{{ sv.label }}</span>
+                <span style="margin-inline-start: auto; font-size: 12px; color: var(--color-neutral-700);">{{ sv.meta }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+        <div style="padding: 24px 28px; border-bottom: 1px solid var(--color-divider);">
+          <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 14px;">How it reaches us</div>
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <sc-for list="{{ routes }}" as="r" hint-placeholder-count="2">
+              <label class="radio" style="min-height: 44px; gap: 12px;"><input type="radio" name="shift-route" checked="{{ r.on }}" onChange="{{ r.pick }}"><span class="dot"></span><span>{{ r.label }}</span><span style="margin-inline-start: auto; font-size: 12px; color: var(--color-neutral-700);">{{ r.meta }}</span></label>
+            </sc-for>
+          </div>
+        </div>
+        <div style="padding: 24px 28px 28px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px;">
+            <span style="font-size: 13px; color: var(--color-neutral-700);">{{ repairSummary }}</span>
+            <span style="font-family: var(--font-heading); font-weight: 800; font-size: 30px; letter-spacing: -0.04em;">{{ repairTotal }}</span>
+          </div>
+          <button class="btn btn-primary" style="min-height: 52px; width: 100%;">Book this repair</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ LEDGER ══ -->
+  <section id="shift-ledger" style="max-width: 1760px; margin: 0 auto; padding: clamp(40px, 6vw, 88px) clamp(16px, 5vw, 64px);">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: clamp(24px, 4vw, 64px); align-items: start;">
+      <div>
+        <div style="font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 18px;">The ledger</div>
+        <h2 style="margin: 0 0 14px; font-size: clamp(26px, 3vw, 40px); max-width: 20ch;">Published quarterly. Audited annually.</h2>
+        <p style="margin: 0; font-size: 14px; line-height: 1.55; color: var(--color-neutral-800); max-width: 40ch; text-wrap: pretty;">No offsets, no pledges for 2040. Only what has already moved through the benches, counted the same way every quarter.</p>
+      </div>
+      <table class="table">
+        <thead><tr><th>Measure</th><th style="text-align: end;">2026 to date</th><th style="text-align: end;">Since 2019</th></tr></thead>
+        <tbody>
+          <sc-for list="{{ ledger }}" as="row" hint-placeholder-count="5">
+            <tr>
+              <td>{{ row.label }}</td>
+              <td dir="ltr" style="text-align: end; font-variant-numeric: tabular-nums;">{{ row.ytd }}</td>
+              <td dir="ltr" style="text-align: end; font-variant-numeric: tabular-nums; color: var(--color-neutral-700);">{{ row.all }}</td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ══ JOURNAL ══ -->
+  <section id="shift-journal" style="border-top: 1px solid var(--color-divider); max-width: 1760px; margin: 0 auto; padding: clamp(40px, 6vw, 88px) clamp(16px, 5vw, 64px);">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 32px;">
+      <h2 style="margin: 0; font-size: clamp(26px, 3vw, 40px);">Field notes</h2>
+      <button class="btn btn-ghost" style="padding-inline: 0;"><span>All notes</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: clamp(20px, 3vw, 44px);">
+      <sc-for list="{{ journal }}" as="j" hint-placeholder-count="3">
+        <article style="display: flex; flex-direction: column; gap: 16px;">
+          <div style="aspect-ratio: 16 / 11; background: var(--color-surface); position: relative;">
+            <img src="{{ j.src }}" alt="{{ j.alt }}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+          </div>
+          <span style="font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-accent);">{{ j.kicker }}</span>
+          <div style="font-family: var(--font-heading); font-weight: 700; font-size: 22px; letter-spacing: -0.035em; line-height: 1.1; max-width: 26ch;">{{ j.title }}</div>
+          <p style="margin: 0; font-size: 14px; line-height: 1.55; color: var(--color-neutral-800); max-width: 40ch; text-wrap: pretty;">{{ j.body }}</p>
+          <span style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-neutral-600);">{{ j.meta }}</span>
+        </article>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ══ BRIDGE CROSSOVER — SHIFT advertising the parent house, in SHIFT's
+       own language. The block inherits SHIFT tokens; nothing switches brand. ══ -->
+  <dc-import name="Blocks" brand="shift" block="crossover" device="{{ device }}" hint-size="100%,460px"></dc-import>
+
+  <dc-import name="Blocks" brand="shift" block="footer" device="{{ device }}" on-navigate="{{ navigate }}" hint-size="100%,420px"></dc-import>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;startSection&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;hero&quot;,&quot;pillars&quot;,&quot;tradein&quot;,&quot;resale&quot;,&quot;repair&quot;,&quot;ledger&quot;,&quot;journal&quot;],&quot;default&quot;:&quot;hero&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;}}">
+const CATS = [
+  { k: 'jersey', label: 'Jersey', base: 38 },
+  { k: 'bibs', label: 'Bib shorts', base: 46 },
+  { k: 'jacket', label: 'Jacket', base: 74 },
+  { k: 'shoes', label: 'Shoes', base: 56 },
+  { k: 'wheels', label: 'Wheelset', base: 190 },
+];
+const CONDS = [
+  { k: 'asnew', label: 'As new, barely ridden', mult: 1, grade: 'Grade A' },
+  { k: 'sound', label: 'Used, sound', mult: 0.66, grade: 'Grade B' },
+  { k: 'worn', label: 'Worn, needs repair', mult: 0.38, grade: 'Grade C' },
+];
+const AGES = [
+  { k: 'new', label: 'Under a year', mult: 1 },
+  { k: 'mid', label: '1–3 years', mult: 0.86 },
+  { k: 'old', label: '3 years +', mult: 0.7 },
+];
+const SERVICES = [
+  { k: 'zip', label: 'Zip replacement', price: 24, lead: '5 working days' },
+  { k: 'crash', label: 'Crash repair — panel rebuild', price: 38, lead: '8 working days' },
+  { k: 'dwr', label: 'Re-waterproofing', price: 18, lead: '6 working days' },
+  { k: 'wheel', label: 'Wheel true & re-tension', price: 32, lead: '3 working days' },
+];
+const ROUTES = [
+  { k: 'mail', label: 'Mail-in', price: 6, meta: 'Label emailed, collected in 48h' },
+  { k: 'bench', label: 'Drop at a bench', price: 0, meta: '12 locations, no booking' },
+];
+
+class Component extends DCLogic {
+  state = { cat: 'bibs', cond: 'sound', age: 'mid', service: 'crash', route: 'mail', tick: 0 };
+
+  queryView() {
+    if (typeof window === 'undefined') return '';
+    const m = /[?&]view=(desktop|mobile|responsive)/.exec(window.location.search || '');
+    return m ? m[1] : '';
+  }
+
+  componentDidMount() {
+    this.onResize = () => this.setState({ vw: window.innerWidth });
+    window.addEventListener('resize', this.onResize);
+    this.onResize();
+    const attach = () => {
+      const s = window.BridgeLocale;
+      if (!s) { this._retry = setTimeout(attach, 60); return; }
+      this._unsub = s.subscribe(() => this.setState({ tick: this.state.tick + 1 }));
+      this.setState({ tick: this.state.tick + 1 });
+    };
+    attach();
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onResize);
+    clearTimeout(this._retry);
+    if (this._unsub) this._unsub();
+  }
+
+  goShop() {
+    if (typeof this.props.onShop === 'function') { this.props.onShop('plp'); return; }
+    window.location.href = 'ShiftShop.dc.html?screen=plp';
+  }
+
+  jumpTo(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const y = el.getBoundingClientRect().top + window.pageYOffset - 90;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  }
+
+  renderVals() {
+    const s = this.state;
+    const store = window.BridgeLocale;
+    const loc = store ? store.get() : { dir: 'ltr' };
+    const cat = CATS.filter((c) => c.k === s.cat)[0] || CATS[0];
+    const cond = CONDS.filter((c) => c.k === s.cond)[0] || CONDS[0];
+    const age = AGES.filter((a) => a.k === s.age)[0] || AGES[0];
+    const credit = Math.max(8, Math.round((cat.base * cond.mult * age.mult) / 2) * 2);
+    const svc = SERVICES.filter((x) => x.k === s.service)[0] || SERVICES[0];
+    const route = ROUTES.filter((r) => r.k === s.route)[0] || ROUTES[0];
+
+    const rowStyle = (on) =>
+      'appearance: none; background: ' + (on ? 'var(--color-surface)' : 'transparent') +
+      '; border: 0; border-bottom: 1px solid var(--color-divider); cursor: pointer; width: 100%;' +
+      ' display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 4px; font: inherit; color: var(--color-text); text-align: start;';
+
+    return {
+      dir: loc.dir || 'ltr',
+      device: (this.props.view || this.queryView()) === 'mobile' ? 'mobile'
+        : (this.props.view || this.queryView()) === 'desktop' ? 'desktop'
+        : (s.vw || 1440) < 760 ? 'mobile' : 'desktop',
+      navigate: (dest) => {
+        if (typeof this.props.onShop === 'function' && (dest === 'plp' || dest === 'checkout')) { this.props.onShop(dest); return; }
+        if (dest === 'plp') { window.location.href = 'ShiftShop.dc.html?screen=plp'; return; }
+        if (dest === 'checkout') { window.location.href = 'ShiftShop.dc.html?screen=checkout'; return; }
+        if (dest === 'search') { if (typeof this.props.onSearch === 'function') { this.props.onSearch(); return; } window.location.href = 'ShiftSearch.dc.html'; return; }
+        if (dest === 'signin') { if (typeof this.props.onSignIn === 'function') { this.props.onSignIn(); return; } window.location.href = 'ShiftLogin.dc.html'; return; }
+        if (dest === 'account') {
+          if (typeof this.props.onAccount === 'function') { this.props.onAccount(); return; }
+          window.location.href = 'ShiftAccount.dc.html';
+          return;
+        }
+        if (dest === 'repair') { this.jumpTo('shift-repair'); return; }
+        if (dest === 'tradein') { this.jumpTo('shift-tradein'); return; }
+        if (dest === 'materials') { this.jumpTo('shift-pillars'); return; }
+        if (dest === 'journal') { this.jumpTo('shift-journal'); return; }
+        this.jumpTo('shift-hero');
+      },
+      secondLifeNo: '41,208',
+      divergentCount: '31',
+
+      navItems: [
+        { label: 'Repair', go: () => this.jumpTo('shift-repair') },
+        { label: 'Pre-owned', go: () => this.jumpTo('shift-resale') },
+        { label: 'Trade-in', go: () => this.jumpTo('shift-tradein') },
+        { label: 'Materials', go: () => this.jumpTo('shift-pillars') },
+        { label: 'The ledger', go: () => this.jumpTo('shift-ledger') },
+      ],
+      goShop: () => this.goShop(),
+      goTrade: () => this.jumpTo('shift-tradein'),
+      goRepair: () => this.jumpTo('shift-repair'),
+      shiftHomeHero: { primaryDest: 'tradein', secondaryDest: 'repair', secondaryTone: 'secondary' },
+
+      manifesto: [
+        { num: '01', head: 'Make less, better', body: 'Four collections became two. Every panel is specified for repair before it is specified for weight.' },
+        { num: '02', head: 'Keep it in use', body: 'Repairs for life on anything Bridge has ever sold, whoever owns it now. The record follows the garment, not the receipt.' },
+        { num: '03', head: 'Take it back', body: 'Trade in any piece for credit. What cannot be resold is separated to fibre and returned to the mill we buy from.' },
+      ],
+
+      pillars: [
+        {
+          kicker: 'Repair', title: 'The bench', meta: '12 locations',
+          body: 'Zips, crashes, seams, waterproofing, wheels. Priced flat, logged against the product, guaranteed for two years.',
+          cta: 'Book a repair', go: () => this.jumpTo('shift-repair'),
+          src: 'bridge/E4-hands-on-bars-gloves.jpeg', alt: 'Hands in Bridge gloves on the bars',
+        },
+        {
+          kicker: 'Resale', title: 'Second lives', meta: '412 pieces live',
+          body: 'Traded-in kit is cleaned, repaired and graded A to C by the same people who built it, then sold with a two-year guarantee.',
+          cta: 'Shop pre-owned', go: () => this.goShop(),
+          src: 'bridge/E2-folded-stack-repair-label.jpeg', alt: 'Folded graded stock with repair labels',
+        },
+        {
+          kicker: 'Materials', title: 'Back to fibre', meta: '9 mill partners',
+          body: 'Unsellable garments are cut down, sorted by fibre and returned to the mills we already buy from. No downcycling into rags.',
+          cta: 'Read the method', go: () => this.jumpTo('shift-system'),
+          src: 'bridge/A19-mesh-base-layer-white-front.jpeg', alt: 'Open mesh fabric structure, close',
+        },
+      ],
+
+      categories: CATS.map((c) => ({ label: c.label, on: c.k === s.cat, pick: () => this.setState({ cat: c.k }) })),
+      conditions: CONDS.map((c) => ({ label: c.label, grade: c.grade, on: c.k === s.cond, pick: () => this.setState({ cond: c.k }) })),
+      ages: AGES.map((a) => ({ label: a.label, on: a.k === s.age, pick: () => this.setState({ age: a.k }) })),
+      creditLabel: '£' + credit,
+      gradeLabel: cond.grade,
+      creditLine: cat.label + ', ' + cond.label.toLowerCase() + ', ' + age.label.toLowerCase() + '. Confirmed at the bench within 48 hours of arrival.',
+      tradeSteps: [
+        { num: '1', head: 'Post it free', body: 'Label emailed the moment you confirm.' },
+        { num: '2', head: 'Graded at the bench', body: 'Photographed, repaired, graded A to C.' },
+        { num: '3', head: 'Credit issued', body: 'Spends across Bridge and SHIFT. Never expires.' },
+      ],
+
+      preOwned: [
+        { name: 'Meridian Bib Short', grade: 'Grade A', life: 'Second life no. 04117', price: '£96', was: '£185', note: 'New pad fitted · Size M', src: 'bridge/A2-bib-short-black-side.jpeg', alt: 'Meridian bib short, black' },
+        { name: 'Winterline Jacket', grade: 'Grade B', life: 'Second life no. 03980', price: '£128', was: '£320', note: 'Re-waterproofed · Size L', src: 'bridge/A10-rain-shell-translucent.jpeg', alt: 'Winterline shell, translucent' },
+        { name: 'Cadence Jersey', grade: 'Grade A', life: 'Second life no. 04206', price: '£58', was: '£120', note: 'Zip replaced · Size S', src: 'bridge/A8-roll-neck-green.jpeg', alt: 'Cadence roll-neck, green' },
+        { name: "Women's Winter Tight", grade: 'Grade C', life: 'Second life no. 03844', price: '£74', was: '£245', note: 'Knee panel repaired · Size S', src: 'bridge/A9-womens-winter-tights-black.jpeg', alt: "Women's winter tight, black" },
+      ],
+
+      benchStats: [
+        { value: '18,940', label: 'repairs completed' },
+        { value: '4.6 yrs', label: 'average life added' },
+        { value: '£0', label: 'for Bridge owners' },
+      ],
+
+      services: SERVICES.map((x) => ({
+        label: x.label,
+        meta: '£' + x.price + ' · ' + x.lead,
+        on: x.k === s.service,
+        dot: x.k === s.service ? 'var(--color-accent)' : 'transparent',
+        rowStyle: rowStyle(x.k === s.service),
+        pick: () => this.setState({ service: x.k }),
+      })),
+      routes: ROUTES.map((r) => ({
+        label: r.label,
+        meta: r.price ? '£' + r.price + ' · ' + r.meta : 'Free · ' + r.meta,
+        on: r.k === s.route,
+        pick: () => this.setState({ route: r.k }),
+      })),
+      repairSummary: svc.label + ' · ' + route.label.toLowerCase() + ' · ' + svc.lead,
+      repairTotal: '£' + (svc.price + route.price),
+
+      ledger: [
+        { label: 'Repairs completed', ytd: '5,412', all: '18,940' },
+        { label: 'Pieces regraded and resold', ytd: '3,180', all: '11,265' },
+        { label: 'Trade-in credit issued', ytd: '£412,900', all: '£1.84m' },
+        { label: 'Fibre returned to mills', ytd: '9.2 t', all: '38.6 t' },
+        { label: 'New garments not made', ytd: '3,180', all: '11,265' },
+      ],
+
+      journal: [
+        { kicker: 'Method', title: 'Why we stopped bonding seams', body: 'A bonded seam is lighter and lasts three seasons. A stitched one can be opened, repaired and closed again for a decade.', meta: '6 min read · Aug 2026', src: 'bridge/B2-collar-zip-detail-blue.jpeg', alt: 'Collar and zip construction, close' },
+        { kicker: 'Bench notes', title: 'The 40 most common failures', body: 'Two years of repair logs, sorted. Zips, crash abrasion and elastic fatigue account for most of it — all of them fixable.', meta: '9 min read · Jul 2026', src: 'bridge/E1-repair-bench-hands-green.jpeg', alt: 'The repair bench' },
+        { kicker: 'Riders', title: 'One jersey, four owners', body: 'Second life no. 00912 has covered 31,000km across three countries and two continents. We tracked down everyone who wore it.', meta: '12 min read · Jun 2026', src: 'bridge/D1-rider-empty-road-dusk.jpeg', alt: 'A rider on an empty road at dusk' },
+      ],
+
+    };
+  }
+}
+
+</script>
+</body>
+</html>

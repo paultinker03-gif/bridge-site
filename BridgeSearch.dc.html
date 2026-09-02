@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="brands.css">
+<script src="locale.js"></script>
+<style>
+  body { margin: 0; }
+  a { color: var(--color-accent); }
+  a:hover { color: var(--color-accent-700); }
+</style>
+</helmet>
+
+<sc-if value="{{ isSingle }}" hint-placeholder-val="{{ true }}">
+<div data-brand="bridge" style="background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); min-height: var(--se-min-h, 100vh); display: flex; flex-direction: column;">
+
+  <dc-import name="Blocks" brand="bridge" block="nav" device="{{ device }}" bag-count="2" on-navigate="{{ navigateOut }}" hint-size="100%,100px"></dc-import>
+
+  <!-- SEARCH BAR — persistent across every state -->
+  <div style="border-bottom: 1px solid var(--color-divider); padding: {{ padBar }};">
+    <div style="max-width: 1680px; margin: 0 auto; display: flex; align-items: center; gap: 12px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-700)" stroke-width="2" stroke-linecap="square" style="flex: none;"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg>
+      <input class="input" id="se-q" placeholder="{{ str.sePlaceholder }}" style="border: 0; background: transparent; font-family: var(--font-heading); font-weight: 800; font-size: {{ querySize }}; min-height: {{ fieldH }}; padding-inline-start: 0; flex: 1; min-width: 0;" value="{{ query }}" onChange="{{ onQuery }}" onKeyDown="{{ onKey }}">
+      <sc-if value="{{ hasQuery }}" hint-placeholder-val="{{ false }}">
+        <button class="btn btn-icon btn-ghost" aria-label="{{ str.seClear }}" style="flex: none; min-width: 44px; min-height: 44px;" onClick="{{ clearQuery }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M5 5l14 14M19 5 5 19"/></svg></button>
+      </sc-if>
+      <sc-if value="{{ wideBar }}" hint-placeholder-val="{{ true }}">
+        <button class="btn btn-primary" style="flex: none; min-height: {{ tapH }};" onClick="{{ runSearch }}">{{ searchLabel }}</button>
+      </sc-if>
+      <sc-if value="{{ narrowBar }}" hint-placeholder-val="{{ false }}">
+        <button class="btn btn-icon btn-primary" aria-label="Search" style="flex: none; min-width: 48px; min-height: 48px;" onClick="{{ runSearch }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg></button>
+      </sc-if>
+    </div>
+  </div>
+
+  <div style="flex: 1;">
+
+    <!-- 1 — EMPTY / SUGGESTIONS -->
+    <sc-if value="{{ isIdle }}" hint-placeholder-val="{{ true }}">
+      <div style="max-width: 1680px; margin: 0 auto; display: grid; grid-template-columns: {{ idleCols }};">
+        <div style="border-inline-end: {{ borderRight }}; padding: {{ padPanel }};">
+          <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 18px;">{{ str.seRecent }}</div>
+          <div style="display: flex; flex-direction: column;">
+            <button class="btn btn-ghost" style="justify-content: flex-start; min-height: {{ rowH }}; border-bottom: 1px solid var(--color-divider);" onClick="{{ searchBib }}">bib short</button>
+            <button class="btn btn-ghost" style="justify-content: flex-start; min-height: {{ rowH }}; border-bottom: 1px solid var(--color-divider);" onClick="{{ searchCap }}">winter cap</button>
+            <button class="btn btn-ghost" style="justify-content: flex-start; min-height: {{ rowH }};" onClick="{{ searchPro }}">pro jersey</button>
+          </div>
+          <button class="btn btn-ghost" style="padding-inline-start: 0; font-size: 12px; margin-top: 16px;" onClick="{{ clearRecent }}">{{ str.seClearRecent }}</button>
+        </div>
+        <div style="padding: {{ padPanel }};">
+          <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 18px;">{{ str.sePopular }}</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px;">
+            <button class="btn btn-secondary" style="min-height: {{ tapH }};" onClick="{{ searchPro }}">Pro Jersey</button>
+            <button class="btn btn-secondary" style="min-height: {{ tapH }};" onClick="{{ searchBib }}">Eight-Hour Bib</button>
+            <button class="btn btn-secondary" style="min-height: {{ tapH }};" onClick="{{ searchGilet }}">Gilet</button>
+            <button class="btn btn-secondary" style="min-height: {{ tapH }};" onClick="{{ searchCap }}">Merino cap</button>
+          </div>
+          <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 18px;">{{ str.seBrowseInstead }}</div>
+          <div style="display: grid; grid-template-columns: {{ catCols }}; border-top: 1px solid var(--color-divider);">
+            <button class="btn btn-ghost" style="justify-content: flex-start; min-height: {{ rowH }}; border-bottom: 1px solid var(--color-divider); border-inline-end: 1px solid var(--color-divider);" onClick="{{ goMen }}">{{ str.nvMen }}</button>
+            <button class="btn btn-ghost" style="justify-content: flex-start; min-height: {{ rowH }}; border-bottom: 1px solid var(--color-divider);" onClick="{{ goWomen }}">{{ str.nvWomen }}</button>
+            <button class="btn btn-ghost" style="justify-content: flex-start; min-height: {{ rowH }}; border-bottom: 1px solid var(--color-divider); grid-column: 1 / -1;" onClick="{{ goAccessories }}">{{ str.accessories }}</button>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- 2 — RESULTS -->
+    <sc-if value="{{ isResults }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width: 1680px; margin: 0 auto;">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px 24px; padding: {{ padToolbar }}; border-bottom: 1px solid var(--color-divider);">
+          <span style="font-size: 13px; color: var(--color-neutral-800);">{{ resultLine }}</span>
+          <div class="seg" style="{{ segStyle }}">
+            <label class="seg-opt"><input type="radio" name="se-sort" checked="{{ sortRelevance }}" onChange="{{ pickRelevance }}"><span>{{ str.seRelevance }}</span></label>
+            <label class="seg-opt"><input type="radio" name="se-sort" checked="{{ sortPrice }}" onChange="{{ pickPrice }}"><span>{{ str.sePrice }}</span></label>
+            <label class="seg-opt"><input type="radio" name="se-sort" checked="{{ sortNewest }}" onChange="{{ pickNewest }}"><span>{{ str.seNewest }}</span></label>
+          </div>
+        </div>
+
+        <sc-if value="{{ hasFacets }}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: {{ padChips }}; border-bottom: 1px solid var(--color-divider);">
+            <span style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-700); margin-inline-end: 4px;">{{ str.seNarrowBy }}</span>
+            <sc-for list="{{ facets }}" as="facet" hint-placeholder-count="3">
+              <button class="tag" style="{{ facet.style }}" onClick="{{ facet.toggle }}">{{ facet.label }}</button>
+            </sc-for>
+            <sc-if value="{{ hasActiveFacet }}" hint-placeholder-val="{{ false }}">
+              <button class="btn btn-ghost" style="font-size: 12px;" onClick="{{ clearFilters }}">{{ str.seClearFilters }}</button>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <div style="display: grid; grid-template-columns: {{ resultCols }}; gap: 32px 24px; padding: {{ padGrid }};">
+          <sc-for list="{{ results }}" as="item" hint-placeholder-count="6">
+            <button onClick="{{ goProduct }}" style="appearance: none; border: 0; background: transparent; padding: 0; margin: 0; font: inherit; color: inherit; text-align: start; cursor: pointer; display: block; width: 100%;">
+              <div style="position: relative; aspect-ratio: 4 / 5; background: var(--color-surface); overflow: hidden;">
+                <img src="{{ item.src }}" alt="{{ item.name }}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                <img src="{{ item.hoverSrc }}" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; transition: opacity 240ms ease;" style-hover="opacity: 1;">
+              </div>
+              <div style="padding-top: 14px; display: flex; flex-direction: column; gap: 4px;">
+                <span style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-700);">{{ item.kickerLabel }}</span>
+                <span style="font-family: var(--font-heading); font-weight: 800; font-size: 16px;">{{ item.name }}</span>
+                <span style="font-size: 14px;">{{ item.price }}</span>
+              </div>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- 3 — NO RESULTS -->
+    <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width: 1680px; margin: 0 auto; padding: {{ padPanel }};">
+        <div style="max-width: 560px;">
+          <div style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 16px;">{{ str.seNoMatches }}</div>
+          <h1 style="font-size: {{ h1Size }}; margin: 0 0 8px;">{{ nothingFor }}</h1>
+          <p style="margin: 0 0 28px; font-size: 14px; color: var(--color-neutral-800); text-wrap: pretty;">{{ str.seEmptyLead }}</p>
+
+          <div style="border-top: 1px solid var(--color-divider); padding-top: 24px;">
+            <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 14px;">{{ str.seDidYouMean }}</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px;">
+              <button class="btn btn-secondary" style="min-height: {{ tapH }};" onClick="{{ searchJersey }}">jersey</button>
+              <button class="btn btn-secondary" style="min-height: {{ tapH }};" onClick="{{ searchBib }}">bib short</button>
+              <button class="btn btn-secondary" style="min-height: {{ tapH }};" onClick="{{ searchGilet }}">gilet</button>
+            </div>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+              <button class="btn btn-primary" style="min-height: {{ tapH }};" onClick="{{ goPlp }}">{{ str.seBrowseEverything }}</button>
+              <button class="btn btn-ghost" style="min-height: {{ tapH }};">{{ str.seAskWorkshop }}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+  </div>
+
+  <dc-import name="Blocks" brand="bridge" block="footer" device="{{ device }}" on-navigate="{{ navigateOut }}" hint-size="100%,380px"></dc-import>
+</div>
+</sc-if>
+
+<sc-if value="{{ isBoth }}" hint-placeholder-val="{{ false }}">
+  <div data-brand="bridge" style="background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); padding: 40px; min-height: 100vh;">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; border-bottom: 1px solid var(--color-divider); padding-bottom: 18px; margin-bottom: 40px; flex-wrap: wrap;">
+      <div>
+        <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent-700); margin-bottom: 10px;">Bridge — search</div>
+        <h1 style="margin: 0 0 6px; font-size: 46px; line-height: 0.96; letter-spacing: -0.02em;">Search — all screens</h1>
+        <p style="margin: 0; font-size: 13px; color: var(--color-neutral-800); max-width: 64ch;">Empty, results and no-match states, both breakpoints, full pages end to end.</p>
+      </div>
+      <div style="font-size: 12px; color: var(--color-neutral-700); text-align: end; flex: none;">Desktop 1440 at 0.45×<br>Mobile 390 at 1× — full height, no scroll</div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 56px;">
+      <sc-for list="{{ screens }}" as="s" hint-placeholder-count="3">
+        <div>
+          <div style="display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid var(--color-divider); padding-bottom: 10px; margin-bottom: 18px;">
+            <span style="font-family: var(--font-heading); font-weight: 800; font-size: 13px; background: var(--color-text); color: var(--color-bg); padding: 2px 8px;">{{ s.index }}</span>
+            <span style="font-family: var(--font-heading); font-weight: 800; font-size: 20px;">{{ s.label }}</span>
+            <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700);">{{ s.key }}</span>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 28px; flex-wrap: wrap;">
+            <div style="flex: none;">
+              <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 8px;">Desktop</div>
+              <div style="width: 648px; overflow: hidden; border: 1px solid var(--color-divider); background: var(--color-bg);">
+                <div data-scale="0.45" style="width: 1440px; transform: scale(0.45); transform-origin: top left;">
+                  <iframe src="{{ s.urlD }}" title="{{ s.label }} desktop" scrolling="no" onLoad="{{ fitFrame }}" style="width: 1440px; height: 900px; border: 0; display: block;"></iframe>
+                </div>
+              </div>
+            </div>
+            <div style="flex: none;">
+              <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 8px;">Mobile — 390</div>
+              <div style="width: 390px; border: 1px solid var(--color-divider); overflow: hidden; background: var(--color-bg);">
+                <iframe src="{{ s.urlM }}" title="{{ s.label }} mobile" scrolling="no" onLoad="{{ fitFrame }}" style="width: 390px; height: 700px; border: 0; display: block;"></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</sc-if>
+
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900},&quot;forceScreen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;&quot;,&quot;idle&quot;,&quot;results&quot;,&quot;empty&quot;],&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;}}">
+class Component extends DCLogic {
+  state = {
+    screen: this.queryScreen() || this.props.forceScreen || 'idle',
+    query: this.initQuery(),
+    sort: 'relevance',
+    facet: '',
+    busy: false,
+  };
+
+  // embedded (Demo) hands us onExit; standalone falls through to the Shop file itself
+  exit(dest) {
+    const f = this.props.onExit;
+    if (typeof f === 'function') return f(dest);
+    if (typeof window === 'undefined') return;
+    if (dest === 'journal') { window.location.href = 'BridgeJournal.dc.html'; return; }
+    if (dest === 'signin') { window.location.href = 'BridgeLogin.dc.html'; return; }
+    if (dest === 'checkout') { window.location.href = 'BridgeShop.dc.html?screen=checkout'; return; }
+    const v = /[?&]view=([a-z]+)/.exec(window.location.search || '');
+    const gender = dest === 'men' || dest === 'women' || dest === 'accessories';
+    const q = gender ? 'screen=plp&section=' + dest : 'screen=' + (dest || 'home');
+    window.location.href = 'BridgeShop.dc.html?' + q + (v ? '&view=' + v[1] : '');
+  }
+
+  queryScreen() {
+    if (typeof window === 'undefined') return '';
+    const m = /[?&]screen=([a-z]+)/.exec(window.location.search || '');
+    return m ? m[1] : '';
+  }
+
+  initQuery() {
+    if (this.props.initialQuery) return this.props.initialQuery;
+    const s = this.queryScreen() || this.props.forceScreen || 'idle';
+    if (s === 'results') return 'jersey';
+    if (s === 'empty') return 'aero bibs xl';
+    return '';
+  }
+
+  queryView() {
+    if (typeof window === 'undefined') return '';
+    const m = /[?&]view=(desktop|mobile|responsive)/.exec(window.location.search || '');
+    return m ? m[1] : '';
+  }
+
+  componentDidMount() {
+    this.onResize = () => this.setState({ vw: window.innerWidth });
+    window.addEventListener('resize', this.onResize);
+    this.onResize();
+    if (this.props.initialQuery) this.search(this.props.initialQuery);
+    const attach = () => {
+      const s = window.BridgeLocale;
+      if (!s) { this._lRetry = setTimeout(attach, 60); return; }
+      this._lUnsub = s.subscribe(() => this.setState({ localeTick: (this.state.localeTick || 0) + 1 }));
+      this.setState({ localeTick: (this.state.localeTick || 0) + 1 });
+    };
+    attach();
+    this._fitTimers = [800, 2000, 4000].map((ms) => setTimeout(() => this.fitAllFrames(), ms));
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onResize);
+    clearTimeout(this._lRetry);
+    if (this._lUnsub) this._lUnsub();
+  }
+
+  catalogue() {
+    const J = 'bridge-jerseys/', O = 'bridge-outerwear/';
+    return [
+      { slot: 'se-r1', src: J + 'M01.jpeg', hoverSrc: J + 'M01-closeup.jpeg', kicker: 'Jersey · 2 colours', name: 'Contour Jersey — Tidewater', price: '£85', brief: 'RESULT 4:5 — Contour Jersey, front, teal.', tags: 'jersey race pro short sleeve' },
+      { slot: 'se-r2', src: J + 'M07.jpeg', hoverSrc: J + 'M07-closeup.jpeg', kicker: 'Jersey · 2 colours', name: 'Series 01 Jersey — Cobalt', price: '£75', brief: 'RESULT 4:5 — Series 01 Jersey, front, cobalt.', tags: 'jersey aero race short sleeve' },
+      { slot: 'se-r3', src: J + 'M06.jpeg', hoverSrc: J + 'M06-closeup.jpeg', kicker: 'Jersey · 4 colours', name: 'Facet Jersey — Harbour', price: '£85', brief: 'RESULT 4:5 — Facet Jersey, front, harbour blue.', tags: 'jersey thermal winter long sleeve' },
+      { slot: 'se-r4', src: J + 'W01.jpeg', hoverSrc: J + 'W01-closeup.jpeg', kicker: 'Jersey · 3 colours', name: 'Deco Jersey — Lagoon', price: '£90', brief: 'RESULT 4:5 — Deco Jersey, front, lagoon.', tags: 'jersey short sleeve womens' },
+      { slot: 'se-r5', src: J + 'W04.jpeg', hoverSrc: J + 'W04-closeup.jpeg', kicker: 'Jersey · 1 colour', name: 'Pinstripe Jersey — Chalk', price: '£80', brief: 'RESULT 4:5 — Pinstripe Jersey, front, chalk.', tags: 'jersey short sleeve womens' },
+      { slot: 'se-r6', src: O + 'mens-featherweight-shell-forest.jpeg', hoverSrc: O + 'mens-featherweight-shell-forest-detail.jpeg', kicker: 'Outerwear · 2 colours', name: 'Featherweight Shell — Forest', price: '£90', brief: 'RESULT 4:5 — Shell, front, zipped, forest.', tags: 'gilet shell outerwear wind' },
+      { slot: 'se-r7', src: O + 'mens-jacquard-thermal-jacket-navy.jpeg', hoverSrc: O + 'mens-jacquard-thermal-jacket-navy-detail.jpeg', kicker: 'Outerwear · 3 colours', name: 'Jacquard Thermal Jacket — Navy', price: '£120', brief: 'RESULT 4:5 — Thermal jacket, front, navy.', tags: 'jacket thermal winter outerwear' },
+      { slot: 'se-r8', src: O + 'womens-swirl-thermal-jacket-teal.jpeg', hoverSrc: O + 'womens-swirl-thermal-jacket-teal-detail.jpeg', kicker: 'Outerwear · 1 colour', name: 'Swirl Thermal Jacket — Lagoon', price: '£115', brief: 'RESULT 4:5 — Thermal jacket, front, teal.', tags: 'jacket thermal winter outerwear womens' },
+      { slot: 'se-r9', src: O + 'womens-paisley-thermal-jacket-indigo.jpeg', hoverSrc: O + 'womens-paisley-thermal-jacket-indigo-detail.jpeg', kicker: 'Outerwear · 1 colour', name: 'Paisley Thermal Jacket — Indigo', price: '£125', brief: 'RESULT 4:5 — Thermal jacket, front, indigo.', tags: 'jacket thermal winter outerwear womens' },
+    ];
+  }
+
+  matches(q) {
+    const term = (q || '').toLowerCase().trim();
+    if (!term) return [];
+    const words = term.split(/\s+/);
+    return this.catalogue().filter((item) => {
+      const hay = (item.name + ' ' + item.kicker + ' ' + item.tags).toLowerCase();
+      // every word must appear somewhere, so "winter bib" narrows rather than widens
+      return words.every((w) => hay.indexOf(w) !== -1);
+    });
+  }
+
+  set(patch) { this.setState(patch); }
+
+  search(term) {
+    const q = (term === undefined ? this.state.query : term).trim();
+    if (!q) return this.setState({ screen: 'idle', query: '' });
+    // anything the catalogue doesn't carry falls through to the empty state
+    const found = this.matches(q);
+    this.setState({ busy: true });
+    setTimeout(() => this.setState({ busy: false, query: q, facet: '', screen: found.length ? 'results' : 'empty' }), 450);
+  }
+
+  facetList(found) {
+    const groups = [];
+    found.forEach((item) => {
+      const g = item.kicker.split(' · ')[0];
+      if (groups.indexOf(g) === -1) groups.push(g);
+    });
+    return groups;
+  }
+
+  sortResults(list) {
+    const by = this.state.sort;
+    const out = list.slice();
+    if (by === 'price') out.sort((a, b) => Number(a.price.replace(/[^0-9.]/g, '')) - Number(b.price.replace(/[^0-9.]/g, '')));
+    if (by === 'newest') out.reverse();
+    return out;
+  }
+
+  fitAllFrames() {
+    const root = this.hostEl || document;
+    const frames = root.querySelectorAll ? root.querySelectorAll('iframe') : [];
+    for (let i = 0; i < frames.length; i++) this.fitFrame({ target: frames[i] });
+  }
+
+  fitFrame(e) {
+    const f = e.target;
+    const measure = () => {
+      try {
+        const d = f.contentDocument;
+        if (!d || !d.body) return;
+        f.style.height = '0px';
+        const h = Math.max(d.body.scrollHeight, d.documentElement ? d.documentElement.scrollHeight : 0);
+        if (!h) { f.style.height = '700px'; return; }
+        f.style.height = h + 'px';
+        const inner = f.parentElement;
+        if (inner && inner.dataset && inner.dataset.scale) {
+          const sc = parseFloat(inner.dataset.scale) || 1;
+          inner.style.height = h + 'px';
+          if (inner.parentElement) inner.parentElement.style.height = Math.round(h * sc) + 'px';
+        }
+      } catch (err) {}
+    };
+    measure();
+    setTimeout(measure, 350);
+    setTimeout(measure, 1200);
+  }
+
+  showcaseScreens() {
+    const list = [["idle","Idle"],["results","Results"],["empty","No match"]];
+    return list.map((row, i) => ({
+      key: row[0],
+      label: row[1],
+      index: (i + 1) < 10 ? '0' + (i + 1) : String(i + 1),
+      urlD: 'BridgeSearch.dc.html?view=desktop&screen=' + row[0],
+      urlM: 'BridgeSearch.dc.html?view=mobile&screen=' + row[0],
+    }));
+  }
+
+  /* the host's variant picker changes the prop after mount — mirror it into state
+     so choosing a screen in Tweaks actually moves the flow. */
+  componentDidUpdate(prev) {
+    const f = this.props.forceScreen;
+    if (f && prev.forceScreen !== f) this.setState({ screen: f, query: f === 'results' ? 'jersey' : f === 'empty' ? 'aero bibs xl' : this.state.query });
+  }
+
+  renderVals() {
+    const s = this.state;
+    const view = this.props.view || this.queryView() || 'responsive';
+    const vw = s.vw || (typeof window !== 'undefined' ? window.innerWidth : 1280);
+    const mobile = view === 'mobile' ? true : view === 'desktop' ? false : vw < 720;
+    const seeded = this.queryScreen() || this.props.forceScreen || 'idle';
+    const found = this.matches(s.query);
+    const groups = this.facetList(found);
+    // an active facet narrows what's rendered; a facet that no longer applies is ignored
+    const shown = s.facet && groups.indexOf(s.facet) !== -1 ? found.filter((i) => i.kicker.indexOf(s.facet) === 0) : found;
+
+    const L = window.BridgeLocale;
+    const str = L ? L.strings() : {};
+    const fmt = L ? L.fmt : ((x) => x);
+    // kickers stay English in the data (they drive matching and facets); only the label is localised
+    const CAT = { Jersey: 'seCatJersey', Shorts: 'seCatShorts', Outerwear: 'seCatOuterwear', 'Base layer': 'seCatBase', Accessories: 'seCatAccessories' };
+    const catLabel = (g) => str[CAT[g]] || g;
+    const kickerLabel = (k) => {
+      const parts = k.split(' · ');
+      const cat = catLabel(parts[0]);
+      if (parts.length < 2) return cat;
+      const n = parseInt(parts[1], 10);
+      const colours = n === 1 ? str.seColourOne : fmt(str.seColours, n);
+      return cat + ' · ' + colours;
+    };
+    const countLabel = shown.length === 1 ? str.seResultOne : fmt(str.seResultMany, shown.length);
+    return {
+      str: str,
+      resultLine: fmt(str.seForQuery, countLabel, s.query),
+      nothingFor: fmt(str.seNothingFor, s.query),
+      screens: this.showcaseScreens(),
+      fitFrame: (e) => this.fitFrame(e),
+      frameDesktop: 'BridgeSearch.dc.html?view=desktop&screen=' + seeded,
+      frameMobile: 'BridgeSearch.dc.html?view=mobile&screen=' + seeded,
+      isBoth: view === 'both',
+      isSingle: view !== 'both',
+
+      device: mobile ? 'mobile' : 'desktop',
+      padBar: mobile ? '12px 16px' : '18px 40px',
+      padPanel: mobile ? '24px 16px 32px' : '40px',
+      padToolbar: mobile ? '14px 16px' : '18px 40px',
+      padChips: mobile ? '12px 16px' : '16px 40px',
+      padGrid: mobile ? '20px 16px 32px' : '32px 40px 56px',
+      idleCols: mobile ? '1fr' : 'minmax(0, 1fr) minmax(0, 1fr)',
+      catCols: mobile ? '1fr' : 'minmax(0, 1fr) minmax(0, 1fr)',
+      resultCols: mobile ? 'minmax(0, 1fr) minmax(0, 1fr)' : 'repeat(4, minmax(0, 1fr))',
+      borderRight: mobile ? '0' : '1px solid var(--color-divider)',
+      cardH: mobile ? '210px' : '340px',
+      querySize: mobile ? '18px' : '24px',
+      h1Size: mobile ? '30px' : '40px',
+      tapH: mobile ? '48px' : '34px',
+      fieldH: mobile ? '44px' : '40px',
+      rowH: mobile ? '52px' : '42px',
+      segStyle: mobile ? 'min-height: 48px; width: 100%;' : 'min-height: 34px;',
+
+      isIdle: s.screen === 'idle',
+      isResults: s.screen === 'results',
+      isEmpty: s.screen === 'empty',
+
+      query: s.query,
+      hasQuery: !!s.query,
+      results: this.sortResults(shown).map((i) => Object.assign({}, i, { kickerLabel: kickerLabel(i.kicker) })),
+      facets: groups.map((g) => ({
+        label: catLabel(g) + ' (' + found.filter((i) => i.kicker.indexOf(g) === 0).length + ')',
+        style: s.facet === g
+          ? 'background: var(--color-accent); color: var(--color-bg); border: 1px solid var(--color-accent); cursor: pointer;'
+          : 'background: transparent; color: var(--color-text); border: 1px solid var(--color-divider); cursor: pointer;',
+        toggle: () => this.set({ facet: s.facet === g ? '' : g }),
+      })),
+      hasFacets: groups.length > 1,
+      hasActiveFacet: !!s.facet,
+      resultCount: countLabel,
+      wideBar: !mobile,
+      narrowBar: mobile,
+      onKey: (e) => { if (e.key === 'Enter') this.search(); },
+      searchLabel: s.busy ? str.searching : str.search,
+
+      sortRelevance: s.sort === 'relevance', sortPrice: s.sort === 'price', sortNewest: s.sort === 'newest',
+      pickRelevance: () => this.set({ sort: 'relevance' }),
+      pickPrice: () => this.set({ sort: 'price' }),
+      pickNewest: () => this.set({ sort: 'newest' }),
+
+      onQuery: (e) => this.set({ query: e.target.value }),
+      clearQuery: () => this.set({ query: '', screen: 'idle' }),
+      runSearch: () => this.search(),
+      searchJersey: () => this.search('jersey'),
+      searchBib: () => this.search('bib'),
+      searchCap: () => this.search('cap'),
+      searchPro: () => this.search('pro jersey'),
+      searchGilet: () => this.search('gilet'),
+      clearRecent: () => this.set({ screen: 'idle' }),
+      clearFilters: () => this.set({ facet: '' }),
+
+      navigateOut: (dest) => this.exit(dest),
+      goPlp: () => this.exit('plp'),
+      goMen: () => this.exit('men'),
+      goWomen: () => this.exit('women'),
+      goAccessories: () => this.exit('accessories'),
+      goProduct: () => this.exit('product'),
+    };
+  }
+}
+
+</script>
+</body>
+</html>

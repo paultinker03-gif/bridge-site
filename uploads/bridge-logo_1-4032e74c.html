@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bridge Logo</title>
+
+<!--
+  BRIDGE LOGO — hover-reveal cyclist
+  -----------------------------------
+  Self-contained: the <a class="bridge-logo">…</a> block plus its CSS is
+  everything needed to replace the logo wherever it lives in the site
+  (nav bar or otherwise). No JavaScript — the swap and the wheel spin
+  are both pure CSS, driven off :hover / :focus-visible.
+
+  Behavior:
+    - Default: the "Bridge" wordmark (Fraunces, bold) is shown.
+    - On hover/focus: the wordmark fades/slides out, the bicycle
+      line-icon fades/slides in, and both wheels spin continuously
+      for as long as the pointer/focus stays on it.
+    - Respects prefers-reduced-motion (spin is disabled, crossfade stays).
+
+  Swap the two CSS custom properties below (--ink / --yellow) to match
+  exact brand colors, and swap the Google Fonts link for a self-hosted
+  Fraunces file if that's how the site loads fonts.
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,SOFT,WONK,wght@0,144,50,0,700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --ink: #1a2332;
+    --yellow: #f4c430;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: #ffffff;
+  }
+
+  /* ============ THE LOGO COMPONENT ============ */
+
+  /* Both states share this exact footprint, so the logo slot never
+     resizes or shifts whatever layout it sits in when it swaps on hover. */
+  .bridge-logo {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: 100px;
+    height: 44px;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .bridge-logo .wordmark {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Fraunces', Georgia, 'Times New Roman', serif;
+    font-weight: 700;
+    /* Pin the optical-size axis to its largest (display) setting rather than
+       letting the browser auto-interpolate it from the font-size — that's
+       what gives Fraunces Bold its crisp, high-contrast look at logo size.
+       SOFT is Fraunces' softness axis (0 = sharp/angular, 100 = fully
+       rounded) — 50 sits it at a moderate, friendly roundness. */
+    font-optical-sizing: none;
+    font-variation-settings: "opsz" 144, "SOFT" 50;
+    font-size: 34px;
+    letter-spacing: -0.5px;
+    color: var(--ink);
+    white-space: nowrap;
+    opacity: 1;
+    transition: opacity .28s ease, transform .28s ease;
+  }
+
+  .bridge-logo .bike-icon {
+    position: absolute;
+    left: 2px;
+    top: 50%;
+    width: 96px;
+    height: 48px;
+    transform: translateY(-50%) translateX(-8px) scale(.9);
+    opacity: 0;
+    transition: opacity .28s ease, transform .28s ease;
+  }
+
+  .bridge-logo:hover .wordmark,
+  .bridge-logo:focus-visible .wordmark {
+    opacity: 0;
+    transform: translateY(-50%) translateX(10px);
+  }
+
+  .bridge-logo:hover .bike-icon,
+  .bridge-logo:focus-visible .bike-icon {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0) scale(1);
+  }
+
+  /* wheels only spin once the icon is actually revealed */
+  .bridge-logo:hover .wheel,
+  .bridge-logo:focus-visible .wheel {
+    animation: spin 1s linear infinite;
+  }
+
+  .wheel {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bridge-logo:hover .wheel,
+    .bridge-logo:focus-visible .wheel {
+      animation: none;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <a class="bridge-logo" href="#" aria-label="Bridge — home">
+    <span class="wordmark">Bridge</span>
+
+    <svg class="bike-icon" viewBox="0 0 124 62" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <!-- rear wheel -->
+      <g class="wheel">
+        <circle cx="34" cy="42" r="19" stroke="var(--ink)" stroke-width="2.5"/>
+        <line x1="34" y1="23" x2="34" y2="61" stroke="var(--ink)" stroke-width="1.1"/>
+        <line x1="15" y1="42" x2="53" y2="42" stroke="var(--ink)" stroke-width="1.1"/>
+        <line x1="21" y1="29" x2="47" y2="55" stroke="var(--ink)" stroke-width="1.1"/>
+        <line x1="21" y1="55" x2="47" y2="29" stroke="var(--ink)" stroke-width="1.1"/>
+      </g>
+
+      <!-- front wheel -->
+      <g class="wheel">
+        <circle cx="91" cy="42" r="19" stroke="var(--ink)" stroke-width="2.5"/>
+        <line x1="91" y1="23" x2="91" y2="61" stroke="var(--ink)" stroke-width="1.1"/>
+        <line x1="72" y1="42" x2="110" y2="42" stroke="var(--ink)" stroke-width="1.1"/>
+        <line x1="78" y1="29" x2="104" y2="55" stroke="var(--ink)" stroke-width="1.1"/>
+        <line x1="78" y1="55" x2="104" y2="29" stroke="var(--ink)" stroke-width="1.1"/>
+      </g>
+
+      <!-- frame: rear triangle (RA-BB-ST), front triangle (BB-HT-ST), fork (HT-FA) -->
+      <path d="M34 42 L60 42 L49 22 L34 42 M60 42 L82 24 L49 22 M82 24 L91 42"
+            stroke="var(--ink)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+
+      <!-- seat post + saddle -->
+      <path d="M49 22 L49 17" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M41 17 L57 17" stroke="var(--ink)" stroke-width="3.5" stroke-linecap="round"/>
+
+      <!-- stem + handlebar (mirrors the seat post + saddle for a consistent, simple style) -->
+      <path d="M82 24 L82 16" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M74 16 L90 16" stroke="var(--ink)" stroke-width="3.5" stroke-linecap="round"/>
+
+      <!-- crank / pedal hub -->
+      <circle cx="60" cy="42" r="5" fill="var(--yellow)"/>
+    </svg>
+  </a>
+
+</body>
+</html>
