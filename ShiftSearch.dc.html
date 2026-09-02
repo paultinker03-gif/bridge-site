@@ -143,6 +143,14 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900},&quot;forceScreen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;&quot;,&quot;idle&quot;,&quot;results&quot;,&quot;empty&quot;],&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;}}">
 
+const NAME_AR = {
+  'Cadence Roll-Neck': 'قميص كادينس ذو الرقبة العالية', 'Featherweight Shell — Forest': 'غطاء فيذرويت — فورست',
+  'Deco Jersey — Lagoon': 'قميص ديكو — لاغون', 'Magma Jersey — Ember': 'قميص ماغما — إمبر',
+  'Swirl Thermal Jacket — Teal': 'سترة سوِرل الحرارية — تيل', 'Tapestry Jersey — Sovereign': 'قميص تيبستري — سوفرين',
+  'Series 01 Jersey — Cobalt': 'قميص المجموعة ٠١ — كوبالت', 'Merino Neck Warmer': 'واقي رقبة ميرينو',
+};
+const priceNum = (str) => Number(String(str).replace(/[^0-9.]/g, ''));
+
 class Component extends DCLogic {
   state = {
     screen: this.queryScreen() || this.props.forceScreen || 'idle',
@@ -257,8 +265,11 @@ class Component extends DCLogic {
     const shown = s.facet && groups.indexOf(s.facet) !== -1 ? found.filter((i) => i.kicker.indexOf(s.facet) === 0) : found;
 
     const L = window.BridgeLocale;
+    const loc = L ? L.get() : { languageCode: 'en' };
     const str = L ? L.strings() : {};
     const fmt = L ? L.fmt : ((x) => x);
+    const isAr = loc.languageCode === 'ar';
+    const money = (n) => (L ? L.money(n) : '£' + n);
     const countLabel = shown.length === 1 ? str.seResultOne : fmt(str.seResultMany, shown.length);
     return {
       str: str,
@@ -289,7 +300,7 @@ class Component extends DCLogic {
 
       query: s.query,
       hasQuery: !!s.query,
-      results: this.sortResults(shown).map((i) => Object.assign({}, i, { kickerLabel: i.kicker })),
+      results: this.sortResults(shown).map((i) => Object.assign({}, i, { kickerLabel: i.kicker, name: isAr ? (NAME_AR[i.name] || i.name) : i.name, price: isAr ? money(priceNum(i.price)) : i.price })),
       facets: groups.map((g) => ({
         label: g + ' (' + found.filter((i) => i.kicker.indexOf(g) === 0).length + ')',
         style: s.facet === g

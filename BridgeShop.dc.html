@@ -319,6 +319,30 @@ const OTHERS = [
 
 const CATALOGUE = JERSEYS.concat(OUTERWEAR).concat(OTHERS);
 
+const NAME_AR = {
+  'Contour Jersey — Tidewater': 'قميص كونتور — تايدواتر', 'Weave Jersey — Fern': 'قميص ويف — فيرن',
+  'Magma Jersey — Ember': 'قميص ماغما — إمبر', 'Kolam Jersey — Emerald': 'قميص كولام — زمردي',
+  'Series 01 Jersey — Claret': 'قميص المجموعة ٠١ — كلاريت', 'Facet Jersey — Harbour': 'قميص فاسيت — هاربور',
+  'Series 01 Jersey — Cobalt': 'قميص المجموعة ٠١ — كوبالت', 'Contour Jersey — Copper': 'قميص كونتور — كوبر',
+  'Canopy Jersey — Woodland': 'قميص كانوبي — وودلاند', 'Series 01 Jersey — Slate': 'قميص المجموعة ٠١ — أردوازي',
+  'Spot Jersey — Chalk': 'قميص سبوت — طباشيري', 'Series 01 Jersey — Ink': 'قميص المجموعة ٠١ — حِبري',
+  'Deco Jersey — Lagoon': 'قميص ديكو — لاغون', 'Tropicana Jersey — Canopy': 'قميص تروبيكانا — كانوبي',
+  'Sashiko Jersey — Indigo': 'قميص ساشيكو — نيلي', 'Pinstripe Jersey — Chalk': 'قميص بينسترايب — طباشيري',
+  'Petroglyph Jersey — Oxide': 'قميص بتروغليف — أوكسيد', 'Orchard Jersey — Ochre': 'قميص أورشارد — أوكر',
+  'Tapestry Jersey — Sovereign': 'قميص تيبستري — سوفرين', 'Breton Jersey — Navy': 'قميص بريتون — كحلي',
+  'Strata Jersey — Canyon': 'قميص ستراتا — كانيون', 'Swallow Jersey — Claret': 'قميص سوالو — كلاريت',
+  'Pinstripe Jersey — Silver': 'قميص بينسترايب — فضي', 'Ridgeline Jersey — Moorland': 'قميص ريدجلاين — موورلاند',
+  'Script Jersey — Sand': 'قميص سكريبت — ساند', 'Chevron Jersey — Signal': 'قميص شيفرون — سيغنال',
+  'Mosaic Thermal Jacket — Harbour': 'سترة موزاييك الحرارية — هاربور', 'Jacquard Thermal Jacket — Copper': 'سترة جاكار الحرارية — كوبر',
+  'Jacquard Thermal Jacket — Forest': 'سترة جاكار الحرارية — فورست', 'Jacquard Thermal Jacket — Navy': 'سترة جاكار الحرارية — كحلي',
+  'Featherweight Shell — Rust': 'غطاء فيذرويت — رست', 'Featherweight Shell — Forest': 'غطاء فيذرويت — فورست',
+  'Swirl Thermal Jacket — Lagoon': 'سترة سوِرل الحرارية — لاغون', 'Mosaic Thermal Jacket — Glasshouse': 'سترة موزاييك الحرارية — غلاسهاوس',
+  'Confetti Thermal Jacket — Bloom': 'سترة كونفيتي الحرارية — بلوم', 'Paisley Thermal Jacket — Indigo': 'سترة بيزلي الحرارية — نيلي',
+  'Folk Floral Thermal Jacket — Meadow': 'سترة فولك فلورال الحرارية — ميدو',
+  'Race Sock — 15cm': 'جورب السرعة — ١٥سم', 'Deep Winter Glove': 'قفاز الشتاء الكثيف',
+  'Merino Neck Warmer': 'واقي رقبة ميرينو', 'Cotton Race Cap': 'قبعة السرعة القطنية', 'Thermal Overshoe': 'غطاء حذاء حراري',
+};
+
 /* Swatches read off the jersey line, so the rail can never offer a colour the
    catalogue does not carry. */
 const COLOURS = [
@@ -432,13 +456,13 @@ class Component extends DCLogic {
     return list;
   }
 
-  card(p, str, colours) {
+  card(p, str, colours, isAr, money) {
     return {
       id: p.id,
-      name: p.name,
+      name: isAr ? (NAME_AR[p.name] || p.name) : p.name,
       meta: p.tag === 'Low stock' ? (str.shSoldOutM || 'Sold out in M') : p.colour || colours(p.colours),
-      price: '£' + p.price,
-      was: p.was ? '£' + p.was : '',
+      price: money(p.price),
+      was: p.was ? money(p.was) : '',
       tag: p.tag || '',
       tagTone: p.tagTone || 'solid',
       src: p.src,
@@ -478,6 +502,9 @@ class Component extends DCLogic {
     const loc = L ? L.get() : { dir: 'ltr' };
     const str = L ? L.strings() : {};
     const fmt = L ? L.fmt : ((x) => x);
+    const isAr = loc.languageCode === 'ar';
+    const money = (n) => (L ? L.money(Math.round(n * 100) / 100) : '£' + n.toFixed(2));
+    const trName = (name) => isAr ? (NAME_AR[name] || name) : name;
     const colours = (n) => (n === 1 ? str.seColourOne : fmt(str.seColours, n));
     const shopMen = (str.shShop || 'Shop') + ' ' + (str.nvMen || 'Men');
     const shopWomen = (str.shShop || 'Shop') + ' ' + (str.nvWomen || 'Women');
@@ -485,7 +512,6 @@ class Component extends DCLogic {
       { screen: 'plp', section: section, types: { [type]: true }, shown: 8 },
       this.top()
     );
-    const money = (n) => '£' + n.toFixed(2);
 
     const view = this.props.view || this.queryView() || 'responsive';
     const vw = s.vw || (typeof window !== 'undefined' ? window.innerWidth : 1440);
@@ -577,13 +603,13 @@ class Component extends DCLogic {
         { name: str.catOuterwear, desc: str.catOuterwearDesc, men: shopMen, women: shopWomen, src: OIMG + 'womens-mosaic-thermal-jacket-multi.jpeg', alt: 'Mosaic Thermal Jacket, glasshouse, women\'s fit', go: cat('outerwear', 'women'), goMen: cat('outerwear', 'men'), goWomen: cat('outerwear', 'women') },
         { name: str.accessories, desc: str.catAccessoriesDesc || str.catOuterwearDesc, men: shopMen, women: shopWomen, src: IMG + 'A11-winter-gloves-black.jpeg', alt: 'Deep Winter Glove, black', go: cat('accessories', 'accessories'), goMen: cat('accessories', 'men'), goWomen: cat('accessories', 'women') },
       ],
-      newIn: ['w01', 'm03', 'winter-glove', 'race-cap'].map((id) => this.card(this.item(id), str, colours)),
+      newIn: ['w01', 'm03', 'winter-glove', 'race-cap'].map((id) => this.card(this.item(id), str, colours, isAr, money)),
 
       // ── plp ──
       plpTitle: sectionTitle,
       showingLine: fmt(str.shShowingOf, String(shown.length), String(list.length)),
       plpItems: (function () {
-        const cards = shown.map((x) => this.card(x, str, colours));
+        const cards = shown.map((x) => this.card(x, str, colours, isAr, money));
         // one advert after the second row on a full page of results
         if (cards.length >= 6) cards.splice(6, 0, this.promoCard(str));
         return cards;
@@ -628,8 +654,8 @@ class Component extends DCLogic {
       },
 
       // ── product ──
-      pdpName: p.name,
-      pdpPrice: '£' + p.price,
+      pdpName: trName(p.name),
+      pdpPrice: money(p.price),
       colourLine: fmt(str.shColourDash, s.colour),
       sizeLine: fmt(str.shSizeDash, s.size),
       pdpColours: COLOURS.slice(0, 6).map((c) => ({
@@ -646,7 +672,7 @@ class Component extends DCLogic {
         { src: p.src, alt: p.alt },
         p.hoverSrc ? { src: p.hoverSrc, alt: p.name + ', fabric close-up' } : { src: IMG + 'B2-collar-zip-detail-blue.jpeg', alt: 'Collar and hidden zip detail' },
       ],
-      pdpRelated: ['race-sock', 'neck-warmer', 'race-cap', 'overshoe'].map((id) => this.card(this.item(id), str, colours)),
+      pdpRelated: ['race-sock', 'neck-warmer', 'race-cap', 'overshoe'].map((id) => this.card(this.item(id), str, colours, isAr, money)),
       addLabel: s.added ? str.shAdded : str.shAddToBag,
       addToBag: () => {
         const next = this.state.bag.slice();
@@ -662,7 +688,7 @@ class Component extends DCLogic {
       bagCount: bagCount,
       bagItems: fmt(str.shItems, String(bagCount)),
       bagLines: bagRows.map((b) => ({
-        name: b.name,
+        name: trName(b.name),
         variant: s.colour + ' · ' + s.size,
         price: money(b.price * b.qty),
         qty: b.qty,
@@ -678,7 +704,7 @@ class Component extends DCLogic {
       total: money(total),
       shipOptions: [
         { label: str.shStandardRow, price: str.shFree, on: s.shipping === 'Standard', pick: () => this.setState({ shipping: 'Standard' }) },
-        { label: str.shExpressRow, price: '£9.00', on: s.shipping === 'Express', pick: () => this.setState({ shipping: 'Express' }) },
+        { label: str.shExpressRow, price: money(9), on: s.shipping === 'Express', pick: () => this.setState({ shipping: 'Express' }) },
         { label: str.shCollectRow, price: str.shFree, on: s.shipping === 'Workshop collection', pick: () => this.setState({ shipping: 'Workshop collection' }) },
       ],
       shippingLabel: shipLabel,

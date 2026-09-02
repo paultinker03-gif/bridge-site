@@ -69,7 +69,7 @@
 
   <!-- ══ SPECIMENS ══ -->
   <div style="padding: clamp(28px, 4vw, 56px) clamp(16px, 4vw, 56px) 0;">
-    <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #605d5d; margin-bottom: 20px;">Same components, both brands</div>
+    <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #605d5d; margin-bottom: 20px;">Components and blocks, both brands</div>
   </div>
   <div style="padding: 0 clamp(16px, 4vw, 56px) clamp(28px, 4vw, 56px); display: grid; grid-template-columns: {{ paneCols }}; gap: 1px; background: #d7d3d3; border: 1px solid #d7d3d3;">
 
@@ -107,9 +107,48 @@
             <span style="font-size: 14px;">£165</span>
           </div>
         </div>
-        <div style="border-top: 2px solid var(--color-divider); padding-top: 18px;">
-          <div style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 12px;">Nav block · brand="bridge"</div>
-          <dc-import name="Blocks" brand="bridge" block="nav" device="mobile" show-announcement="{{ yes }}" bag-count="2" hint-size="100%,120px"></dc-import>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+          <span class="badge">3</span>
+          <span class="badge badge-quiet">12</span>
+          <span class="badge badge-outline">7</span>
+          <span class="tag tag-neutral">Repaired</span>
+          <span class="tag tag-quiet">Archive</span>
+        </div>
+        <div class="alert alert-success">
+          <div><div class="alert-title">Repair scheduled</div><p class="alert-body">Your jersey ships back within 5 working days.</p></div>
+        </div>
+        <div class="alert alert-warning">
+          <div><div class="alert-title">Low stock</div><p class="alert-body">Only 2 left in size M.</p></div>
+        </div>
+        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+          <label class="radio"><input type="radio" name="be-bridge-ship" checked=""><span class="dot"></span>Standard delivery</label>
+          <label class="radio"><input type="radio" name="be-bridge-ship"><span class="dot"></span>Next day</label>
+        </div>
+        <div class="card elev-sm" style="max-width: 320px;">
+          <span class="card-kicker">Care guide</span>
+          <span class="card-title">Repair before replace</span>
+          <p class="card-body">Every Bridge piece is built to be resoled, restitched and reworn — see how the repair programme works.</p>
+          <span class="card-meta">6 min read</span>
+        </div>
+
+        <div style="border-top: 2px solid var(--color-divider); padding-top: 22px; display: flex; flex-direction: column; gap: 20px;">
+          <div style="font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-neutral-700);">Blocks · brand="bridge"</div>
+          <div>
+            <div style="font-size: 11px; color: var(--color-neutral-600); margin-bottom: 8px;">Nav</div>
+            <dc-import name="Blocks" brand="bridge" block="nav" device="mobile" show-announcement="{{ yes }}" bag-count="2" hint-size="100%,120px"></dc-import>
+          </div>
+          <div>
+            <div style="font-size: 11px; color: var(--color-neutral-600); margin-bottom: 8px;">Grid</div>
+            <dc-import name="Blocks" brand="bridge" block="grid" device="mobile" hint-size="100%,320px"></dc-import>
+          </div>
+          <div>
+            <div style="font-size: 11px; color: var(--color-neutral-600); margin-bottom: 8px;">Promo</div>
+            <dc-import name="Blocks" brand="bridge" block="promo" device="mobile" hint-size="100%,220px"></dc-import>
+          </div>
+          <div>
+            <div style="font-size: 11px; color: var(--color-neutral-600); margin-bottom: 8px;">Footer</div>
+            <dc-import name="Blocks" brand="bridge" block="footer" device="mobile" hint-size="100%,240px"></dc-import>
+          </div>
         </div>
       </div>
     </sc-if>
@@ -151,9 +190,48 @@
             <span style="font-size: 14px;">£96</span>
           </div>
         </div>
-        <div style="border-top: 1px solid var(--color-divider); padding-top: 18px;">
-          <div style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 12px;">Nav block · brand="shift"</div>
-          <dc-import name="Blocks" brand="shift" block="nav" device="mobile" show-announcement="{{ yes }}" bag-count="2" hint-size="100%,120px"></dc-import>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+          <span class="badge">3</span>
+          <span class="badge badge-quiet">12</span>
+          <span class="badge badge-outline">7</span>
+          <span class="tag tag-neutral">Repaired</span>
+          <span class="tag tag-quiet">Archive</span>
+        </div>
+        <div class="alert alert-success">
+          <div><div class="alert-title">Trade-in accepted</div><p class="alert-body">Your credit lands in your account within 3 working days.</p></div>
+        </div>
+        <div class="alert alert-warning">
+          <div><div class="alert-title">One of a kind</div><p class="alert-body">This piece won't be restocked once sold.</p></div>
+        </div>
+        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+          <label class="radio"><input type="radio" name="be-shift-ship" checked=""><span class="dot"></span>Standard delivery</label>
+          <label class="radio"><input type="radio" name="be-shift-ship"><span class="dot"></span>Next day</label>
+        </div>
+        <div class="card elev-sm" style="max-width: 320px;">
+          <span class="card-kicker">Second life</span>
+          <span class="card-title">Where this piece has been</span>
+          <p class="card-body">Graded, cleaned and photographed by hand — every SHIFT listing carries its own condition report.</p>
+          <span class="card-meta">4 min read</span>
+        </div>
+
+        <div style="border-top: 1px solid var(--color-divider); padding-top: 22px; display: flex; flex-direction: column; gap: 20px;">
+          <div style="font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-neutral-700);">Blocks · brand="shift"</div>
+          <div>
+            <div style="font-size: 11px; color: var(--color-neutral-600); margin-bottom: 8px;">Nav</div>
+            <dc-import name="Blocks" brand="shift" block="nav" device="mobile" show-announcement="{{ yes }}" bag-count="2" hint-size="100%,120px"></dc-import>
+          </div>
+          <div>
+            <div style="font-size: 11px; color: var(--color-neutral-600); margin-bottom: 8px;">Grid</div>
+            <dc-import name="Blocks" brand="shift" block="grid" device="mobile" hint-size="100%,320px"></dc-import>
+          </div>
+          <div>
+            <div style="font-size: 11px; color: var(--color-neutral-600); margin-bottom: 8px;">Promo</div>
+            <dc-import name="Blocks" brand="shift" block="promo" device="mobile" hint-size="100%,220px"></dc-import>
+          </div>
+          <div>
+            <div style="font-size: 11px; color: var(--color-neutral-600); margin-bottom: 8px;">Footer</div>
+            <dc-import name="Blocks" brand="shift" block="footer" device="mobile" hint-size="100%,240px"></dc-import>
+          </div>
         </div>
       </div>
     </sc-if>

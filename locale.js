@@ -557,10 +557,22 @@
     return function () { subs = subs.filter(function (f) { return f !== fn; }); };
   }
 
+  var AR_DIGITS = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+  function arDigits(n) {
+    return String(n).replace(/[0-9]/g, function (d) { return AR_DIGITS[+d]; });
+  }
+  function money(n, code) {
+    var isAr = state.language === 'ar';
+    var sym = (code === 'AED' || code === 'SAR') ? code : '£';
+    var num = isAr ? arDigits(n) : String(n);
+    return isAr ? num + sym : sym + num;
+  }
+
   paint();
   window.BridgeLocale = {
     COUNTRIES: COUNTRIES, LANGUAGES: LANGUAGES,
     get: get, set: set, subscribe: subscribe, t: t, strings: strings,
-    countryName: countryName, dir: dir, fmt: fmt, flag: flag, FLAG_FONT: FLAG_FONT
+    countryName: countryName, dir: dir, fmt: fmt, flag: flag, FLAG_FONT: FLAG_FONT,
+    arDigits: arDigits, money: money
   };
 })();

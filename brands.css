@@ -74,6 +74,7 @@
 [data-brand="bridge"] .btn { text-transform: none; letter-spacing: 0; font-size: 14px; font-weight: 800; justify-content: flex-start; text-align: start; }
 [data-brand="bridge"] .btn-icon { justify-content: center; }
 [data-brand="bridge"] .btn-ghost { color: var(--color-accent); }
+[data-brand="bridge"] .nav-brand:hover, [data-brand="bridge"] .nav-brand:active { background: transparent; }
 [data-brand="bridge"] .tag { text-transform: none; letter-spacing: 0.02em; font-size: 11px; padding: 3px 10px; }
 [data-brand="bridge"] .stepper-mark { border-radius: var(--radius-control); }
 

@@ -243,6 +243,29 @@ const COLOURS = [
   { key: 'White', value: '#e9e7e2' },
 ];
 
+const NAME_AR = {
+  'Contour Jersey — Tidewater': 'قميص كونتور — تايدواتر', 'Weave Jersey — Fern': 'قميص ويف — فيرن',
+  'Magma Jersey — Ember': 'قميص ماغما — إمبر', 'Kolam Jersey — Emerald': 'قميص كولام — زمردي',
+  'Series 01 Jersey — Claret': 'قميص المجموعة ٠١ — كلاريت', 'Facet Jersey — Harbour': 'قميص فاسيت — هاربور',
+  'Series 01 Jersey — Cobalt': 'قميص المجموعة ٠١ — كوبالت', 'Contour Jersey — Copper': 'قميص كونتور — كوبر',
+  'Canopy Jersey — Woodland': 'قميص كانوبي — وودلاند', 'Series 01 Jersey — Slate': 'قميص المجموعة ٠١ — أردوازي',
+  'Spot Jersey — Chalk': 'قميص سبوت — طباشيري', 'Series 01 Jersey — Ink': 'قميص المجموعة ٠١ — حِبري',
+  'Deco Jersey — Lagoon': 'قميص ديكو — لاغون', 'Tropicana Jersey — Canopy': 'قميص تروبيكانا — كانوبي',
+  'Sashiko Jersey — Indigo': 'قميص ساشيكو — نيلي', 'Pinstripe Jersey — Chalk': 'قميص بينسترايب — طباشيري',
+  'Petroglyph Jersey — Oxide': 'قميص بتروغليف — أوكسيد', 'Orchard Jersey — Ochre': 'قميص أورشارد — أوكر',
+  'Tapestry Jersey — Sovereign': 'قميص تيبستري — سوفرين', 'Breton Jersey — Navy': 'قميص بريتون — كحلي',
+  'Strata Jersey — Canyon': 'قميص ستراتا — كانيون', 'Swallow Jersey — Claret': 'قميص سوالو — كلاريت',
+  'Pinstripe Jersey — Silver': 'قميص بينسترايب — فضي', 'Ridgeline Jersey — Moorland': 'قميص ريدجلاين — موورلاند',
+  'Script Jersey — Sand': 'قميص سكريبت — ساند', 'Chevron Jersey — Signal': 'قميص شيفرون — سيغنال',
+  'Mosaic Thermal Jacket — Harbour': 'سترة موزاييك الحرارية — هاربور', 'Jacquard Thermal Jacket — Copper': 'سترة جاكار الحرارية — كوبر',
+  'Jacquard Thermal Jacket — Forest': 'سترة جاكار الحرارية — فورست', 'Jacquard Thermal Jacket — Navy': 'سترة جاكار الحرارية — كحلي',
+  'Featherweight Shell — Rust': 'غطاء فيذرويت — رست', 'Featherweight Shell — Forest': 'غطاء فيذرويت — فورست',
+  'Swirl Thermal Jacket — Teal': 'سترة سوِرل الحرارية — تيل', 'Mosaic Thermal Jacket — Glasshouse': 'سترة موزاييك الحرارية — غلاسهاوس',
+  'Confetti Thermal Jacket — Bloom': 'سترة كونفيتي الحرارية — بلوم', 'Paisley Thermal Jacket — Indigo': 'سترة بيزلي الحرارية — نيلي',
+  'Folk Floral Thermal Jacket — Meadow': 'سترة فولك فلورال الحرارية — ميدو', 'Merino Neck Warmer': 'واقي رقبة ميرينو',
+  'Cadence Roll-Neck': 'قميص كادينس ذو الرقبة العالية', 'Merino Long Sleeve': 'قميص ميرينو طويل الكم',
+};
+
 const RECORDS = {
   A: [['2023', 'Sold new, Bridge Bristol'], ['2025', 'Two services logged'], ['Aug 2026', 'Traded in, graded A'], ['Aug 2026', 'Cleaned, inspected, listed']],
   B: [['2022', 'Sold new, Bridge Girona'], ['2024', 'Crash repair, bench 04'], ['Jul 2026', 'Traded in, graded B'], ['Aug 2026', 'Repaired and listed']],
@@ -303,14 +326,14 @@ class Component extends DCLogic {
   go(screen) { this.setState({ screen: screen, error: '' }); this.top(); }
   item(id) { return STOCK.filter((x) => x.id === id)[0] || STOCK[0]; }
 
-  shape(x, str) {
+  shape(x, str, isAr, money) {
     return {
       id: x.id,
-      name: x.name,
+      name: isAr ? (NAME_AR[x.name] || x.name) : x.name,
       grade: (str.sfGradeA ? str['sfGrade' + x.grade] : 'Grade ' + x.grade) || ('Grade ' + x.grade),
       life: x.life,
-      price: '£' + x.price,
-      was: '£' + x.was,
+      price: money(x.price),
+      was: money(x.was),
       priceInk: x.was ? 'var(--color-signal-700)' : 'var(--color-text)',
       saving: Math.round((1 - x.price / x.was) * 100) + '% off new',
       note: x.note,
@@ -321,11 +344,11 @@ class Component extends DCLogic {
     };
   }
 
-  card(x, str) {
-    const sh = this.shape(x, str);
+  card(x, str, isAr, money) {
+    const sh = this.shape(x, str, isAr, money);
     return {
       id: x.id,
-      name: x.name,
+      name: sh.name,
       meta: x.life,
       price: sh.price,
       was: sh.was,
@@ -364,7 +387,8 @@ class Component extends DCLogic {
     const loc = L ? L.get() : { dir: 'ltr' };
     const str = L ? L.strings() : {};
     const fmt = L ? L.fmt : ((x) => x);
-    const money = (n) => '£' + n.toFixed(2);
+    const isAr = loc.languageCode === 'ar';
+    const money = (n) => (L ? L.money(Math.round(n * 100) / 100) : '£' + n.toFixed(2));
 
     const view = this.props.view || this.queryView() || 'responsive';
     const vw = s.vw || 1440;
@@ -373,7 +397,7 @@ class Component extends DCLogic {
     const two = 'minmax(0, 1fr) minmax(0, 1fr)';
 
     const list = this.visible();
-    const sel = this.shape(this.item(s.product), str);
+    const sel = this.shape(this.item(s.product), str, isAr, money);
     const shipCost = s.shipping === 'Express' ? 6 : 0;
     const bagRows = s.bag.map((b) => Object.assign({}, this.item(b.id), { qty: b.qty }));
     const subtotal = bagRows.reduce((t, b) => t + b.price * b.qty, 0);
@@ -415,7 +439,7 @@ class Component extends DCLogic {
       // ── plp ──
       countLine: fmt(str.sfPieces || '%s of %s pieces', String(list.length), String(STOCK.length)),
       plpItems: (function () {
-        const cards = list.map((x) => this.card(x, str));
+        const cards = list.map((x) => this.card(x, str, isAr, money));
         /* the cross-brand advert, mirroring Bridge's SHIFT card: one occasional
            cell in the same grid rather than a banner */
         if (cards.length >= 6) cards.splice(6, 0, {
@@ -479,7 +503,7 @@ class Component extends DCLogic {
         { src: IMG + 'E1-repair-bench-hands-green.jpeg', alt: 'The piece under the needle at the bench' },
         { src: IMG + 'E2-folded-stack-repair-label.jpeg', alt: 'Graded and labelled, ready to ship' },
       ],
-      related: list.filter((x) => x.id !== s.product).slice(0, 4).map((x) => this.card(x, str)),
+      related: list.filter((x) => x.id !== s.product).slice(0, 4).map((x) => this.card(x, str, isAr, money)),
       addLabel: s.added ? str.shAdded : str.shAddToBag,
       addToBag: () => {
         const next = this.state.bag.slice();
@@ -494,7 +518,7 @@ class Component extends DCLogic {
       bagCount: bagCount,
       bagItems: fmt(str.shItems, String(bagCount)),
       bagLines: bagRows.map((b) => ({
-        name: b.name,
+        name: isAr ? (NAME_AR[b.name] || b.name) : b.name,
         variant: b.life,
         price: money(b.price * b.qty),
         qty: b.qty,
@@ -510,7 +534,7 @@ class Component extends DCLogic {
       total: money(total),
       shipOptions: [
         { label: str.shStandardRow, price: str.shFree, on: s.shipping === 'Standard', pick: () => this.setState({ shipping: 'Standard' }) },
-        { label: str.shExpressRow, price: '£6.00', on: s.shipping === 'Express', pick: () => this.setState({ shipping: 'Express' }) },
+        { label: str.shExpressRow, price: money(6), on: s.shipping === 'Express', pick: () => this.setState({ shipping: 'Express' }) },
         { label: str.shCollectRow, price: str.shFree, on: s.shipping === 'Workshop collection', pick: () => this.setState({ shipping: 'Workshop collection' }) },
       ],
       searchOpen: s.searchOpen,

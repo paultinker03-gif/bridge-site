@@ -188,6 +188,15 @@
 
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900},&quot;forceScreen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;&quot;,&quot;idle&quot;,&quot;results&quot;,&quot;empty&quot;],&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;}}">
+const NAME_AR = {
+  'Contour Jersey — Tidewater': 'قميص كونتور — تايدواتر', 'Series 01 Jersey — Cobalt': 'قميص المجموعة ٠١ — كوبالت',
+  'Facet Jersey — Harbour': 'قميص فاسيت — هاربور', 'Deco Jersey — Lagoon': 'قميص ديكو — لاغون',
+  'Pinstripe Jersey — Chalk': 'قميص بينسترايب — طباشيري', 'Featherweight Shell — Forest': 'غطاء فيذرويت — فورست',
+  'Jacquard Thermal Jacket — Navy': 'سترة جاكار الحرارية — كحلي', 'Swirl Thermal Jacket — Lagoon': 'سترة سوِرل الحرارية — لاغون',
+  'Paisley Thermal Jacket — Indigo': 'سترة بيزلي الحرارية — نيلي',
+};
+const priceNum = (str) => Number(String(str).replace(/[^0-9.]/g, ''));
+
 class Component extends DCLogic {
   state = {
     screen: this.queryScreen() || this.props.forceScreen || 'idle',
@@ -364,8 +373,11 @@ class Component extends DCLogic {
     const shown = s.facet && groups.indexOf(s.facet) !== -1 ? found.filter((i) => i.kicker.indexOf(s.facet) === 0) : found;
 
     const L = window.BridgeLocale;
+    const loc = L ? L.get() : { languageCode: 'en' };
     const str = L ? L.strings() : {};
     const fmt = L ? L.fmt : ((x) => x);
+    const isAr = loc.languageCode === 'ar';
+    const money = (n) => (L ? L.money(n) : '£' + n);
     // kickers stay English in the data (they drive matching and facets); only the label is localised
     const CAT = { Jersey: 'seCatJersey', Shorts: 'seCatShorts', Outerwear: 'seCatOuterwear', 'Base layer': 'seCatBase', Accessories: 'seCatAccessories' };
     const catLabel = (g) => str[CAT[g]] || g;
@@ -413,7 +425,7 @@ class Component extends DCLogic {
 
       query: s.query,
       hasQuery: !!s.query,
-      results: this.sortResults(shown).map((i) => Object.assign({}, i, { kickerLabel: kickerLabel(i.kicker) })),
+      results: this.sortResults(shown).map((i) => Object.assign({}, i, { kickerLabel: kickerLabel(i.kicker), name: isAr ? (NAME_AR[i.name] || i.name) : i.name, price: isAr ? money(priceNum(i.price)) : i.price })),
       facets: groups.map((g) => ({
         label: catLabel(g) + ' (' + found.filter((i) => i.kicker.indexOf(g) === 0).length + ')',
         style: s.facet === g
