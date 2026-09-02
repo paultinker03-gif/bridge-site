@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="brands.css">
+<script src="locale.js"></script>
+<style>
+@keyframes bridgeLogoSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { [data-logo-wheel] { animation: none !important; } }
+</style>
+</helmet>
+
+<div data-brand="{{ brandKey }}" style="font-family: var(--font-body); color: var(--color-text);">
+
+  <!-- ===== NAV — DESKTOP ===== -->
+  <sc-if value="{{ isNavDesktop }}" hint-placeholder-val="{{ true }}">
+    <div>
+      <sc-if value="{{ showAnnouncement }}" hint-placeholder-val="{{ true }}">
+        <div style="background: var(--color-text); color: var(--color-bg); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; padding: 10px 40px; display: flex; justify-content: space-between; gap: 24px;">
+          <span>{{ announceLine }}</span>
+          <span style="display: flex; align-items: center; gap: 18px; white-space: nowrap;">
+            <span>{{ shipsLine }}</span>
+            <dc-import name="LocalePicker" variant="trigger" tone="dark" device="desktop" hint-size="180px,20px"></dc-import>
+          </span>
+        </div>
+      </sc-if>
+      <div style="background: var(--color-bg);">
+        <nav class="nav" style="max-width: 1680px; margin: 0 auto; padding-inline-start: 40px; padding-inline-end: 40px; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; column-gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 4px; min-width: 0; flex-wrap: wrap;">
+            <sc-for list="{{ navLinks }}" as="nl" hint-placeholder-count="5">
+              <button class="btn btn-ghost" style="flex: none; white-space: nowrap;" onClick="{{ nl.go }}">{{ nl.label }}</button>
+            </sc-for>
+          </div>
+          <button class="btn btn-ghost nav-brand" style="padding-inline-start: 0; margin-inline-end: 0; display: flex; align-items: baseline; gap: 10px; justify-self: center;" aria-label="{{ brandWord }} — home" onClick="{{ goHome }}" onMouseEnter="{{ logoOnEnter }}" onMouseLeave="{{ logoOnLeave }}" onFocus="{{ logoOnEnter }}" onBlur="{{ logoOnLeave }}">
+            <sc-if value="{{ isBridgeLogo }}" hint-placeholder-val="{{ true }}">
+              <span style="position: relative; display: inline-flex; align-items: center; width: 104px; height: 36px;">
+                <span style="{{ logoStylesLg.wordmark }}">Bridge</span>
+                <svg width="100" height="50" viewBox="0 0 124 62" fill="none" style="{{ logoStylesLg.icon }}" aria-hidden="true">
+                  <g data-logo-wheel style="{{ logoStylesLg.wheel }}"><circle cx="34" cy="42" r="19" stroke="var(--color-logo)" stroke-width="2.5"/><line x1="34" y1="23" x2="34" y2="61" stroke="var(--color-logo)" stroke-width="1.1"/><line x1="15" y1="42" x2="53" y2="42" stroke="var(--color-logo)" stroke-width="1.1"/><line x1="21" y1="29" x2="47" y2="55" stroke="var(--color-logo)" stroke-width="1.1"/><line x1="21" y1="55" x2="47" y2="29" stroke="var(--color-logo)" stroke-width="1.1"/></g>
+                  <g data-logo-wheel style="{{ logoStylesLg.wheel }}"><circle cx="91" cy="42" r="19" stroke="var(--color-logo)" stroke-width="2.5"/><line x1="91" y1="23" x2="91" y2="61" stroke="var(--color-logo)" stroke-width="1.1"/><line x1="72" y1="42" x2="110" y2="42" stroke="var(--color-logo)" stroke-width="1.1"/><line x1="78" y1="29" x2="104" y2="55" stroke="var(--color-logo)" stroke-width="1.1"/><line x1="78" y1="55" x2="104" y2="29" stroke="var(--color-logo)" stroke-width="1.1"/></g>
+                  <path d="M34 42 L60 42 L49 22 L34 42 M60 42 L82 24 L49 22 M82 24 L91 42" stroke="var(--color-logo)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+                  <path d="M49 22 L49 17" stroke="var(--color-logo)" stroke-width="2.5" stroke-linecap="round"/>
+                  <path d="M41 17 L57 17" stroke="var(--color-logo)" stroke-width="3.5" stroke-linecap="round"/>
+                  <path d="M82 24 L82 16" stroke="var(--color-logo)" stroke-width="2.5" stroke-linecap="round"/>
+                  <path d="M74 16 L90 16" stroke="var(--color-logo)" stroke-width="3.5" stroke-linecap="round"/>
+                  <circle cx="60" cy="42" r="5" fill="var(--color-accent)"/>
+                </svg>
+              </span>
+            </sc-if>
+            <sc-if value="{{ isShift }}" hint-placeholder-val="{{ false }}">
+              <span style="color: var(--color-logo); font-size: 30px; letter-spacing: -0.03em; line-height: 1;">{{ brandWord }}</span>
+              <span class="brand-endorsement" style="font-size: 13px; color: var(--color-neutral-700); white-space: nowrap;">by Bridge</span>
+            </sc-if>
+          </button>
+          <div style="justify-self: end; display: flex; align-items: center; gap: 4px; flex: none; white-space: nowrap;">
+            <button class="btn btn-icon btn-ghost" aria-label="{{ str.search }}" title="{{ str.search }}" onClick="{{ goSearch }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg></button>
+            <button class="btn btn-icon btn-ghost" aria-label="{{ accountLabel }}" title="{{ accountLabel }}" onClick="{{ goSignIn }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></button>
+            <button class="btn btn-icon btn-ghost" aria-label="{{ bagAria }}" title="{{ str.bag }}" style="position: relative;" onClick="{{ goCheckout }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M4 7h16l-1.5 14H5.5z"/><path d="M9 7V4h6v3"/></svg><sc-if value="{{ hasBag }}" hint-placeholder-val="{{ true }}"><span class="badge badge-sm badge-pin">{{ bagLabel }}</span></sc-if></button>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ===== NAV — MOBILE ===== -->
+  <sc-if value="{{ isNavMobile }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <sc-if value="{{ showAnnouncement }}" hint-placeholder-val="{{ true }}">
+        <div style="background: var(--color-text); color: var(--color-bg); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 9px 16px; text-align: center;">{{ announceShort }}</div>
+      </sc-if>
+      <div style="background: var(--color-bg); display: flex; align-items: center; gap: 8px; padding: 12px 16px; min-height: 60px;">
+        <button class="btn btn-icon btn-ghost" aria-label="Menu" style="min-width: 44px; min-height: 44px;" onClick="{{ toggleMenu }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+        <button class="btn btn-ghost nav-brand" style="padding-inline-start: 4px; display: flex; align-items: baseline; gap: 7px;" aria-label="{{ brandWord }} — home" onClick="{{ goHome }}" onMouseEnter="{{ logoOnEnter }}" onMouseLeave="{{ logoOnLeave }}" onFocus="{{ logoOnEnter }}" onBlur="{{ logoOnLeave }}">
+          <sc-if value="{{ isBridgeLogo }}" hint-placeholder-val="{{ true }}">
+            <span style="position: relative; display: inline-flex; align-items: center; width: 84px; height: 30px;">
+              <span style="{{ logoStylesSm.wordmark }}">Bridge</span>
+              <svg width="80" height="40" viewBox="0 0 124 62" fill="none" style="{{ logoStylesSm.icon }}" aria-hidden="true">
+                <g data-logo-wheel style="{{ logoStylesSm.wheel }}"><circle cx="34" cy="42" r="19" stroke="var(--color-logo)" stroke-width="2.5"/><line x1="34" y1="23" x2="34" y2="61" stroke="var(--color-logo)" stroke-width="1.1"/><line x1="15" y1="42" x2="53" y2="42" stroke="var(--color-logo)" stroke-width="1.1"/><line x1="21" y1="29" x2="47" y2="55" stroke="var(--color-logo)" stroke-width="1.1"/><line x1="21" y1="55" x2="47" y2="29" stroke="var(--color-logo)" stroke-width="1.1"/></g>
+                <g data-logo-wheel style="{{ logoStylesSm.wheel }}"><circle cx="91" cy="42" r="19" stroke="var(--color-logo)" stroke-width="2.5"/><line x1="91" y1="23" x2="91" y2="61" stroke="var(--color-logo)" stroke-width="1.1"/><line x1="72" y1="42" x2="110" y2="42" stroke="var(--color-logo)" stroke-width="1.1"/><line x1="78" y1="29" x2="104" y2="55" stroke="var(--color-logo)" stroke-width="1.1"/><line x1="78" y1="55" x2="104" y2="29" stroke="var(--color-logo)" stroke-width="1.1"/></g>
+                <path d="M34 42 L60 42 L49 22 L34 42 M60 42 L82 24 L49 22 M82 24 L91 42" stroke="var(--color-logo)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+                <path d="M49 22 L49 17" stroke="var(--color-logo)" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M41 17 L57 17" stroke="var(--color-logo)" stroke-width="3.5" stroke-linecap="round"/>
+                <path d="M82 24 L82 16" stroke="var(--color-logo)" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M74 16 L90 16" stroke="var(--color-logo)" stroke-width="3.5" stroke-linecap="round"/>
+                <circle cx="60" cy="42" r="5" fill="var(--color-accent)"/>
+              </svg>
+            </span>
+          </sc-if>
+          <sc-if value="{{ isShift }}" hint-placeholder-val="{{ false }}"><span style="color: var(--color-logo); font-size: 24px; letter-spacing: -0.03em; line-height: 1;">{{ brandWord }}</span><span class="brand-endorsement" style="font-size: 11px; color: var(--color-neutral-700); white-space: nowrap;">by Bridge</span></sc-if>
+        </button>
+        <div style="margin-inline-start: auto; display: flex; align-items: center; gap: 2px;">
+          <button class="btn btn-icon btn-ghost" aria-label="Search" style="min-width: 44px; min-height: 44px;" onClick="{{ goSearch }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg></button>
+          <button class="btn btn-icon btn-ghost" aria-label="{{ accountLabel }}" title="{{ accountLabel }}" style="min-width: 44px; min-height: 44px;" onClick="{{ goSignIn }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></button>
+          <button class="btn btn-icon btn-ghost" aria-label="{{ bagAria }}" style="min-width: 44px; min-height: 44px; position: relative;" onClick="{{ goCheckout }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M4 7h16l-1.5 14H5.5z"/><path d="M9 7V4h6v3"/></svg><sc-if value="{{ hasBag }}" hint-placeholder-val="{{ true }}"><span class="badge badge-sm badge-pin">{{ bagLabel }}</span></sc-if></button>
+        </div>
+      </div>
+
+      <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="position: fixed; inset: 0; z-index: 90; background: var(--color-bg); display: flex; flex-direction: column; overflow-y: auto;">
+          <div style="border-bottom: 1px solid var(--color-divider); display: flex; align-items: center; gap: 8px; padding: 12px 16px; min-height: 60px; flex: none;">
+            <span class="brand-lockup" style="font-family: var(--font-heading); font-weight: 800; font-size: 20px; letter-spacing: -0.03em; display: flex; align-items: baseline; gap: 7px;"><span>{{ brandWord }}</span><sc-if value="{{ isShift }}" hint-placeholder-val="{{ false }}"><span class="brand-endorsement" style="font-size: 11px; color: var(--color-neutral-700);">by Bridge</span></sc-if></span>
+            <button class="btn btn-icon btn-ghost" aria-label="Close menu" style="margin-inline-start: auto; min-width: 44px; min-height: 44px;" onClick="{{ closeMenu }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M5 5l14 14M19 5 5 19"/></svg></button>
+          </div>
+          <div style="padding: 20px 16px 32px; display: flex; flex-direction: column; gap: 24px;">
+            <div class="field">
+              <label for="menu-search">{{ str.search }}</label>
+              <div style="display: flex; gap: 8px;">
+                <input class="input" id="menu-search" placeholder="{{ str.searchPlaceholder }}" style="min-height: 48px; flex: 1; min-width: 0;" value="{{ menuQuery }}" onChange="{{ onMenuQuery }}" onKeyDown="{{ onMenuKey }}">
+                <button class="btn btn-icon btn-primary" aria-label="Search" style="flex: none; min-width: 48px; min-height: 48px;" onClick="{{ menuSearch }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg></button>
+              </div>
+            </div>
+
+        <div style="display: flex; flex-direction: column;">
+          <sc-for list="{{ navLinks }}" as="nl" hint-placeholder-count="5">
+            <button class="btn btn-ghost" style="justify-content: flex-start; min-height: 52px; font-size: 17px; border-bottom: 1px solid var(--color-divider);" onClick="{{ nl.menuGo }}">{{ nl.label }}</button>
+          </sc-for>
+        </div>
+
+        <div style="border-top: 1px solid var(--color-divider); display: flex; flex-direction: column;">
+          <button class="btn btn-ghost" style="justify-content: flex-start; min-height: 52px; border-bottom: 1px solid var(--color-divider);" onClick="{{ menuSignIn }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span>{{ accountLabel }}</span></button>
+          <button class="btn btn-ghost" style="justify-content: flex-start; min-height: 52px; border-bottom: 1px solid var(--color-divider);" onClick="{{ menuBag }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M4 7h16l-1.5 14H5.5z"/><path d="M9 7V4h6v3"/></svg><span>{{ str.bag }}</span><span class="badge" style="margin-inline-start: 2px;">{{ bagLabel }}</span></button>
+          <button class="btn btn-ghost" style="justify-content: flex-start; min-height: 52px; border-bottom: 1px solid var(--color-divider);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M4 4h16v16H4z"/><path d="m8 12 3 3 5-6"/></svg><span>{{ str.ordersRepairs }}</span></button>
+          <dc-import name="LocalePicker" variant="inline" device="mobile" hint-size="100%,52px"></dc-import>
+        </div>
+
+        <div style="border-top: 1px solid var(--color-divider); padding-top: 20px; font-size: 12px; color: var(--color-neutral-700);">Free returns for 90 days · Repairs for life</div>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <!-- ===== MENU ===== -->
+  <sc-if value="{{ isMenu }}" hint-placeholder-val="{{ false }}">
+    <div style="width: 100%; max-width: 390px; border: 1px solid var(--color-divider); background: var(--color-bg); display: flex; flex-direction: column;">
+      <div style="border-bottom: 1px solid var(--color-divider); display: flex; align-items: center; gap: 8px; padding: 12px 16px; min-height: 60px;">
+        <span class="brand-lockup" style="font-family: var(--font-heading); font-weight: 800; font-size: 20px; letter-spacing: -0.03em; display: flex; align-items: baseline; gap: 7px;"><span>{{ brandWord }}</span><sc-if value="{{ isShift }}" hint-placeholder-val="{{ false }}"><span class="brand-endorsement" style="font-size: 11px; color: var(--color-neutral-700);">by Bridge</span></sc-if></span>
+        <button class="btn btn-icon btn-ghost" aria-label="Close menu" style="margin-inline-start: auto; min-width: 44px; min-height: 44px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M5 5l14 14M19 5 5 19"/></svg></button>
+      </div>
+      <div style="padding: 20px 16px 28px; display: flex; flex-direction: column; gap: 24px;">
+        <div class="field">
+          <label for="menu-spec-search">{{ str.search }}</label>
+          <div style="display: flex; gap: 8px;">
+            <input class="input" id="menu-spec-search" placeholder="{{ str.searchPlaceholder }}" style="min-height: 48px; flex: 1; min-width: 0;" value="{{ menuQuery }}" onChange="{{ onMenuQuery }}" onKeyDown="{{ onMenuKey }}">
+            <button class="btn btn-icon btn-primary" aria-label="Search" style="flex: none; min-width: 48px; min-height: 48px;" onClick="{{ menuSearch }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg></button>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column;">
+          <sc-for list="{{ navLinks }}" as="nl" hint-placeholder-count="5">
+            <button class="btn btn-ghost" style="justify-content: flex-start; min-height: 52px; font-size: 17px; border-bottom: 1px solid var(--color-divider);" onClick="{{ nl.menuGo }}">{{ nl.label }}</button>
+          </sc-for>
+        </div>
+
+        <div style="border-top: 1px solid var(--color-divider); display: flex; flex-direction: column;">
+          <button class="btn btn-ghost" style="justify-content: flex-start; min-height: 52px; border-bottom: 1px solid var(--color-divider);" onClick="{{ menuSignIn }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span>{{ accountLabel }}</span></button>
+          <button class="btn btn-ghost" style="justify-content: flex-start; min-height: 52px; border-bottom: 1px solid var(--color-divider);" onClick="{{ menuBag }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M4 7h16l-1.5 14H5.5z"/><path d="M9 7V4h6v3"/></svg><span>{{ str.bag }}</span><span class="badge" style="margin-inline-start: 2px;">{{ bagLabel }}</span></button>
+          <button class="btn btn-ghost" style="justify-content: flex-start; min-height: 52px; border-bottom: 1px solid var(--color-divider);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M4 4h16v16H4z"/><path d="m8 12 3 3 5-6"/></svg><span>{{ str.ordersRepairs }}</span></button>
+          <dc-import name="LocalePicker" variant="inline" device="mobile" hint-size="100%,52px"></dc-import>
+        </div>
+
+        <div style="border-top: 1px solid var(--color-divider); padding-top: 20px; font-size: 12px; color: var(--color-neutral-700);">Free returns for 90 days · Repairs for life</div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ===== LOGO ===== -->
+  <sc-if value="{{ isLogo }}" hint-placeholder-val="{{ false }}">
+    <div style="display: flex; flex-direction: column; gap: 32px; padding: 8px;">
+      <div class="brand-lockup" style="display: flex; flex-direction: column; align-items: flex-start; gap: 10px; font-family: var(--font-heading); font-weight: 800; font-size: 40px; letter-spacing: -0.02em; line-height: 1;">
+        <span>{{ brandWord }}</span>
+      </div>
+      <div style="display: flex; align-items: flex-end; gap: 32px; border-top: 1px solid var(--color-divider); padding-top: 24px;">
+        <div class="brand-lockup" style="display: flex; align-items: center; gap: 10px; font-family: var(--font-heading); font-weight: 800; font-size: 20px;"><span>{{ brandWord }}</span></div>
+        <div class="brand-lockup" style="display: flex; align-items: center; gap: 8px; font-family: var(--font-heading); font-weight: 800; font-size: 15px;"><span>{{ brandWord }}</span></div>
+              </div>
+      <div class="brand-lockup" style="background: var(--color-text); color: var(--color-bg); padding: 24px; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; font-family: var(--font-heading); font-weight: 800; font-size: 26px; line-height: 1;">
+        <span>{{ brandWord }}</span>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ===== LOCALE — picker documentation ===== -->
+  <sc-if value="{{ isLocale }}" hint-placeholder-val="{{ false }}">
+    <div style="display: flex; flex-direction: column; gap: 20px; padding: 8px;">
+      <div style="background: var(--color-text); padding: 12px 16px; display: flex; justify-content: flex-end;">
+        <dc-import name="LocalePicker" variant="trigger" tone="dark" device="{{ device }}" hint-size="180px,20px"></dc-import>
+      </div>
+      <div style="border: 1px solid var(--color-divider); padding: 12px 16px; display: flex; justify-content: flex-start;">
+        <dc-import name="LocalePicker" variant="trigger" tone="light" device="{{ device }}" hint-size="180px,20px"></dc-import>
+      </div>
+      <div style="border: 1px solid var(--color-divider); max-width: 390px;">
+        <dc-import name="LocalePicker" variant="inline" device="mobile" hint-size="100%,52px"></dc-import>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ===== GALLERY — DESKTOP (hero + thumb strip, click to swap) ===== -->
+  <sc-if value="{{ isGalleryDesktop }}" hint-placeholder-val="{{ false }}">
+    <div style="display: flex; gap: 16px; align-items: flex-start; padding-inline-start: {{ padPdpGutter }};">
+      <div style="width: 88px; flex: 0 0 auto; display: flex; flex-direction: column; gap: 12px;">
+        <sc-for list="{{ galThumbs }}" as="shot" hint-placeholder-count="4">
+          <button aria-label="{{ shot.label }}" aria-pressed="{{ shot.active }}" onClick="{{ shot.select }}" style="{{ shot.railStyle }}"><img src="{{ shot.src }}" alt="{{ shot.alt }}" style="width: 100%; height: 100%; object-fit: cover; display: block;"></button>
+        </sc-for>
+      </div>
+      <div style="flex: 1; aspect-ratio: 4 / 5; background: var(--color-surface); min-width: 0;"><img src="{{ galActiveSrc }}" alt="{{ galActiveAlt }}" style="width: 100%; height: 100%; object-fit: cover; display: block;"></div>
+    </div>
+  </sc-if>
+
+  <!-- ===== GALLERY — MOBILE (swipe track, one shot per view) ===== -->
+  <sc-if value="{{ isGalleryMobile }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <div onScroll="{{ galScroll }}" style="display: flex; gap: 8px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 0 16px;">
+        <sc-for list="{{ galThumbs }}" as="shot" hint-placeholder-count="4">
+          <div style="flex: 0 0 88%; scroll-snap-align: center; height: {{ galHeroH }}; background: var(--color-surface);"><img src="{{ shot.src }}" alt="{{ shot.alt }}" style="width: 100%; height: 100%; object-fit: cover; display: block;"></div>
+        </sc-for>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 16px 0;">
+        <sc-for list="{{ galThumbs }}" as="shot" hint-placeholder-count="4">
+          <span style="{{ shot.dotStyle }}"></span>
+        </sc-for>
+        <span style="font-size: 11px; letter-spacing: 0.08em; color: var(--color-neutral-700); margin-inline-start: 6px;">{{ galCounter }}</span>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ===== FOOTER — DESKTOP ===== -->
+  <sc-if value="{{ isFooterDesktop }}" hint-placeholder-val="{{ false }}">
+    <footer style="background: var(--color-text); color: var(--color-bg);">
+      <div style="max-width: 1680px; margin: 0 auto; padding: 56px 40px 40px; display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 2fr) minmax(0, 2fr) minmax(0, 2fr); gap: 40px;">
+        <div>
+          <div class="brand-lockup" style="font-family: var(--font-heading); font-weight: 800; font-size: 30px; letter-spacing: -0.03em; margin-bottom: 16px; display: flex; align-items: baseline; gap: 10px;"><span>{{ brandWord }}</span><sc-if value="{{ isShift }}" hint-placeholder-val="{{ false }}"><span class="brand-endorsement" style="font-size: 13px; opacity: 0.7;">by Bridge</span></sc-if></div>
+          <p style="margin: 0 0 24px; font-size: 13px; max-width: 34ch; opacity: 0.75; text-wrap: pretty;">{{ footerBlurb }}</p>
+          <div style="display: flex; gap: 8px; align-items: flex-end; max-width: 380px;">
+            <div class="field" style="flex: 1;">
+              <label for="fb-mail" style="color: var(--color-bg); opacity: 0.7;">{{ str.email }}</label>
+              <input class="input" id="fb-mail" placeholder="{{ str.emailPlaceholder }}" style="background: transparent; color: var(--color-bg); border-color: rgba(255,255,255,0.25);">
+            </div>
+            <button class="btn btn-primary" onClick="{{ goJournal }}">{{ str.signUp }}</button>
+          </div>
+        </div>
+        <sc-for list="{{ footerCols }}" as="fc" hint-placeholder-count="3">
+          <div>
+            <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.55; margin-bottom: 16px;">{{ fc.head }}</div>
+            <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px;">
+              <sc-for list="{{ fc.items }}" as="li" hint-placeholder-count="4">
+                <a href="{{ li.href }}" style="color: var(--color-bg); text-decoration: none;">{{ li.label }}</a>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="border-top: 1px solid rgba(255,255,255,0.18);">
+        <div style="max-width: 1680px; margin: 0 auto; padding: 20px 40px; display: flex; justify-content: space-between; gap: 24px; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;">
+          <span style="display: flex; align-items: center; gap: 24px;">
+            <span style="color: rgba(255,255,255,0.6);">{{ copyrightLine }}</span>
+            <dc-import name="LocalePicker" variant="trigger" tone="dark" device="desktop" hint-size="180px,20px"></dc-import>
+            <a href="{{ crossHref }}" style="color: rgba(255,255,255,0.6); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.4);">{{ crossLabelLong }}</a>
+          </span>
+          <span style="display: flex; gap: 24px;"><a href="{{ legalTerms }}" style="color: rgba(255,255,255,0.6); text-decoration: none;">{{ str.terms }}</a><a href="{{ legalPrivacy }}" style="color: rgba(255,255,255,0.6); text-decoration: none;">{{ str.privacy }}</a><a href="{{ legalCookies }}" style="color: rgba(255,255,255,0.6); text-decoration: none;">{{ str.cookies }}</a></span>
+        </div>
+      </div>
+    </footer>
+  </sc-if>
+
+  <!-- ===== FOOTER — MOBILE ===== -->
+  <sc-if value="{{ isFooterMobile }}" hint-placeholder-val="{{ false }}">
+    <footer style="background: var(--color-text); color: var(--color-bg); padding: 36px 16px 24px;">
+      <div class="brand-lockup" style="font-family: var(--font-heading); font-weight: 800; font-size: 26px; letter-spacing: -0.03em; margin-bottom: 12px; display: flex; align-items: baseline; gap: 9px;"><span>{{ brandWord }}</span><sc-if value="{{ isShift }}" hint-placeholder-val="{{ false }}"><span class="brand-endorsement" style="font-size: 12px; opacity: 0.7;">by Bridge</span></sc-if></div>
+      <p style="margin: 0 0 20px; font-size: 13px; opacity: 0.75; text-wrap: pretty;">{{ footerBlurbShort }}</p>
+      <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px;">
+        <div class="field">
+          <label for="fbm-mail" style="color: var(--color-bg); opacity: 0.7;">{{ str.email }}</label>
+          <input class="input" id="fbm-mail" placeholder="{{ str.emailPlaceholder }}" style="background: transparent; color: var(--color-bg); border-color: rgba(255,255,255,0.25); min-height: 44px;">
+        </div>
+        <button class="btn btn-primary btn-block" style="min-height: 44px;" onClick="{{ goJournal }}"><span>{{ str.signUp }}</span></button>
+      </div>
+      <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; border-top: 1px solid rgba(255,255,255,0.18); padding-top: 24px;">
+        <sc-for list="{{ footerColsShort }}" as="fc" hint-placeholder-count="2">
+          <div>
+            <div style="font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.55; margin-bottom: 12px;">{{ fc.head }}</div>
+            <div style="display: flex; flex-direction: column; gap: 12px; font-size: 13px;">
+              <sc-for list="{{ fc.items }}" as="li" hint-placeholder-count="3">
+                <a href="{{ li.href }}" style="color: var(--color-bg); text-decoration: none;">{{ li.label }}</a>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="border-top: 1px solid rgba(255,255,255,0.18); margin-top: 24px; padding-top: 18px; display: flex; flex-direction: column; gap: 14px;">
+        <dc-import name="LocalePicker" variant="trigger" tone="dark" device="mobile" hint-size="180px,24px"></dc-import>
+        <a href="{{ crossHref }}" style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-bg); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.4); align-self: flex-start;">{{ crossLabelLong }}</a>
+        <div style="display: flex; gap: 18px; font-size: 11px;"><a href="{{ legalTerms }}" style="color: var(--color-bg); text-decoration: none;">{{ str.terms }}</a><a href="{{ legalPrivacy }}" style="color: var(--color-bg); text-decoration: none;">{{ str.privacy }}</a><a href="{{ legalCookies }}" style="color: var(--color-bg); text-decoration: none;">{{ str.cookies }}</a></div>
+        <div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.6;">{{ copyrightLine }}</div>
+      </div>
+    </footer>
+  </sc-if>
+
+  <!-- ===== HERO — split editorial hero. Same anatomy both brands:
+       copy column + full-bleed image. Bridge sets stats under the copy on a
+       5/7 split; SHIFT runs bigger type on an even split. ===== -->
+  <sc-if value="{{ isHeroSplit }}" hint-placeholder-val="{{ false }}">
+    <section style="border-bottom: {{ ruleStrong }} solid var(--color-divider);">
+      <div style="max-width: {{ pageMax }}; margin: 0 auto; display: grid; grid-template-columns: {{ heroSplit }};">
+        <div style="padding: {{ heroPad }}; border-inline-end: {{ heroRule }}; display: flex; flex-direction: column; justify-content: space-between; gap: {{ heroGap }};">
+          <div>
+            <div style="font-size: {{ kickerSize }}; letter-spacing: {{ kickerTrack }}; text-transform: uppercase; color: var(--color-accent); margin-bottom: 22px;">{{ heroKicker }}</div>
+            <h1 style="margin: 0 0 22px; font-size: {{ heroTitleSize }}; line-height: {{ heroLead }}; max-width: 22ch; text-wrap: balance;">{{ heroTitle }}</h1>
+            <p style="margin: 0; font-size: 16px; line-height: 1.5; color: var(--color-neutral-800); max-width: 44ch; text-wrap: pretty;">{{ heroBody }}</p>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 32px;">
+              <button class="btn btn-primary" style="min-height: {{ tapH }}; padding-inline: 22px;" onClick="{{ heroPrimaryGo }}"><span>{{ heroPrimary }}</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+              <sc-if value="{{ hasHeroSecondary }}" hint-placeholder-val="{{ true }}">
+                <button class="{{ heroSecondaryClass }}" style="min-height: {{ tapH }}; padding-inline: 22px;" onClick="{{ heroSecondaryGo }}">{{ heroSecondary }}</button>
+              </sc-if>
+            </div>
+          </div>
+        </div>
+        <div style="position: relative; min-height: {{ heroImgH }}; background: var(--color-surface);">
+          <img src="{{ heroImg }}" alt="{{ heroAlt }}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+          <sc-if value="{{ hasHeroCaption }}" hint-placeholder-val="{{ false }}">
+            <div style="position: absolute; inset-inline-start: 0; bottom: 0; background: var(--color-text); color: var(--color-bg); padding: 12px 18px; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;">{{ heroCaption }}</div>
+          </sc-if>
+        </div>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- ===== HERO — STACKED. Same content contract as the split hero, ordered
+       vertically: full-measure photograph on top, then a centred caption band —
+       kicker, title, body and actions on one axis. Bridge mounts this on home
+       so the image leads at full page measure. ===== -->
+  <sc-if value="{{ isHeroStacked }}" hint-placeholder-val="{{ false }}">
+    <section style="border-bottom: {{ ruleStrong }} solid var(--color-divider);">
+      <div style="max-width: {{ pageMax }}; margin: 0 auto;">
+        <div style="position: relative; height: {{ heroStackImgH }}; aspect-ratio: {{ heroStackImgRatio }}; background: var(--color-surface);">
+          <img src="{{ heroImg }}" alt="{{ heroAlt }}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+          <sc-if value="{{ hasHeroCaption }}" hint-placeholder-val="{{ false }}">
+            <div style="position: absolute; inset-inline-start: 0; bottom: 0; background: var(--color-text); color: var(--color-bg); padding: 12px 18px; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;">{{ heroCaption }}</div>
+          </sc-if>
+        </div>
+        <div style="padding: {{ heroPad }}; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 24px;">
+          <div style="font-size: {{ kickerSize }}; letter-spacing: {{ kickerTrack }}; text-transform: uppercase; color: var(--color-accent);">{{ heroKicker }}</div>
+          <h1 style="margin: 0; font-size: {{ heroTitleSize }}; line-height: {{ heroLead }}; max-width: 24ch; text-wrap: balance;">{{ heroTitle }}</h1>
+          <p style="margin: 0; font-size: 16px; line-height: 1.55; color: var(--color-neutral-800); max-width: 56ch; text-wrap: pretty;">{{ heroBody }}</p>
+          <div style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 8px;">
+            <button class="btn btn-primary" style="min-height: {{ tapH }}; padding-inline: 22px; justify-content: center; text-align: center;" onClick="{{ heroPrimaryGo }}">{{ heroPrimary }}</button>
+            <sc-if value="{{ hasHeroSecondary }}" hint-placeholder-val="{{ true }}">
+              <button class="{{ heroSecondaryClass }}" style="min-height: {{ tapH }}; padding-inline: 22px; justify-content: center; text-align: center;" onClick="{{ heroSecondaryGo }}">{{ heroSecondary }}</button>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- ===== BRAND CROSSOVER — each house advertises the other in its OWN
+       language. Nothing here switches brand: the block inherits the page's
+       tokens, so the same markup reads Bridge on Bridge and SHIFT on SHIFT. ===== -->
+  <sc-if value="{{ isCrossover }}" hint-placeholder-val="{{ false }}">
+    <section style="background: var(--color-surface);">
+      <div style="max-width: {{ pageMax }}; margin: 0 auto; display: grid; grid-template-columns: {{ crossSplit }}; align-items: stretch;">
+        <div style="position: relative; min-height: {{ crossImgH }}; background: var(--color-surface); order: {{ crossImgOrder }};">
+          <img src="{{ crossImg }}" alt="{{ crossImgAlt }}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+        </div>
+        <div style="padding: {{ padBlock }}; display: flex; flex-direction: column; justify-content: center; gap: 20px;">
+          <div style="display: flex; align-items: baseline; gap: 10px; font-size: {{ kickerSize }}; letter-spacing: {{ kickerTrack }}; text-transform: uppercase; color: var(--color-accent);">
+            <span>{{ crossKicker }}</span>
+          </div>
+          <h2 style="margin: 0; font-size: {{ crossTitleSize }}; line-height: {{ heroLead }}; max-width: 22ch; text-wrap: balance;">{{ crossTitle }}</h2>
+          <p style="margin: 0; font-size: 15px; line-height: 1.55; color: var(--color-neutral-800); max-width: 46ch; text-wrap: pretty;">{{ crossBody }}</p>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 16px; border-top: 1px solid var(--color-divider); padding-top: 18px;">
+            <sc-for list="{{ crossPoints }}" as="cp" hint-placeholder-count="3">
+              <div style="font-size: 13px; color: var(--color-neutral-800); text-wrap: pretty;">{{ cp.text }}</div>
+            </sc-for>
+          </div>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px;">
+            <a class="btn btn-primary" href="{{ crossHref }}" style="min-height: {{ tapH }}; padding-inline: 22px; text-decoration: none;"><span>{{ crossCta }}</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- ===== PRODUCT HERO — breadcrumb, gallery and the kicker/title/price
+       header shared by both PDPs. Bridge and SHIFT each continue with their
+       own buy panel (spec vs provenance record) directly below this. ===== -->
+  <sc-if value="{{ isProductHero }}" hint-placeholder-val="{{ false }}">
+    <sc-if value="{{ pdpHeaderOnly }}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div style="padding: 16px {{ padPdpGutter }} 0; font-size: 12px; color: var(--color-neutral-700);">
+          <button class="btn btn-ghost" style="padding-inline-start: 0; font-size: 12px;" onClick="{{ heroBackGo }}">{{ heroBackLabel }}</button> / <span style="color: var(--color-text);">{{ heroCrumbCurrent }}</span>
+        </div>
+        <div style="padding: 0 {{ padPdpGutter }}; display: flex; flex-direction: column; gap: 14px;">
+          <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent-700);">{{ pdpKicker }}</div>
+          <h1 style="margin: 0; font-size: {{ heroH1Size }}; line-height: 1.04;">{{ pdpTitle }}</h1>
+          <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+            <span style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 22px; color: {{ heroPriceInk }};">{{ heroPrice }}</span>
+            <sc-if value="{{ hasHeroWas }}" hint-placeholder-val="{{ false }}">
+              <span style="font-size: 15px; color: var(--color-neutral-600); text-decoration: line-through;">{{ heroWas }}</span>
+            </sc-if>
+            <sc-if value="{{ hasHeroSaving }}" hint-placeholder-val="{{ false }}">
+              <span class="tag tag-quiet">{{ heroSaving }}</span>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ pdpFullDemo }}" hint-placeholder-val="{{ true }}">
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      <div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-600); padding: 0 {{ padPdpGutter }};">This block is the crumb + kicker/title/price header only — shown here with an example gallery and buy panel around it so the anatomy of a real PDP reads clearly. Bridge and SHIFT each supply their own buy panel (spec vs provenance) below it.</div>
+      <div style="display: grid; grid-template-columns: {{ pdpDemoCols }}; gap: {{ pdpDemoGap }}; padding: 0 {{ padPdpGutter }}; align-items: start;">
+        <div>
+          <sc-if value="{{ pdpGalleryDesktop }}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+              <div style="height: {{ pdpDemoGalH }}; background: var(--color-surface);"><img src="{{ galActiveSrc }}" alt="{{ galActiveAlt }}" style="width: 100%; height: 100%; object-fit: cover; display: block;"></div>
+              <div style="display: grid; grid-template-columns: {{ galThumbCols }}; gap: 12px;">
+                <sc-for list="{{ galThumbs }}" as="shot" hint-placeholder-count="4">
+                  <button aria-label="{{ shot.label }}" aria-pressed="{{ shot.active }}" onClick="{{ shot.select }}" style="{{ shot.style }}"><img src="{{ shot.src }}" alt="{{ shot.alt }}" style="width: 100%; height: 100%; object-fit: cover; display: block;"></button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ pdpGalleryMobile }}" hint-placeholder-val="{{ false }}">
+            <div>
+              <div onScroll="{{ galScroll }}" style="display: flex; gap: 8px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;">
+                <sc-for list="{{ galThumbs }}" as="shot" hint-placeholder-count="4">
+                  <div style="flex: 0 0 88%; scroll-snap-align: center; height: {{ pdpDemoGalH }}; background: var(--color-surface);"><img src="{{ shot.src }}" alt="{{ shot.alt }}" style="width: 100%; height: 100%; object-fit: cover; display: block;"></div>
+                </sc-for>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: center; gap: 8px; padding-top: 10px;">
+                <sc-for list="{{ galThumbs }}" as="shot" hint-placeholder-count="4">
+                  <span style="{{ shot.dotStyle }}"></span>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <div style="font-size: 12px; color: var(--color-neutral-700);">
+            <button class="btn btn-ghost" style="padding-inline-start: 0; font-size: 12px;" onClick="{{ heroBackGo }}">{{ heroBackLabel }}</button> / <span style="color: var(--color-text);">{{ heroCrumbCurrent }}</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent-700);">{{ pdpKicker }}</div>
+            <h1 style="margin: 0; font-size: {{ heroH1Size }}; line-height: 1.04;">{{ pdpTitle }}</h1>
+            <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+              <span style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 22px; color: {{ heroPriceInk }};">{{ heroPrice }}</span>
+              <sc-if value="{{ hasHeroWas }}" hint-placeholder-val="{{ false }}">
+                <span style="font-size: 15px; color: var(--color-neutral-600); text-decoration: line-through;">{{ heroWas }}</span>
+              </sc-if>
+              <sc-if value="{{ hasHeroSaving }}" hint-placeholder-val="{{ false }}">
+                <span class="tag tag-quiet">{{ heroSaving }}</span>
+              </sc-if>
+            </div>
+          </div>
+          <div style="border-top: 1px solid var(--color-divider); padding-top: 20px; display: flex; flex-direction: column; gap: 16px;">
+            <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700);">Example product details — the page's own buy panel continues here</div>
+            <p style="margin: 0; font-size: 14px; color: var(--color-neutral-800); text-wrap: pretty;">Cut close through the chest and sleeve for a race fit, in a lightweight weave that wicks on long climbs. Full-length zip, three rear pockets, reflective trim.</p>
+            <div class="seg" style="max-width: 340px;">
+              <label class="seg-opt"><input type="radio" name="pdp-demo-size"><span>S</span></label>
+              <label class="seg-opt"><input type="radio" name="pdp-demo-size" checked="checked"><span>M</span></label>
+              <label class="seg-opt"><input type="radio" name="pdp-demo-size"><span>L</span></label>
+              <label class="seg-opt"><input type="radio" name="pdp-demo-size"><span>XL</span></label>
+            </div>
+            <button class="btn btn-primary btn-block" style="max-width: 340px;">Add to bag</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+  </sc-if>
+
+  <!-- ===== CROSS-SELL — a titled rail of complementary products: heading,
+       optional "see all", then the shared product grid. Used for Bridge's
+       "New this season" and the "Completes the kit" rail on both PDPs. ===== -->
+  <sc-if value="{{ isCrossSell }}" hint-placeholder-val="{{ false }}">
+    <section style="padding: {{ crossSellPad }};">
+      <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 24px; margin-bottom: 28px;">
+        <h2 style="margin: 0;">{{ crossSellTitle }}</h2>
+        <sc-if value="{{ hasCrossSellCta }}" hint-placeholder-val="{{ false }}">
+          <button class="btn btn-ghost" style="min-height: {{ tapH }};" onClick="{{ crossSellGo }}">{{ crossSellCta }}</button>
+        </sc-if>
+      </div>
+      <div style="display: grid; grid-template-columns: {{ crossSellCols }}; gap: {{ gridGap }}; align-items: start;">
+        <sc-for list="{{ gridItems }}" as="it" hint-placeholder-count="4">
+          <div style="display: flex; flex-direction: column; gap: 14px; cursor: pointer;" onClick="{{ it.open }}">
+            <div style="position: relative; aspect-ratio: 4 / 5; background: var(--color-surface); overflow: hidden;">
+              <img src="{{ it.src }}" alt="{{ it.alt }}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+              <sc-if value="{{ it.hasHover }}" hint-placeholder-val="{{ false }}">
+                <img src="{{ it.hoverSrc }}" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; transition: opacity 240ms ease;" style-hover="opacity: 1;">
+              </sc-if>
+              <sc-if value="{{ it.hasTag }}" hint-placeholder-val="{{ false }}">
+                <span class="{{ it.tagClass }}">{{ it.tag }}</span>
+              </sc-if>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+              <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700);">{{ it.meta }}</span>
+              <span style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 16px;">{{ it.name }}</span>
+              <div style="display: flex; align-items: baseline; gap: 10px;">
+                <span style="font-size: 14px; color: {{ it.priceInk }};">{{ it.price }}</span>
+                <sc-if value="{{ it.hasWas }}" hint-placeholder-val="{{ false }}">
+                  <span style="font-size: 13px; color: var(--color-neutral-600); text-decoration: line-through;">{{ it.was }}</span>
+                </sc-if>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- ===== PRODUCT GRID — one card anatomy, both brands. Image, overlay tag,
+       category line, name, price. A second image fades in on hover where the
+       product has a close-up. An occasional promo cell rides in the same grid,
+       so cross-brand advertising keeps the row rhythm. ===== -->
+  <sc-if value="{{ isGrid }}" hint-placeholder-val="{{ false }}">
+    <div style="display: grid; grid-template-columns: {{ gridCols }}; gap: {{ gridGap }}; align-items: start;">
+      <sc-for list="{{ gridItems }}" as="it" hint-placeholder-count="6">
+        <div style="display: flex; flex-direction: column; gap: 14px; min-width: 0;">
+          <sc-if value="{{ it.isPromo }}" hint-placeholder-val="{{ false }}">
+            <a href="{{ it.href }}" style="display: flex; flex-direction: column; gap: 14px; background: var(--color-surface); padding: 0 0 18px; text-decoration: none; color: inherit;">
+              <div style="aspect-ratio: 4 / 5; background: var(--color-text);">
+                <img src="{{ it.src }}" alt="{{ it.alt }}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 8px; padding: 0 16px;">
+                <span style="font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-accent);">{{ it.kicker }}</span>
+                <span style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 18px; line-height: 1.14;">{{ it.name }}</span>
+                <p style="margin: 0; font-size: 13px; color: var(--color-neutral-800); text-wrap: pretty;">{{ it.body }}</p>
+              </div>
+            </a>
+          </sc-if>
+          <sc-if value="{{ it.isProduct }}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; flex-direction: column; gap: 14px; cursor: pointer;" onClick="{{ it.open }}">
+              <div style="position: relative; aspect-ratio: 4 / 5; background: var(--color-surface); overflow: hidden;">
+                <img src="{{ it.src }}" alt="{{ it.alt }}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                <sc-if value="{{ it.hasHover }}" hint-placeholder-val="{{ false }}">
+                  <img src="{{ it.hoverSrc }}" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; transition: opacity 240ms ease;" style-hover="opacity: 1;">
+                </sc-if>
+                <sc-if value="{{ it.hasTag }}" hint-placeholder-val="{{ false }}">
+                  <span class="{{ it.tagClass }}">{{ it.tag }}</span>
+                </sc-if>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 5px;">
+                <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700);">{{ it.meta }}</span>
+                <span style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 16px;">{{ it.name }}</span>
+                <div style="display: flex; align-items: baseline; gap: 10px;">
+                  <span style="font-size: 14px; color: {{ it.priceInk }};">{{ it.price }}</span>
+                  <sc-if value="{{ it.hasWas }}" hint-placeholder-val="{{ false }}">
+                    <span style="font-size: 13px; color: var(--color-neutral-600); text-decoration: line-through;">{{ it.was }}</span>
+                  </sc-if>
+                </div>
+                <sc-if value="{{ it.hasNote }}" hint-placeholder-val="{{ false }}">
+                  <span style="font-size: 12px; color: var(--color-neutral-700);">{{ it.note }}</span>
+                </sc-if>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <!-- ===== PLP — the composed listing page: filters, toolbar, grid. Desktop
+       runs the rail in a sidebar; phone condenses it to the accordion above the
+       grid. The parts are written out here rather than mounted, because a DC
+       cannot import itself. ===== -->
+  <sc-if value="{{ isPlp }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <sc-if value="{{ plpIsDesktop }}" hint-placeholder-val="{{ true }}">
+        <div style="display: grid; grid-template-columns: {{ plpCols }}; align-items: start;">
+          <aside style="padding: {{ plpRailPad }}; align-self: stretch;">
+            <div style="display: flex; flex-direction: column; gap: 30px;">
+              <sc-for list="{{ filterGroups }}" as="fg" hint-placeholder-count="4">
+                <div>
+                  <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 14px;">{{ fg.label }}</div>
+                  <sc-if value="{{ fg.isCheck }}" hint-placeholder-val="{{ true }}">
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                      <sc-for list="{{ fg.items }}" as="fi" hint-placeholder-count="4">
+                        <label class="radio" style="min-height: 32px;"><input type="checkbox" checked="{{ fi.on }}" onChange="{{ fi.toggle }}"><span class="dot"></span><span>{{ fi.label }}</span><span style="margin-inline-start: auto; font-size: 12px; color: var(--color-neutral-600);">{{ fi.count }}</span></label>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ fg.isChip }}" hint-placeholder-val="{{ false }}">
+                    <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                      <sc-for list="{{ fg.items }}" as="fi" hint-placeholder-count="6">
+                        <button onClick="{{ fi.toggle }}" aria-pressed="{{ fi.on }}" style="{{ fi.chipStyle }}">{{ fi.label }}</button>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ fg.isSwatch }}" hint-placeholder-val="{{ false }}">
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                      <sc-for list="{{ fg.items }}" as="fi" hint-placeholder-count="4">
+                        <button aria-label="{{ fi.label }}" aria-pressed="{{ fi.on }}" onClick="{{ fi.toggle }}" style="{{ fi.swatchStyle }}"></button>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-for>
+              <button class="btn btn-ghost" style="padding-inline-start: 0; align-self: flex-start;" onClick="{{ clearFilters }}">{{ clearLabel }}</button>
+            </div>
+          </aside>
+          <div style="min-width: 0;">
+            <div style="padding: {{ plpToolbarPad }};">
+              <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px 24px;">
+                <span style="font-size: 13px; color: var(--color-neutral-800);">{{ toolbarCount }}</span>
+                <div class="seg" style="{{ toolbarSegStyle }}">
+                  <sc-for list="{{ toolbarSorts }}" as="ts" hint-placeholder-count="3">
+                    <label class="seg-opt" style="min-height: {{ tapH }};"><input type="radio" name="{{ sortGroupName }}" checked="{{ ts.on }}" onChange="{{ ts.pick }}"><span>{{ ts.label }}</span></label>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+            <div style="padding: {{ plpGridPad }};">
+              <sc-if value="{{ plpShowGrid }}" hint-placeholder-val="{{ true }}">
+                <div style="display: grid; grid-template-columns: {{ plpGridCols }}; gap: {{ gridGap }}; align-items: start;">
+                  <sc-for list="{{ gridItems }}" as="it" hint-placeholder-count="6">
+                    <div style="display: flex; flex-direction: column; gap: 14px; min-width: 0;">
+                      <sc-if value="{{ it.isProduct }}" hint-placeholder-val="{{ true }}">
+                        <div style="display: flex; flex-direction: column; gap: 14px; cursor: pointer;" onClick="{{ it.open }}">
+                          <div style="position: relative; aspect-ratio: 4 / 5; background: var(--color-surface); overflow: hidden;">
+                            <img src="{{ it.src }}" alt="{{ it.alt }}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                            <sc-if value="{{ it.hasHover }}" hint-placeholder-val="{{ false }}">
+                              <img src="{{ it.hoverSrc }}" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; transition: opacity 240ms ease;" style-hover="opacity: 1;">
+                            </sc-if>
+                            <sc-if value="{{ it.hasTag }}" hint-placeholder-val="{{ false }}">
+                              <span class="{{ it.tagClass }}">{{ it.tag }}</span>
+                            </sc-if>
+                          </div>
+                          <div style="display: flex; flex-direction: column; gap: 5px;">
+                            <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700);">{{ it.meta }}</span>
+                            <span style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 16px;">{{ it.name }}</span>
+                            <div style="display: flex; align-items: baseline; gap: 10px;">
+                              <span style="font-size: 14px; color: {{ it.priceInk }};">{{ it.price }}</span>
+                              <sc-if value="{{ it.hasWas }}" hint-placeholder-val="{{ false }}">
+                                <span style="font-size: 13px; color: var(--color-neutral-600); text-decoration: line-through;">{{ it.was }}</span>
+                              </sc-if>
+                            </div>
+                            <sc-if value="{{ it.hasNote }}" hint-placeholder-val="{{ false }}">
+                              <span style="font-size: 12px; color: var(--color-neutral-700);">{{ it.note }}</span>
+                            </sc-if>
+                          </div>
+                        </div>
+                      </sc-if>
+                      <sc-if value="{{ it.isPromo }}" hint-placeholder-val="{{ false }}">
+                        <a href="{{ it.href }}" style="display: flex; flex-direction: column; gap: 14px; background: var(--color-surface); padding: 0 0 18px; text-decoration: none; color: inherit;">
+                          <div style="aspect-ratio: 4 / 5; background: var(--color-text);">
+                            <img src="{{ it.src }}" alt="{{ it.alt }}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                          </div>
+                          <div style="display: flex; flex-direction: column; gap: 8px; padding: 0 16px;">
+                            <span style="font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-accent);">{{ it.kicker }}</span>
+                            <span style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 18px; line-height: 1.14;">{{ it.name }}</span>
+                            <p style="margin: 0; font-size: 13px; color: var(--color-neutral-800); text-wrap: pretty;">{{ it.body }}</p>
+                          </div>
+                        </a>
+                      </sc-if>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ plpShowEmpty }}" hint-placeholder-val="{{ false }}">
+                <div style="border: 1px solid var(--color-divider); padding: clamp(32px, 5vw, 64px); display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center;">
+                  <div style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 24px;">{{ emptyTitle }}</div>
+                  <p style="margin: 0; font-size: 14px; color: var(--color-neutral-800); max-width: 42ch; text-wrap: pretty;">{{ emptyBody }}</p>
+                  <button class="btn btn-primary" style="min-height: {{ tapH }}; margin-top: 8px;" onClick="{{ emptyGo }}">{{ emptyCta }}</button>
+                </div>
+              </sc-if>
+            </div>
+            <sc-if value="{{ plpHasLoadMore }}" hint-placeholder-val="{{ false }}">
+              <div style="padding: 0 {{ plpFootGutter }} 56px; display: flex; flex-direction: column; align-items: flex-start; gap: 14px;">
+                <span style="font-size: 12px; color: var(--color-neutral-700);">{{ countLabelProp }}</span>
+                <button class="btn btn-secondary" style="min-height: {{ tapH }};" onClick="{{ plpLoadMore }}" disabled="{{ plpLoadDisabled }}">{{ plpLoadLabel }}</button>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ plpIsMobile }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="padding: 0 16px;">
+            <div style="display: flex; flex-direction: column;">
+              <sc-for list="{{ filterGroups }}" as="fg" hint-placeholder-count="4">
+                <div style="border-top: 1px solid var(--color-divider);">
+                  <button type="button" aria-expanded="{{ fg.open }}" onClick="{{ fg.toggleOpen }}" style="width: 100%; min-height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 12px; background: none; border: 0; padding: 0; font: inherit; color: inherit; text-align: start; cursor: pointer;">
+                    <span style="font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;">{{ fg.label }}</span>
+                    <span style="display: flex; align-items: center; gap: 12px;">
+                      <span style="font-size: 12px; color: var(--color-neutral-700);">{{ fg.summary }}</span>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" style="transform: {{ fg.caret }}; transition: transform 180ms ease;"><path d="M6 9l6 6 6-6"/></svg>
+                    </span>
+                  </button>
+                  <sc-if value="{{ fg.open }}" hint-placeholder-val="{{ false }}">
+                    <div style="padding: 2px 0 22px;">
+                      <sc-if value="{{ fg.isCheck }}" hint-placeholder-val="{{ true }}">
+                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                          <sc-for list="{{ fg.items }}" as="fi" hint-placeholder-count="4">
+                            <label class="radio" style="min-height: 48px;"><input type="checkbox" checked="{{ fi.on }}" onChange="{{ fi.toggle }}"><span class="dot"></span><span>{{ fi.label }}</span><span style="margin-inline-start: auto; font-size: 12px; color: var(--color-neutral-600);">{{ fi.count }}</span></label>
+                          </sc-for>
+                        </div>
+                      </sc-if>
+                      <sc-if value="{{ fg.isChip }}" hint-placeholder-val="{{ false }}">
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                          <sc-for list="{{ fg.items }}" as="fi" hint-placeholder-count="6">
+                            <button onClick="{{ fi.toggle }}" aria-pressed="{{ fi.on }}" style="{{ fi.chipStyleTap }}">{{ fi.label }}</button>
+                          </sc-for>
+                        </div>
+                      </sc-if>
+                      <sc-if value="{{ fg.isSwatch }}" hint-placeholder-val="{{ false }}">
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                          <sc-for list="{{ fg.items }}" as="fi" hint-placeholder-count="4">
+                            <button aria-label="{{ fi.label }}" aria-pressed="{{ fi.on }}" onClick="{{ fi.toggle }}" style="{{ fi.swatchStyleTap }}"></button>
+                          </sc-for>
+                        </div>
+                      </sc-if>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-for>
+              <div style="border-top: 1px solid var(--color-divider); padding-top: 14px;">
+                <button class="btn btn-ghost" style="padding-inline-start: 0; min-height: 48px;" onClick="{{ clearFilters }}">{{ clearLabel }}</button>
+              </div>
+            </div>
+          </div>
+          <div style="padding: 18px 16px; border-top: 1px solid var(--color-divider); border-bottom: 1px solid var(--color-divider);">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px 24px;">
+              <span style="font-size: 13px; color: var(--color-neutral-800);">{{ toolbarCount }}</span>
+              <div class="seg" style="{{ toolbarSegStyle }}">
+                <sc-for list="{{ toolbarSorts }}" as="ts" hint-placeholder-count="3">
+                  <label class="seg-opt" style="min-height: {{ tapH }};"><input type="radio" name="{{ sortGroupName }}" checked="{{ ts.on }}" onChange="{{ ts.pick }}"><span>{{ ts.label }}</span></label>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+          <div style="padding: 20px 16px 32px;">
+            <sc-if value="{{ plpShowGrid }}" hint-placeholder-val="{{ true }}">
+              <div style="display: grid; grid-template-columns: {{ gridCols }}; gap: {{ gridGap }}; align-items: start;">
+                <sc-for list="{{ gridItems }}" as="it" hint-placeholder-count="6">
+                  <div style="display: flex; flex-direction: column; gap: 14px; min-width: 0;">
+                    <sc-if value="{{ it.isProduct }}" hint-placeholder-val="{{ true }}">
+                      <div style="display: flex; flex-direction: column; gap: 14px; cursor: pointer;" onClick="{{ it.open }}">
+                        <div style="position: relative; aspect-ratio: 4 / 5; background: var(--color-surface); overflow: hidden;">
+                          <img src="{{ it.src }}" alt="{{ it.alt }}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                          <sc-if value="{{ it.hasHover }}" hint-placeholder-val="{{ false }}">
+                            <img src="{{ it.hoverSrc }}" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; transition: opacity 240ms ease;" style-hover="opacity: 1;">
+                          </sc-if>
+                          <sc-if value="{{ it.hasTag }}" hint-placeholder-val="{{ false }}">
+                            <span class="{{ it.tagClass }}">{{ it.tag }}</span>
+                          </sc-if>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 5px;">
+                          <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700);">{{ it.meta }}</span>
+                          <span style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 16px;">{{ it.name }}</span>
+                          <div style="display: flex; align-items: baseline; gap: 10px;">
+                            <span style="font-size: 14px; color: {{ it.priceInk }};">{{ it.price }}</span>
+                            <sc-if value="{{ it.hasWas }}" hint-placeholder-val="{{ false }}">
+                              <span style="font-size: 13px; color: var(--color-neutral-600); text-decoration: line-through;">{{ it.was }}</span>
+                            </sc-if>
+                          </div>
+                          <sc-if value="{{ it.hasNote }}" hint-placeholder-val="{{ false }}">
+                            <span style="font-size: 12px; color: var(--color-neutral-700);">{{ it.note }}</span>
+                          </sc-if>
+                        </div>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ it.isPromo }}" hint-placeholder-val="{{ false }}">
+                      <a href="{{ it.href }}" style="display: flex; flex-direction: column; gap: 14px; background: var(--color-surface); padding: 0 0 18px; text-decoration: none; color: inherit;">
+                        <div style="aspect-ratio: 4 / 5; background: var(--color-text);">
+                          <img src="{{ it.src }}" alt="{{ it.alt }}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 8px; padding: 0 16px;">
+                          <span style="font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-accent);">{{ it.kicker }}</span>
+                          <span style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 18px; line-height: 1.14;">{{ it.name }}</span>
+                          <p style="margin: 0; font-size: 13px; color: var(--color-neutral-800); text-wrap: pretty;">{{ it.body }}</p>
+                        </div>
+                      </a>
+                    </sc-if>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ plpShowEmpty }}" hint-placeholder-val="{{ false }}">
+              <div style="border: 1px solid var(--color-divider); padding: clamp(32px, 5vw, 64px); display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center;">
+                <div style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 24px;">{{ emptyTitle }}</div>
+                <p style="margin: 0; font-size: 14px; color: var(--color-neutral-800); max-width: 42ch; text-wrap: pretty;">{{ emptyBody }}</p>
+                <button class="btn btn-primary" style="min-height: {{ tapH }}; margin-top: 8px;" onClick="{{ emptyGo }}">{{ emptyCta }}</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{ plpHasLoadMore }}" hint-placeholder-val="{{ false }}">
+              <div style="display: flex; flex-direction: column; gap: 14px; margin-top: 28px;">
+                <span style="font-size: 12px; color: var(--color-neutral-700);">{{ countLabelProp }}</span>
+                <button class="btn btn-secondary" style="min-height: 48px;" onClick="{{ plpLoadMore }}" disabled="{{ plpLoadDisabled }}">{{ plpLoadLabel }}</button>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <!-- ===== SEARCH — two variants sharing one toolbar/grid anatomy: pre-search
+       (recent queries + browse categories) and results (count + product grid,
+       reusing the same card as PLP). Bridge and Shift mount this instead of
+       hand-rolling their own idle/results markup. ===== -->
+  <sc-if value="{{ isSearch }}" hint-placeholder-val="{{ false }}">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-600); padding: {{ searchPad }} {{ searchPad }} 0;">Pre-search — recent queries and browse categories, shown before the visitor types</div>
+      <div style="display: grid; grid-template-columns: {{ searchPreCols }}; border-bottom: 2px solid var(--color-divider);">
+        <div style="border-inline-end: {{ searchBorderRight }}; padding: {{ searchPad }};">
+          <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 18px;">{{ searchRecentLabel }}</div>
+          <div style="display: flex; flex-direction: column;">
+            <sc-for list="{{ searchRecent }}" as="rq" hint-placeholder-count="3">
+              <button class="btn btn-ghost" style="justify-content: flex-start; min-height: {{ tapH }}; border-bottom: 1px solid var(--color-divider);" onClick="{{ rq.pick }}">{{ rq.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+        <div style="padding: {{ searchPad }};">
+          <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 18px;">{{ searchBrowseLabel }}</div>
+          <div style="display: grid; grid-template-columns: {{ searchCatCols }}; border-top: 1px solid var(--color-divider);">
+            <sc-for list="{{ searchCategories }}" as="ct" hint-placeholder-count="4">
+              <button class="btn btn-ghost" style="justify-content: flex-start; min-height: {{ tapH }}; border-bottom: 1px solid var(--color-divider); border-inline-end: 1px solid var(--color-divider);" onClick="{{ ct.go }}">{{ ct.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+      <div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-600); padding: {{ searchPad }} {{ searchPad }} 0;">Results — count + product grid, reusing the same product-card gallery as PLP</div>
+      <div>
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px 24px; padding: {{ searchToolbarPad }}; border-bottom: 1px solid var(--color-divider);">
+          <span style="font-size: 13px; color: var(--color-neutral-800);">{{ toolbarCount }}</span>
+        </div>
+        <div style="padding: {{ searchGridPad }};">
+          <div style="display: grid; grid-template-columns: {{ searchResultCols }}; gap: 32px 24px;">
+            <sc-for list="{{ gridItems }}" as="it" hint-placeholder-count="8">
+              <div style="display: flex; flex-direction: column; gap: 14px; cursor: pointer;" onClick="{{ it.open }}">
+                <div style="position: relative; aspect-ratio: 4 / 5; background: var(--color-surface); overflow: hidden;">
+                  <img src="{{ it.src }}" alt="{{ it.alt }}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                  <sc-if value="{{ it.hasHover }}" hint-placeholder-val="{{ false }}">
+                    <img src="{{ it.hoverSrc }}" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; transition: opacity 240ms ease;" style-hover="opacity: 1;">
+                  </sc-if>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                  <span style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-700);">{{ it.meta }}</span>
+                  <span style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 16px;">{{ it.name }}</span>
+                  <span style="font-size: 14px;">{{ it.price }}</span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ===== ORDER SUMMARY — bag lines, promo, totals ===== -->
+  <sc-if value="{{ isSummary }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 22px;">
+        <h3 style="margin: 0;">{{ summaryTitle }}</h3>
+        <span style="font-size: 12px; color: var(--color-neutral-700);">{{ summaryCount }}</span>
+      </div>
+      <div style="border-top: {{ ruleStrong }} solid var(--color-divider);">
+        <sc-for list="{{ summaryItems }}" as="bi" hint-placeholder-count="2">
+          <div style="display: grid; grid-template-columns: 84px minmax(0, 1fr) auto; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--color-divider); align-items: start;">
+            <div style="height: 104px; background: var(--color-surface);"><img src="{{ bi.src }}" alt="{{ bi.alt }}" style="width: 100%; height: 100%; object-fit: cover; display: block;"></div>
+            <div style="display: flex; flex-direction: column; gap: 8px; min-width: 0;">
+              <span style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 14px;">{{ bi.name }}</span>
+              <span style="font-size: 12px; color: var(--color-neutral-700);">{{ bi.variant }}</span>
+              <div class="qty">
+                <button type="button" aria-label="Decrease quantity" onClick="{{ bi.dec }}" disabled="{{ bi.atMin }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><path d="M5 12h14"/></svg></button>
+                <span class="qty-value">{{ bi.qty }}</span>
+                <button type="button" aria-label="Increase quantity" onClick="{{ bi.inc }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><path d="M12 5v14M5 12h14"/></svg></button>
+              </div>
+              <button class="btn btn-ghost" style="padding-inline-start: 0; font-size: 12px; align-self: flex-start;" onClick="{{ bi.remove }}">{{ removeLabel }}</button>
+            </div>
+            <span style="font-size: 14px; white-space: nowrap;">{{ bi.price }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display: flex; gap: 8px; align-items: flex-end; padding: 22px 0; border-bottom: 1px solid var(--color-divider);">
+        <div class="field" style="flex: 1;"><label for="blk-promo">{{ promoLabel }}</label><input class="input" id="blk-promo" placeholder="{{ promoPlaceholder }}"></div>
+        <button class="btn btn-secondary" style="min-height: {{ tapH }};">{{ applyLabel }}</button>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr auto; gap: 12px; padding: 22px 0; font-size: 14px;">
+        <sc-for list="{{ summaryLines }}" as="sl" hint-placeholder-count="3">
+          <span style="color: var(--color-neutral-800);">{{ sl.label }}</span><span style="text-align: end;">{{ sl.value }}</span>
+        </sc-for>
+      </div>
+      <div style="border-top: {{ ruleStrong }} solid var(--color-divider); padding-top: 18px; display: flex; align-items: baseline; justify-content: space-between; gap: 16px;">
+        <span style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 18px;">{{ totalLabel }}</span>
+        <span style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 26px;">{{ totalValue }}</span>
+      </div>
+      <div style="margin-top: 24px; display: flex; flex-direction: column; gap: 10px; font-size: 12px; color: var(--color-neutral-800);">
+        <sc-for list="{{ summaryAssurances }}" as="sa" hint-placeholder-count="3">
+          <span>{{ sa.text }}</span>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:320},&quot;brand&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;bridge&quot;,&quot;shift&quot;],&quot;default&quot;:&quot;bridge&quot;,&quot;tsType&quot;:&quot;'bridge' | 'shift'&quot;,&quot;section&quot;:&quot;Brand&quot;},&quot;block&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;nav&quot;,&quot;footer&quot;,&quot;menu&quot;,&quot;logo&quot;,&quot;locale&quot;,&quot;hero&quot;,&quot;crossover&quot;,&quot;grid&quot;,&quot;crosssell&quot;,&quot;productHero&quot;,&quot;summary&quot;,&quot;gallery&quot;,&quot;plp&quot;,&quot;search&quot;],&quot;default&quot;:&quot;nav&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Block&quot;},&quot;device&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;desktop&quot;,&quot;mobile&quot;],&quot;default&quot;:&quot;desktop&quot;,&quot;tsType&quot;:&quot;'desktop' | 'mobile'&quot;,&quot;section&quot;:&quot;Block&quot;},&quot;heroLayout&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;split&quot;,&quot;stacked&quot;],&quot;default&quot;:&quot;stacked&quot;,&quot;tsType&quot;:&quot;'split' | 'stacked'&quot;,&quot;section&quot;:&quot;Block&quot;},&quot;showAnnouncement&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Block&quot;},&quot;bagCount&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:0,&quot;min&quot;:0,&quot;max&quot;:99,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Block&quot;},&quot;accountLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Block&quot;},&quot;heroHeight&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;620px&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Block&quot;},&quot;cardHeight&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;330px&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Block&quot;},&quot;cardMin&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Block&quot;},&quot;countLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Block&quot;},&quot;summaryTitle&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Block&quot;},&quot;summaryCount&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Block&quot;},&quot;total&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Block&quot;},&quot;crossSellTitle&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Cross-sell&quot;},&quot;crossSellCta&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Cross-sell&quot;},&quot;crossSellDest&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;string&quot;},&quot;padSection&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;string&quot;},&quot;heroBackLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Product hero&quot;},&quot;heroCrumbCurrent&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Product hero&quot;},&quot;heroBackDest&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;string&quot;},&quot;heroKicker&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Product hero&quot;},&quot;heroTitle&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Product hero&quot;},&quot;heroPrice&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Product hero&quot;},&quot;heroWas&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Product hero&quot;},&quot;heroSaving&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Product hero&quot;},&quot;images&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;{ id: string; brief?: string }[]&quot;},&quot;hero&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;{ layout?: 'split' | 'stacked'; kicker?: string; title?: string; body?: string; primary?: string; secondary?: string; img?: string; alt?: string; caption?: string }&quot;},&quot;crossover&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;{ kicker?: string; title?: string; body?: string; points?: string[]; cta?: string; href?: string; img?: string; imgAlt?: string }&quot;},&quot;products&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;{ kind?: 'promo'; id?: string; name: string; meta?: string; price: string; was?: string; note?: string; tag?: string; tagTone?: 'solid' | 'quiet' | 'accent'; src: string; hoverSrc?: string; alt?: string; dest?: string; kicker?: string; body?: string; cta?: string; href?: string }[]&quot;,&quot;section&quot;:&quot;Cross-sell&quot;},&quot;filters&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;{ label: string; kind?: 'check' | 'chip' | 'swatch'; items: { label: string; on?: boolean; count?: string; value?: string }[] }[]&quot;},&quot;sorts&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;{ key?: string; label: string; on?: boolean }[]&quot;},&quot;bag&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;{ name: string; variant?: string; price: string; qty?: number; src: string; alt?: string }[]&quot;},&quot;lines&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;{ label: string; value: string }[]&quot;},&quot;assurances&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;string[]&quot;},&quot;empty&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;{ title?: string; body?: string; cta?: string; dest?: string }&quot;},&quot;loadMore&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;{ label?: string; disabled?: boolean }&quot;},&quot;searchVariant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;pre&quot;,&quot;results&quot;],&quot;default&quot;:&quot;pre&quot;,&quot;tsType&quot;:&quot;'pre' | 'results'&quot;,&quot;section&quot;:&quot;Search&quot;},&quot;recentSearches&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;string[]&quot;},&quot;categories&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;{ label: string; dest?: string }[]&quot;},&quot;onNavigate&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(dest: string, payload?: unknown) =&amp;gt; void&quot;}}">
+class Component extends DCLogic {
+  state = { menuOpen: false, menuQuery: '', galActive: 0, localeTick: 0, filterOpen: {}, logoHover: false };
+
+  logoHoverOn() { this.setState({ logoHover: true }); }
+  logoHoverOff() { this.setState({ logoHover: false }); }
+
+  logoStyles(fontSize) {
+    const hover = this.state.logoHover;
+    return {
+      wordmark: {
+        position: 'absolute', left: 0, top: '50%', whiteSpace: 'nowrap',
+        fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-heading-weight)',
+        fontSize: fontSize, letterSpacing: '-0.03em', lineHeight: 1, color: 'var(--color-logo)',
+        transition: 'opacity .28s ease, transform .28s ease',
+        opacity: hover ? 0 : 1,
+        transform: hover ? 'translateY(-50%) translateX(10px)' : 'translateY(-50%)',
+      },
+      icon: {
+        position: 'absolute', left: 2, top: '50%',
+        transition: 'opacity .28s ease, transform .28s ease',
+        opacity: hover ? 1 : 0,
+        transform: hover ? 'translateY(-50%) translateX(0) scale(1)' : 'translateY(-50%) translateX(-8px) scale(.9)',
+      },
+      wheel: {
+        transformBox: 'fill-box', transformOrigin: 'center',
+        animation: hover ? 'bridgeLogoSpin 1s linear infinite' : 'none',
+      },
+    };
+  }
+
+  // one radio group per mounted instance — two toolbars on a page must not share
+  // a group, or the later mount silently unchecks the earlier one
+  sortGroup = 'sort-' + Math.random().toString(36).slice(2, 9);
+
+  // "Jersey, Outerwear" / "2 selected" / "" — what a collapsed accordion row shows
+  groupSummary(g) {
+    const on = (g.items || []).filter((it) => it.on);
+    if (!on.length) return '';
+    if (g.kind === 'swatch') return on.length + (on.length === 1 ? ' colour' : ' colours');
+    if (on.length <= 2) return on.map((it) => it.label).join(', ');
+    return on.length + ' selected';
+  }
+
+  componentDidMount() {
+    const attach = () => {
+      const s = window.BridgeLocale;
+      if (!s) { this._lRetry = setTimeout(attach, 60); return; }
+      this._lUnsub = s.subscribe(() => this.setState({ localeTick: this.state.localeTick + 1 }));
+      this.setState({ localeTick: this.state.localeTick + 1 });
+    };
+    attach();
+  }
+  componentWillUnmount() {
+    clearTimeout(this._lRetry);
+    if (this._lUnsub) this._lUnsub();
+  }
+
+  shots() {
+    const g = this.props.images;
+    const given = Array.isArray(g) ? g.filter((s) => s && s.src) : [];
+    if (given.length) return given;
+    // standalone preview / library documentation set
+    return [
+      { src: 'bridge/A1-pro-jersey-blue-front.jpeg', alt: 'Pro jersey, front' },
+      { src: 'bridge/B2-collar-zip-detail-blue.jpeg', alt: 'Collar and zip detail' },
+      { src: 'bridge/B3-rider-vineyard-blue-jersey.jpeg', alt: 'Rider in the jersey on the road' },
+      { src: 'bridge/E4-hands-on-bars-gloves.jpeg', alt: 'Hands on the bars' },
+    ];
+  }
+
+  // fallback demo content so switching the block/hero-layout prop in isolation
+  // (no page wiring it up yet) always shows something real, not an empty shell
+  heroDemo(isShift) {
+    return isShift
+      ? { layout: 'split', kicker: 'Circularity at Bridge', title: 'Changing how we make, use and reuse cycling gear.', body: 'Bridge builds kit to last a decade. SHIFT keeps it moving after the first owner — repaired at the bench, regraded, resold, and eventually broken back down into the next one.', primary: 'Trade in your kit', secondary: 'Book a repair', secondaryTone: 'secondary', img: 'bridge/E1-repair-bench-hands-green.jpeg', alt: 'Hands re-stitching a jersey at the repair bench', caption: 'Bench 04 · Girona' }
+      : { layout: 'stacked', kicker: 'Spring collection', title: 'Kit built to outlast the season it was named for.', body: 'Every Bridge jersey, bib and shell is cut for a decade of riding — then repaired, regraded and resold through SHIFT rather than replaced.', primary: 'Shop the collection', secondary: 'How we make it', secondaryTone: 'secondary', img: 'bridge/hero-three-riders-cobalt.jpeg', alt: 'Three riders in Bridge jerseys and bibs standing with road bikes against a cobalt ground', caption: 'Spring 26 · Girona' };
+  }
+
+  demoCatalog(isShift) {
+    const J = 'bridge-jerseys/', O = 'bridge-outerwear/';
+    const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'].map((z) => ({ label: z, on: z === 'M' }));
+    const colours = [{ label: 'Teal', value: '#1f6b74' }, { label: 'Blue', value: '#28418f', on: true }, { label: 'Burgundy', value: '#6d2233' }, { label: 'Black', value: '#1a1918' }];
+    return {
+      filters: isShift ? [
+        { label: 'All grades', kind: 'chip', items: [{ label: 'All grades', on: true }, { label: 'Grade A' }, { label: 'Grade B' }] },
+        { label: 'Product type', kind: 'check', items: [{ label: 'Everything', on: true }, { label: 'Jerseys', count: '6' }, { label: 'Outerwear', count: '2' }] },
+        { label: 'Size', kind: 'chip', items: sizes },
+        { label: 'Colour', kind: 'swatch', items: colours },
+      ] : [
+        { label: 'Product type', kind: 'check', items: [{ label: 'Jerseys', on: true, count: '12' }, { label: 'Outerwear', count: '8' }] },
+        { label: 'Size', kind: 'chip', items: sizes },
+        { label: 'Colour', kind: 'swatch', items: colours },
+      ],
+      sorts: [{ key: 'new', label: 'Newest', on: true }, { key: 'low', label: 'Price low' }, { key: 'high', label: 'Price high' }],
+      countLabel: isShift ? '9 pieces · 3 graded A' : 'Showing 6 of 24',
+      products: isShift ? [
+        { name: 'Cadence Roll-Neck', meta: 'Jersey · Grade A', price: '£29', was: '£60', tag: 'Grade A', tagTone: 'accent', note: 'Second life no. 04206', src: J + 'M01.jpeg', hoverSrc: J + 'M01-closeup.jpeg', alt: 'Cadence roll-neck' },
+        { name: 'Featherweight Shell — Forest', meta: 'Outerwear · Grade B', price: '£64', was: '£160', tag: 'Grade B', tagTone: 'solid', note: 'Second life no. 03980', src: O + 'mens-featherweight-shell-forest.jpeg', hoverSrc: O + 'mens-featherweight-shell-forest-detail.jpeg', alt: 'Featherweight shell, forest' },
+        { name: 'Deco Jersey — Lagoon', meta: 'Jersey · Grade A', price: '£46', was: '£88', tag: 'Grade A', tagTone: 'accent', note: 'Second life no. 04231', src: J + 'W01.jpeg', hoverSrc: J + 'W01-closeup.jpeg', alt: 'Deco Jersey, lagoon' },
+        { name: 'Magma Jersey — Ember', meta: 'Jersey · Grade B', price: '£42', was: '£88', tag: 'Grade B', tagTone: 'solid', note: 'Second life no. 04102', src: J + 'M03.jpeg', hoverSrc: J + 'M03-closeup.jpeg', alt: 'Magma Jersey, ember' },
+      ] : [
+        { name: 'Facet Jersey — Harbour', meta: 'Jersey', price: '£145', src: J + 'M06.jpeg', hoverSrc: J + 'M06-closeup.jpeg', alt: 'Facet Jersey, harbour' },
+        { name: 'Deco Jersey — Lagoon', meta: 'Jersey', price: '£145', src: J + 'W01.jpeg', hoverSrc: J + 'W01-closeup.jpeg', alt: 'Deco Jersey, lagoon' },
+        { name: 'Jacquard Thermal — Forest', meta: 'Outerwear', price: '£290', src: O + 'mens-jacquard-thermal-jacket-forest.jpeg', hoverSrc: O + 'mens-jacquard-thermal-jacket-forest-detail.jpeg', alt: 'Jacquard thermal jacket, forest' },
+        { name: 'Series 01 Jersey — Cobalt', meta: 'Jersey', price: '£145', src: J + 'M07.jpeg', hoverSrc: J + 'M07-closeup.jpeg', alt: 'Series 01 Jersey, cobalt' },
+      ],
+    };
+  }
+
+  go(dest, payload) {
+    const fn = this.props.onNavigate;
+    if (typeof fn === 'function') fn(dest, payload);
+  }
+  runMenuSearch() {
+    const q = (this.state.menuQuery || '').trim();
+    this.setState({ menuOpen: false });
+    this.go('search', q);
+  }
+
+  brandData(str) {
+    const shift = this.props.brand === 'shift';
+    if (shift) {
+      return {
+        brandKey: 'shift',
+        isShift: true,
+        brandWord: 'SHIFT',
+        crossHref: 'BridgeShop.dc.html',
+        crossLabel: 'Bridge',
+        crossLabelLong: 'Visit Bridge',
+        announceLine: 'Second life no. 41,208 logged today',
+        announceShort: 'Repairs for life · Trade in any Bridge piece',
+        footerBlurb: 'Repair, resale and recovery for Bridge cycling gear. A Bridge company, run as its own house.',
+        footerBlurbShort: 'Repair, resale and recovery for Bridge cycling gear.',
+        copyrightLine: '© 2026 Bridge Cycling · SHIFT',
+        navLinks: [
+          { label: str.sfPreOwned || 'Pre-owned', dest: 'plp' },
+          { label: str.sfRepair || 'Repair', dest: 'repair' },
+          { label: str.sfTradeIn || 'Trade-in', dest: 'tradein' },
+          { label: str.sfMaterials || 'Materials', dest: 'materials' },
+          { label: str.sfFieldNotes || 'Field notes', dest: 'journal' },
+        ],
+        footerCols: [
+          { head: str.sfCircularity, items: [{ label: str.sfShopPreOwned, href: 'ShiftShop.dc.html' }, { label: str.sfBookRepair, href: 'ShiftHome.dc.html#shift-repair' }, { label: str.sfTradeKit, href: 'ShiftHome.dc.html#shift-tradein' }, { label: str.sfMaterialsMethod, href: 'ShiftHome.dc.html#shift-pillars' }] },
+          { head: str.sfHouse, items: [{ label: str.sfTheLedger, href: 'ShiftHome.dc.html#shift-ledger' }, { label: str.sfFieldNotes, href: 'ShiftHome.dc.html#shift-journal' }, { label: str.sfBenchHours, href: 'ShiftHome.dc.html#shift-repair' }, { label: str.sfGrading, href: 'ShiftHome.dc.html#shift-resale' }] },
+          { head: str.acAccount || 'Account', items: [{ label: str.signIn, href: 'ShiftLogin.dc.html' }, { label: str.sfYourRecord, href: 'ShiftAccount.dc.html' }, { label: str.sfDropNotices, href: 'ShiftNotices.dc.html' }, { label: str.xsCta, href: 'BridgeShop.dc.html' }] },
+        ],
+        footerColsShort: [
+          { head: str.sfCircularity, items: [{ label: str.sfPreOwned, href: 'ShiftShop.dc.html' }, { label: str.sfRepair, href: 'ShiftHome.dc.html#shift-repair' }, { label: str.sfTradeIn, href: 'ShiftHome.dc.html#shift-tradein' }] },
+          { head: str.sfHouse, items: [{ label: str.sfTheLedger, href: 'ShiftHome.dc.html#shift-ledger' }, { label: str.sfYourRecord, href: 'ShiftAccount.dc.html' }, { label: str.xsCta, href: 'BridgeShop.dc.html' }] },
+        ],
+        cross: {
+          kicker: str.xsKicker, title: str.xsTitle, body: str.xsBody,
+          points: [str.xsP1, str.xsP2, str.xsP3],
+          cta: str.xsCta, href: 'BridgeShop.dc.html',
+          img: 'bridge/C2-rider-mountain-road.jpeg',
+          imgAlt: 'A rider on an open mountain road in Bridge kit',
+        },
+      };
+    }
+    return {
+      brandKey: 'bridge',
+      isShift: false,
+      brandWord: 'Bridge',
+      crossHref: 'ShiftHome.dc.html',
+      crossLabel: 'SHIFT',
+      crossLabelLong: 'Visit SHIFT',
+      announceLine: str.announce,
+      announceShort: str.announceShort,
+      footerBlurb: str.footerBlurb,
+      footerBlurbShort: str.footerBlurbShort,
+      copyrightLine: str.copyright,
+      navLinks: [
+        { label: str.nvMen || 'Men', dest: 'men' },
+        { label: str.nvWomen || 'Women', dest: 'women' },
+        { label: str.accessories, dest: 'accessories' },
+        { label: str.journal, dest: 'journal' },
+      ],
+      footerCols: [
+        { head: str.shop, items: [{ label: str.catJerseys, href: 'BridgeShop.dc.html?screen=plp&type=jersey' }, { label: str.catOuterwear, href: 'BridgeShop.dc.html?screen=plp&type=outerwear' }, { label: str.accessories, href: 'BridgeShop.dc.html?screen=plp&type=accessories' }] },
+        { head: str.help, items: [{ label: str.sizeGuide, href: 'BridgeShop.dc.html' }, { label: str.delivery, href: 'BridgeShop.dc.html' }, { label: str.returns, href: 'BridgeShop.dc.html' }, { label: str.repairs, href: 'ShiftHome.dc.html#shift-repair' }, { label: str.contact, href: 'BridgeShop.dc.html' }] },
+        { head: str.studio, items: [{ label: str.about, href: 'BridgeShop.dc.html' }, { label: str.workshop, href: 'BridgeShop.dc.html' }, { label: str.sustainability, href: 'ShiftHome.dc.html' }, { label: str.stockists, href: 'BridgeShop.dc.html' }] },
+      ],
+      footerColsShort: [
+        { head: str.shop, items: [{ label: str.catJerseys, href: 'BridgeShop.dc.html?screen=plp&type=jersey' }, { label: str.catOuterwear, href: 'BridgeShop.dc.html?screen=plp&type=outerwear' }] },
+        { head: str.help, items: [{ label: str.sizeGuide, href: 'BridgeShop.dc.html' }, { label: str.returns, href: 'BridgeShop.dc.html' }, { label: str.repairs, href: 'ShiftHome.dc.html#shift-repair' }] },
+      ],
+      cross: {
+        kicker: str.xbKicker, title: str.xbTitle, body: str.xbBody,
+        points: [str.xbP1, str.xbP2, str.xbP3],
+        cta: str.xbCta, href: 'ShiftHome.dc.html',
+        img: 'bridge/E2-folded-stack-repair-label.jpeg',
+        imgAlt: 'Folded kit with a repair label on a workshop bench',
+      },
+    };
+  }
+
+  renderVals() {
+    const block = this.props.block || 'nav';
+    const mobile = this.props.device === 'mobile';
+    const gal = this.shots();
+    const active = Math.max(0, Math.min(this.state.galActive, gal.length - 1));
+    const store = window.BridgeLocale;
+    const loc = store ? store.get() : null;
+    const str = store ? store.strings() : {};
+    const brand = this.brandData(str);
+    const arr = (v) => (Array.isArray(v) ? v : []);
+    const heroFallback = this.heroDemo(brand.isShift);
+    const hero = Object.assign({}, heroFallback, this.props.hero || {});
+    if (this.props.heroLayout) hero.layout = this.props.heroLayout;
+    const heroLayout = hero.layout === 'split' ? 'split' : 'stacked';
+    const openGroups = this.state.filterOpen || {};
+    const filtersLayout = this.props.filtersLayout || (mobile ? 'accordion' : 'rail');
+    // one gutter value, shared by the hero and every page section
+    const pageGutter = 'clamp(16px, 5vw, 64px)';
+    // the crossover copy is the brand's own by default; a page can override any field
+    const xo = Object.assign({}, brand.cross, this.props.crossover || {});
+    const steps = arr(this.props.steps);
+    const current = Math.max(0, Math.min(this.props.currentStep == null ? 0 : this.props.currentStep, steps.length - 1));
+    const demo = this.demoCatalog(brand.isShift);
+    const products = this.props.products ? arr(this.props.products) : demo.products;
+    const filters = this.props.filters ? arr(this.props.filters) : demo.filters;
+    const sorts = this.props.sorts ? arr(this.props.sorts) : demo.sorts;
+    const bag = arr(this.props.bag);
+    const promo = this.props.promo || {};
+    const alert = this.props.alert || {};
+    const alertTone = alert.tone || this.props.alertTone || 'info';
+    const qty = this.props.qtyValue == null ? 1 : this.props.qtyValue;
+    const bagN = this.props.bagCount ?? 0;
+    const brandIsShift = this.props.brand === 'shift';
+    return {
+      hasBag: bagN > 0,
+      // one legal document set, reached from either house
+      legalTerms: (brandIsShift ? 'BridgeLegal.dc.html?doc=terms&brand=shift' : 'BridgeLegal.dc.html?doc=terms'),
+      legalPrivacy: (brandIsShift ? 'BridgeLegal.dc.html?doc=privacy&brand=shift' : 'BridgeLegal.dc.html?doc=privacy'),
+      legalCookies: (brandIsShift ? 'BridgeLegal.dc.html?doc=cookies&brand=shift' : 'BridgeLegal.dc.html?doc=cookies'),
+      bagAria: (str.bag || 'Bag') + ' — ' + bagN,
+      str: str,
+      brandKey: brand.brandKey,
+      isShift: brand.isShift,
+      isBridgeLogo: !brand.isShift,
+      brandWord: brand.brandWord,
+      logoOnEnter: () => this.logoHoverOn(),
+      logoOnLeave: () => this.logoHoverOff(),
+      logoStylesLg: this.logoStyles('30px'),
+      logoStylesSm: this.logoStyles('24px'),
+      crossHref: xo.href || brand.crossHref,
+      crossLabel: brand.crossLabel,
+      crossLabelLong: brand.crossLabelLong,
+      announceLine: brand.announceLine,
+      announceShort: brand.announceShort,
+      footerBlurb: brand.footerBlurb,
+      footerBlurbShort: brand.footerBlurbShort,
+      copyrightLine: brand.copyrightLine,
+      footerCols: brand.footerCols,
+      footerColsShort: brand.footerColsShort,
+
+      // ── shared brand rhythm: the one place the two houses diverge on measure ──
+      pageMax: brand.isShift ? '1760px' : '1680px',
+      padBlock: mobile ? '28px 16px 32px' : brand.isShift ? 'clamp(40px, 5vw, 80px) clamp(16px, 5vw, 64px)' : '56px 40px',
+      ruleStrong: brand.isShift ? '1px' : '2px',
+      kickerSize: brand.isShift ? '10px' : '11px',
+      kickerTrack: brand.isShift ? '0.2em' : '0.14em',
+      heroLead: brand.isShift ? '1.02' : '1.0',
+      tapH: mobile ? '48px' : brand.isShift ? '46px' : '38px',
+
+      // ── HERO ──
+      isHeroSplit: block === 'hero' && heroLayout === 'split',
+      isHeroStacked: block === 'hero' && heroLayout === 'stacked',
+      // the hero gutter tracks the PAGE gutter, not the generic block padding —
+      // otherwise hero copy sits on a different left edge to every section below it
+      heroPad: mobile ? '28px 16px 32px' : 'clamp(40px, 5vw, 80px) ' + pageGutter,
+      heroStackGutter: mobile ? '16px' : pageGutter,
+      heroStackFoot: mobile ? '32px' : '40px',
+      // proportion, not viewport width — a fixed-width mount must scale with its
+      // own frame, and the source photograph is 1280x698 (~16/9 wide)
+      // the frame takes the photograph's own proportion, so a full-body kit shot
+      // is never cropped at the feet — at any mount width, desktop or phone
+      heroStackImgH: 'auto',
+      heroStackImgRatio: hero.ratio || '1280 / 698',
+
+      heroSplit: mobile ? '1fr' : brand.isShift ? 'minmax(0, 1fr) minmax(0, 1fr)' : 'minmax(0, 5fr) minmax(0, 7fr)',
+      heroRule: mobile ? 'none' : (brand.isShift ? '1px' : '2px') + ' solid var(--color-divider)',
+      heroGap: mobile ? '28px' : '48px',
+      heroImgH: mobile ? '320px' : brand.isShift ? '540px' : '560px',
+      heroTitleSize: mobile ? '38px' : brand.isShift ? 'clamp(38px, 4.4vw, 78px)' : 'clamp(40px, 4vw, 66px)',
+      heroKicker: hero.kicker || '',
+      heroTitle: hero.title || '',
+      heroBody: hero.body || '',
+      heroPrimary: hero.primary || '',
+      heroSecondary: hero.secondary || '',
+      hasHeroSecondary: !!hero.secondary,
+      goJournal: () => this.go('journal'),
+      heroSecondaryClass: 'btn ' + (hero.secondaryTone === 'primary' ? 'btn-primary' : 'btn-secondary'),
+      heroPrimaryGo: () => this.go(hero.primaryDest || 'plp'),
+      heroSecondaryGo: () => this.go(hero.secondaryDest || 'plp'),
+      heroImg: hero.img || '',
+      heroAlt: hero.alt || '',
+      hasHeroCaption: !!hero.caption,
+      heroCaption: hero.caption || '',
+
+      // ── BRAND CROSSOVER ──
+      isCrossover: block === 'crossover',
+      crossSplit: mobile ? '1fr' : brand.isShift ? 'minmax(0, 5fr) minmax(0, 7fr)' : 'minmax(0, 1fr) minmax(0, 1fr)',
+      crossImgOrder: brand.isShift ? '1' : '0',
+      crossImgH: mobile ? '280px' : '460px',
+      crossImg: xo.img,
+      crossImgAlt: xo.imgAlt,
+      crossKicker: xo.kicker,
+      crossTitle: xo.title,
+      crossBody: xo.body,
+      crossCta: xo.cta,
+      crossTitleSize: mobile ? '30px' : brand.isShift ? 'clamp(30px, 3.2vw, 46px)' : 'clamp(30px, 3vw, 44px)',
+      crossPoints: (xo.points || []).map((t) => ({ text: t })),
+
+      // ── STEPPER ──
+      isStepper: block === 'stepper',
+      stepperMax: mobile ? '100%' : '460px',
+      stepperSteps: steps.map((label, i) => {
+        const state = i < current ? 'done' : i === current ? 'current' : 'todo';
+        return { label: label, num: String(i + 1), state: state, done: state === 'done', pending: state !== 'done' };
+      }),
+
+      // ── PRODUCT HERO ──
+      isProductHero: block === 'productHero',
+      pdpHeaderOnly: this.props.pdpDemo === false || this.props.pdpDemo === 'false',
+      pdpFullDemo: !(this.props.pdpDemo === false || this.props.pdpDemo === 'false'),
+      padPdpGutter: mobile ? '16px' : brand.isShift ? 'clamp(16px, 5vw, 64px)' : '40px',
+      pdpDemoCols: mobile ? '1fr' : 'minmax(0, 1fr) minmax(0, 1fr)',
+      pdpDemoGap: mobile ? '24px' : '56px',
+      pdpDemoGalH: mobile ? '360px' : '520px',
+      heroBackLabel: this.props.heroBackLabel || (brand.isShift ? 'Pre-owned' : 'Men'),
+      heroCrumbCurrent: this.props.heroCrumbCurrent || (brand.isShift ? 'Cadence Roll-Neck' : 'Series 01 Pro Jersey'),
+      heroBackGo: () => this.go(this.props.heroBackDest || 'plp'),
+      heroImages: arr(this.props.images),
+      heroGalleryH: mobile ? '440px' : (this.props.heroHeight || '620px'),
+      pdpKicker: this.props.heroKicker || (brand.isShift ? 'Grade A' : 'Race fit series'),
+      pdpTitle: this.props.heroTitle || (brand.isShift ? 'Cadence Roll-Neck' : 'Series 01 Pro Jersey'),
+      heroH1Size: mobile ? '30px' : brand.isShift ? 'clamp(28px, 3vw, 40px)' : 'clamp(28px, 3vw, 38px)',
+      heroPrice: this.props.heroPrice || (brand.isShift ? '£29' : '£165'),
+      heroPriceInk: this.props.heroWas ? 'var(--color-signal-700)' : 'var(--color-text)',
+      hasHeroWas: !!this.props.heroWas,
+      heroWas: this.props.heroWas || '',
+      hasHeroSaving: !!this.props.heroSaving,
+      heroSaving: this.props.heroSaving || '',
+
+      // ── CROSS-SELL ──
+      isCrossSell: block === 'crosssell',
+      crossSellPad: this.props.padSection || (mobile ? '32px 16px' : '56px 40px'),
+      crossSellTitle: this.props.crossSellTitle || (brand.isShift ? 'Completes the kit' : 'New this season'),
+      crossSellCta: this.props.crossSellCta || '',
+      hasCrossSellCta: !!this.props.crossSellCta,
+      crossSellGo: () => this.go(this.props.crossSellDest || 'plp'),
+      // A cross-sell rail has a fixed, small item count, so auto-fill would
+      // leave empty tracks and the row would stop short of the container.
+      // Divide the full width by the number of items instead.
+      crossSellCols: mobile
+        ? 'repeat(2, minmax(0, 1fr))'
+        : 'repeat(' + Math.max(1, Math.min(products.length || 4, 6)) + ', minmax(0, 1fr))',
+
+      // ── PRODUCT GRID ──
+      isGrid: block === 'grid',
+      gridCols: mobile
+        ? 'repeat(2, minmax(0, 1fr))'
+        : 'repeat(auto-fill, minmax(' + (this.props.cardMin || (brand.isShift ? '230px' : '250px')) + ', 1fr))',
+      gridGap: mobile ? '20px 12px' : brand.isShift ? 'clamp(20px, 2.4vw, 36px)' : '32px 24px',
+      // PLP can take an explicit desktop column count (`cols`) so wide windows
+      // don't add a fifth track.
+      plpGridCols: mobile
+        ? 'repeat(2, minmax(0, 1fr))'
+        : this.props.cols
+          ? 'repeat(' + this.props.cols + ', minmax(0, 1fr))'
+          : 'repeat(auto-fill, minmax(' + (this.props.cardMin || (brand.isShift ? '230px' : '250px')) + ', 1fr))',
+      gridItems: products.map((p, i) => ({
+        isPromo: p.kind === 'promo',
+        isProduct: p.kind !== 'promo',
+        src: p.src || '',
+        alt: p.alt || p.name || '',
+        hoverSrc: p.hoverSrc || '',
+        hasHover: !!p.hoverSrc,
+        name: p.name || '',
+        meta: p.meta || '',
+        price: p.price || '',
+        // a reduced price is the only place a product price leaves the ink role
+        priceInk: p.was ? 'var(--color-signal-700)' : 'var(--color-text)',
+        was: p.was || '',
+        hasWas: !!p.was,
+        note: p.note || '',
+        hasNote: !!p.note,
+        tag: p.tag || '',
+        hasTag: !!p.tag,
+        tagClass: 'tag tag-on-image ' + (p.tagTone === 'quiet' ? 'tag-quiet' : p.tagTone === 'accent' ? 'tag-accent' : p.tagTone === 'sale' ? 'tag-sale' : 'tag-solid'),
+        kicker: p.kicker || '',
+        body: p.body || '',
+        cta: p.cta || '',
+        href: p.href || '#',
+        open: () => this.go(p.dest || 'product', p.id != null ? p.id : i),
+      })),
+
+      // ── PROMO / ADVERT CARD ──
+      isPromo: block === 'promo',
+      promoSrc: promo.src || xo.img,
+      promoAlt: promo.alt || xo.imgAlt,
+      promoKicker: promo.kicker || xo.kicker,
+      promoTitle: promo.title || xo.title,
+      promoBody: promo.body || xo.body,
+      promoCta: promo.cta || xo.cta,
+      promoHref: promo.href || brand.crossHref,
+
+      // ── ALERT ──
+      isAlert: block === 'alert',
+      alertClass: 'alert alert-' + alertTone,
+      alertIcon: alertTone === 'success'
+        ? 'm5 13 5 5 9-11'
+        : alertTone === 'error' || alertTone === 'warning'
+          ? 'M12 8v6M12 17v.5'
+          : 'M12 11v6M12 7v.5',
+      alertTitle: alert.title || '',
+      hasAlertTitle: !!alert.title,
+      alertBody: alert.body || this.props.alertBody || '',
+
+      // ── QUANTITY PICKER ──
+      isQty: block === 'qty',
+      qtyValue: String(qty),
+      qtyAtMin: qty <= (this.props.qtyMin == null ? 1 : this.props.qtyMin),
+      qtyAtMax: qty >= (this.props.qtyMax == null ? 99 : this.props.qtyMax),
+      qtyDecLabel: str.shDecreaseQty || 'Decrease quantity',
+      qtyIncLabel: str.shIncreaseQty || 'Increase quantity',
+      qtyDec: () => this.go('qty', { index: this.props.qtyIndex || 0, delta: -1 }),
+      qtyInc: () => this.go('qty', { index: this.props.qtyIndex || 0, delta: 1 }),
+
+      // ── FILTER RAIL / ACCORDION ──
+      // the accordion is the phone form of the same rail: identical groups and
+      // controls, one collapsed row each. Phone defaults to it; a page can force
+      // either form with filters-layout.
+      isFiltersRail: block === 'filters' && filtersLayout === 'rail',
+      isFiltersAccordion: block === 'filters' && filtersLayout === 'accordion',
+      clearLabel: str.shClearAll || 'Clear all',
+      clearFilters: () => this.go('clearfilters'),
+      filterGroups: filters.map((g, gi) => ({
+        label: g.label,
+        isCheck: (g.kind || 'check') === 'check',
+        isChip: g.kind === 'chip',
+        isSwatch: g.kind === 'swatch',
+        open: openGroups[gi] === undefined ? gi === 0 : !!openGroups[gi],
+        caret: (openGroups[gi] === undefined ? gi === 0 : !!openGroups[gi]) ? 'rotate(180deg)' : 'rotate(0deg)',
+        summary: this.groupSummary(g),
+        toggleOpen: () => this.setState((s) => {
+          const next = Object.assign({}, s.filterOpen);
+          const cur = next[gi] === undefined ? gi === 0 : !!next[gi];
+          next[gi] = !cur;
+          return { filterOpen: next };
+        }),
+        items: (g.items || []).map((it) => ({
+          label: it.label,
+          count: it.count || '',
+          on: !!it.on,
+          toggle: () => this.go('filter', { group: g.label, item: it.label }),
+          chipStyleTap: 'appearance: none; cursor: pointer; font: inherit; font-size: 13px; letter-spacing: 0.04em;'
+            + ' min-height: 44px; padding: 0 16px; border-radius: var(--radius-control); border: 0;'
+            + (it.on
+              ? ' background: var(--color-accent); color: var(--color-bg);'
+              : ' background: color-mix(in srgb, var(--color-text) 8%, transparent); color: var(--color-text);'),
+          swatchStyleTap: 'appearance: none; cursor: pointer; padding: 0; width: 44px; height: 44px; border-radius: 50%;'
+            + ' background: ' + (it.value || 'var(--color-surface)') + ';'
+            + ' border: ' + (it.on ? '2px solid var(--color-text)' : '1px solid var(--color-divider)') + ';'
+            + ' box-shadow: ' + (it.on ? 'inset 0 0 0 3px var(--color-bg)' : 'none') + ';',
+          chipStyle: 'appearance: none; cursor: pointer; font: inherit; font-size: 12px; letter-spacing: 0.04em;'
+            + ' min-height: 34px; padding: 0 12px; border-radius: var(--radius-control); border: 0;'
+            + (it.on
+              ? ' background: var(--color-accent); color: var(--color-bg);'
+              : ' background: color-mix(in srgb, var(--color-text) 8%, transparent); color: var(--color-text);'),
+          swatchStyle: 'appearance: none; cursor: pointer; padding: 0; width: 28px; height: 28px; border-radius: 50%;'
+            + ' background: ' + (it.value || 'var(--color-surface)') + ';'
+            + ' border: ' + (it.on ? '2px solid var(--color-text)' : '1px solid var(--color-divider)') + ';'
+            + ' box-shadow: ' + (it.on ? 'inset 0 0 0 2px var(--color-bg)' : 'none') + ';',
+        })),
+      })),
+
+      // ── PLP — filters + toolbar + grid composed into one listing page ──
+      isPlp: block === 'plp',
+      plpIsDesktop: block === 'plp' && !mobile,
+      plpIsMobile: block === 'plp' && mobile,
+      plpCols: brand.isShift ? '272px minmax(0, 1fr)' : '260px minmax(0, 1fr)',
+      plpRule: (brand.isShift ? '1px' : '2px') + ' solid var(--color-divider)',
+      plpRailPad: brand.isShift ? '32px clamp(16px, 5vw, 64px) 48px' : '32px 32px 48px 40px',
+      plpToolbarPad: brand.isShift ? '20px clamp(16px, 5vw, 64px)' : '18px 40px',
+      plpGridPad: brand.isShift ? '32px clamp(16px, 5vw, 64px)' : '32px 40px 56px',
+      countLabelProp: this.props.countLabel || demo.countLabel,
+      plpShowGrid: products.length > 0,
+      plpShowEmpty: products.length === 0 && !!this.props.empty,
+      plpFootGutter: brand.isShift ? 'clamp(16px, 5vw, 64px)' : '40px',
+      plpHasLoadMore: !!(this.props.loadMore || !this.props.products),
+      plpLoadLabel: (this.props.loadMore || { label: 'Load more' }).label || '',
+      plpLoadDisabled: !!(this.props.loadMore || {}).disabled,
+      plpLoadMore: () => this.go('loadmore'),
+
+      // ── TOOLBAR ──
+      isToolbar: block === 'toolbar',
+      sortGroupName: this.sortGroup,
+      toolbarCount: this.props.countLabel || demo.countLabel,
+      toolbarSegStyle: mobile ? 'min-height: 48px; width: 100%;' : 'min-height: 36px;',
+      toolbarSorts: sorts.map((s2) => ({
+        label: s2.label,
+        on: !!s2.on,
+        pick: () => this.go('sort', s2.key || s2.label),
+      })),
+
+      // ── SEARCH ──
+      isSearch: block === 'search',
+      searchPreCols: mobile ? '1fr' : 'minmax(0, 1fr) minmax(0, 1fr)',
+      searchBorderRight: mobile ? '0' : '1px solid var(--color-divider)',
+      searchPad: mobile ? '24px 16px' : '32px 40px',
+      searchRecentLabel: str.seRecent || 'Recent searches',
+      searchRecent: arr(this.props.recentSearches).map((q) => ({ label: q, pick: () => this.go('search', q) })),
+      searchBrowseLabel: str.seBrowseInstead || 'Browse instead',
+      searchCatCols: mobile ? '1fr' : 'minmax(0, 1fr) minmax(0, 1fr)',
+      searchCategories: arr(this.props.categories).map((c) => ({ label: c.label, go: () => this.go(c.dest || 'plp') })),
+      searchToolbarPad: mobile ? '16px' : '18px 40px',
+      searchGridPad: mobile ? '20px 16px 32px' : '32px 40px 56px',
+      searchResultCols: mobile ? 'repeat(2, minmax(0, 1fr))' : 'repeat(4, minmax(0, 1fr))',
+
+      // ── ORDER SUMMARY ──
+      isSummary: block === 'summary',
+      summaryTitle: this.props.summaryTitle || str.shYourBag || 'Your bag',
+      summaryCount: this.props.summaryCount || '',
+      summaryItems: bag.map((b, i) => ({
+        src: b.src || '', alt: b.alt || b.name || '',
+        name: b.name || '', variant: b.variant || '',
+        price: b.price || '', qty: String(b.qty == null ? 1 : b.qty),
+        atMin: (b.qty == null ? 1 : b.qty) <= 1,
+        inc: () => this.go('qty', { index: i, delta: 1 }),
+        dec: () => this.go('qty', { index: i, delta: -1 }),
+        remove: () => this.go('remove', i),
+      })),
+      summaryLines: this.props.lines || [],
+      summaryAssurances: (this.props.assurances || []).map((t) => ({ text: t })),
+      totalLabel: str.shTotal || 'Total',
+      totalValue: this.props.total || '',
+      promoLabel: str.shPromo || 'Promotion code',
+      promoPlaceholder: str.shEnterCode || 'Enter code',
+      applyLabel: str.shApply || 'Apply',
+      removeLabel: str.shRemove || 'Remove',
+
+      // ── EMPTY STATE ──
+      isEmpty: block === 'empty',
+      emptyTitle: (this.props.empty || {}).title || '',
+      emptyBody: (this.props.empty || {}).body || '',
+      emptyCta: (this.props.empty || {}).cta || '',
+      emptyGo: () => this.go((this.props.empty || {}).dest || 'plp'),
+      navLinks: brand.navLinks.map((n) => ({
+        label: n.label,
+        go: () => this.go(n.dest),
+        menuGo: () => { this.setState({ menuOpen: false }); this.go(n.dest); },
+      })),
+      shipsLine: (str.shipsFrom || 'Ships from Bristol') + ' · ' + ((loc && loc.country.currency) || 'GBP £'),
+      isLocale: block === 'locale',
+      isLogo: block === 'logo',
+      isMenu: block === 'menu',
+      menuOpen: this.state.menuOpen,
+      toggleMenu: () => this.setState({ menuOpen: !this.state.menuOpen }),
+      closeMenu: () => this.setState({ menuOpen: false }),
+      menuQuery: this.state.menuQuery,
+      onMenuQuery: (e) => this.setState({ menuQuery: e.target.value }),
+      onMenuKey: (e) => { if (e.key === 'Enter') this.runMenuSearch(); },
+      menuSearch: () => this.runMenuSearch(),
+      menuPlp: () => { this.setState({ menuOpen: false }); this.go('plp'); },
+      menuSignIn: () => { this.setState({ menuOpen: false }); this.go('signin'); },
+      menuBag: () => { this.setState({ menuOpen: false }); this.go('checkout'); },
+      isGalleryDesktop: block === 'gallery' && !mobile && gal.length > 0,
+      isGalleryMobile: block === 'gallery' && mobile && gal.length > 0,
+      pdpGalleryDesktop: block === 'productHero' && !mobile && gal.length > 0,
+      pdpGalleryMobile: block === 'productHero' && mobile && gal.length > 0,
+      galActiveSrc: (gal[active] || {}).src,
+      galActiveAlt: (gal[active] || {}).alt,
+      galHeroH: mobile ? '440px' : (this.props.heroHeight || '620px'),
+      // always reserve 4 columns' worth of width, so 1-3 shots keep the same thumb
+      // size as a full set of 4; beyond 4, thumbs hold a minimum width and wrap
+      galThumbCols: gal.length <= 4
+        ? 'repeat(4, minmax(0, 1fr))'
+        : 'repeat(auto-fill, minmax(120px, 1fr))',
+      galCounter: gal.length ? (active + 1) + ' / ' + gal.length : '',
+      galThumbs: gal.map((shot, i) => ({
+        src: shot.src,
+        alt: shot.alt || '',
+        label: 'View shot ' + (i + 1),
+        active: i === active,
+        style: 'appearance: none; padding: 0; margin: 0; cursor: pointer; display: block; width: 100%; aspect-ratio: 1 / 1; background: var(--color-surface); outline-offset: -2px; border: ' + (i === active ? '2px solid var(--color-accent)' : '1px solid var(--color-divider)') + ';',
+        railStyle: 'appearance: none; padding: 0; margin: 0; cursor: pointer; display: block; width: 100%; aspect-ratio: 4 / 5; background: var(--color-surface); outline-offset: -2px; border: ' + (i === active ? '2px solid var(--color-accent)' : '1px solid var(--color-divider)') + ';',
+        dotStyle: 'width: 6px; height: 6px; border-radius: 50%; background: ' + (i === active ? 'var(--color-accent)' : 'var(--color-divider)') + ';',
+        select: () => this.setState({ galActive: i }),
+      })),
+      // mobile track: derive the active shot from scroll position so the dots track the swipe
+      galScroll: (e) => {
+        const el = e.currentTarget;
+        if (!el || !el.clientWidth) return;
+        const i = Math.round(el.scrollLeft / (el.clientWidth * 0.88));
+        const next = Math.max(0, Math.min(gal.length - 1, i));
+        if (next !== this.state.galActive) this.setState({ galActive: next });
+      },
+
+      isNavDesktop: block === 'nav' && !mobile,
+      isNavMobile: block === 'nav' && mobile,
+      isFooterDesktop: block === 'footer' && !mobile,
+      isFooterMobile: block === 'footer' && mobile,
+      showAnnouncement: this.props.showAnnouncement ?? true,
+      bagLabel: String(this.props.bagCount ?? 0),
+      accountLabel: this.props.accountLabel || str.signIn || 'Sign in',
+      goSignIn: () => this.go('signin'),
+      goSearch: () => this.go('search'),
+      goHome: () => this.go('home'),
+      goPlp: () => this.go('plp'),
+      goCheckout: () => this.go('checkout'),
+    };
+  }
+}
+
+</script>
+</body>
+</html>

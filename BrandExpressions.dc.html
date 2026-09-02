@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="brands.css">
+<script src="locale.js"></script>
+<style>
+  body { margin: 0; }
+  a { color: var(--color-accent); }
+  a:hover { color: var(--color-accent-700); }
+</style>
+</helmet>
+
+<div style="background: #ffffff; color: #201e1d; font-family: 'Fraunces', Georgia, serif; min-height: 100vh;">
+
+  <!-- ══ HEADER ══ -->
+  <div style="border-bottom: 2px solid #201e1d; padding: 48px clamp(16px, 4vw, 56px) 28px; display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; flex-wrap: wrap;">
+    <div>
+      <div style="font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #605d5d; margin-bottom: 14px;">Bridge design system — brand layer</div>
+      <h1 style="margin: 0 0 10px; font-size: clamp(32px, 4vw, 54px); font-family: 'Fraunces', Georgia, serif; font-weight: 800; letter-spacing: -0.02em; line-height: 1.02;">One system. Two brand expressions.</h1>
+      <p style="margin: 0; font-size: 14px; color: #444141; max-width: 74ch; text-wrap: pretty;">tokens.css owns the system: component classes, spacing, focus rings, 44px targets, logical properties, RTL. brands.css owns nothing but brand: type, colour, rule weight, control finish. Bridge is the parent; SHIFT is the circularity sub-brand. Every specimen below is the same markup with a different <code>data-brand</code> value.</p>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 8px; flex: none;">
+      <span style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #605d5d;">View</span>
+      <div class="seg" data-brand="bridge">
+        <sc-for list="{{ viewOptions }}" as="v" hint-placeholder-count="3">
+          <label class="seg-opt" style="min-height: 44px;"><input type="radio" name="brand-view" checked="{{ v.on }}" onChange="{{ v.pick }}"><span>{{ v.label }}</span></label>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ TOKEN DIFF ══ -->
+  <div style="padding: clamp(28px, 4vw, 56px) clamp(16px, 4vw, 56px); border-bottom: 1px solid #d7d3d3;">
+    <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #605d5d; margin-bottom: 20px;">What differs — {{ diffCount }} tokens, nothing else</div>
+    <div style="overflow-x: auto;">
+      <table class="table" data-brand="bridge" style="min-width: 640px;">
+        <thead><tr><th>Token</th><th>Bridge</th><th>SHIFT</th></tr></thead>
+        <tbody>
+          <sc-for list="{{ tokenRows }}" as="t" hint-placeholder-count="8">
+            <tr>
+              <td style="font-size: 13px; color: #605d5d;">{{ t.name }}</td>
+              <td>
+                <span style="display: inline-flex; align-items: center; gap: 10px;">
+                  <span style="{{ t.bridgeSwatch }}"></span>
+                  <span dir="ltr" style="font-size: 13px;">{{ t.bridge }}</span>
+                </span>
+              </td>
+              <td>
+                <span style="display: inline-flex; align-items: center; gap: 10px;">
+                  <span style="{{ t.shiftSwatch }}"></span>
+                  <span dir="ltr" style="font-size: 13px;">{{ t.shift }}</span>
+                </span>
+              </td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin: 20px 0 0; font-size: 13px; color: #605d5d; max-width: 70ch;">Shared and untouched: the spacing scale, every component class, focus rings, minimum tap targets, logical-property layout, the locale store and its RTL type swap.</p>
+  </div>
+
+  <!-- ══ SPECIMENS ══ -->
+  <div style="padding: clamp(28px, 4vw, 56px) clamp(16px, 4vw, 56px) 0;">
+    <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #605d5d; margin-bottom: 20px;">Same components, both brands</div>
+  </div>
+  <div style="padding: 0 clamp(16px, 4vw, 56px) clamp(28px, 4vw, 56px); display: grid; grid-template-columns: {{ paneCols }}; gap: 1px; background: #d7d3d3; border: 1px solid #d7d3d3;">
+
+    <sc-if value="{{ showBridge }}" hint-placeholder-val="{{ true }}">
+      <div data-brand="bridge" style="background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); padding: clamp(24px, 3vw, 40px); display: flex; flex-direction: column; gap: 32px;">
+        <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px;">
+          <span class="brand-lockup" style="font-family: var(--font-heading); font-weight: 800; font-size: 32px;">Bridge</span>
+          <span style="font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-neutral-700);">Parent brand</span>
+        </div>
+        <div style="display: flex;">
+          <sc-for list="{{ bridgeSwatches }}" as="sw" hint-placeholder-count="5">
+            <div style="{{ sw.style }}"></div>
+          </sc-for>
+        </div>
+        <div>
+          <div style="font-family: var(--font-heading); font-weight: 800; font-size: 36px; line-height: 1.05;">Fraunces 800</div>
+          <p style="margin: 8px 0 0; font-size: 14px; color: var(--color-neutral-800);">Serif throughout. Warm grey ground, cobalt accent, 2px rules, 4px control radius.</p>
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+          <button class="btn btn-primary" style="min-height: 44px;">Add to bag</button>
+          <button class="btn btn-secondary" style="min-height: 44px;">Size guide</button>
+          <button class="btn btn-ghost" style="min-height: 44px;">Details</button>
+          <span class="tag tag-accent">In repair</span>
+          <span class="tag tag-outline">M</span>
+        </div>
+        <div class="field" style="max-width: 320px;"><label for="be-bridge-email">Email address</label><input class="input" id="be-bridge-email" placeholder="you@example.com"></div>
+        <div style="width: 220px;">
+          <div style="aspect-ratio: 3 / 4; background: var(--color-surface); position: relative; display: grid; place-items: center;">
+            <span style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-neutral-600);">Listing image</span>
+            <span class="tag tag-on-image tag-solid">New</span>
+          </div>
+          <div style="padding-top: 12px; display: flex; flex-direction: column; gap: 4px;">
+            <span style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-700);">4 colours</span>
+            <span style="font-family: var(--font-heading); font-weight: 800; font-size: 16px;">Series 01 Pro Jersey</span>
+            <span style="font-size: 14px;">£165</span>
+          </div>
+        </div>
+        <div style="border-top: 2px solid var(--color-divider); padding-top: 18px;">
+          <div style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 12px;">Nav block · brand="bridge"</div>
+          <dc-import name="Blocks" brand="bridge" block="nav" device="mobile" show-announcement="{{ yes }}" bag-count="2" hint-size="100%,120px"></dc-import>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ showShift }}" hint-placeholder-val="{{ true }}">
+      <div data-brand="shift" style="background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); padding: clamp(24px, 3vw, 40px); display: flex; flex-direction: column; gap: 32px;">
+        <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px;">
+          <span class="brand-lockup" style="display: flex; align-items: baseline; gap: 10px;">
+            <span style="font-family: var(--font-heading); font-weight: 800; font-size: 32px; letter-spacing: -0.045em;">SHIFT</span>
+            <span class="brand-endorsement" style="font-size: 13px; color: var(--color-neutral-700);">by Bridge</span>
+          </span>
+          <span style="font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-neutral-700);">Sub-brand</span>
+        </div>
+        <div style="display: flex;">
+          <sc-for list="{{ shiftSwatches }}" as="sw" hint-placeholder-count="5">
+            <div style="{{ sw.style }}"></div>
+          </sc-for>
+        </div>
+        <div>
+          <div style="font-family: var(--font-heading); font-weight: 800; font-size: 36px; line-height: 1.05; letter-spacing: -0.045em;">Archivo 800</div>
+          <p style="margin: 8px 0 0; font-size: 14px; color: var(--color-neutral-800);">Grotesk throughout. Unbleached ground, oxide accent, 1px rules, same control radius as Bridge.</p>
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+          <button class="btn btn-primary" style="min-height: 44px;">Add to bag</button>
+          <button class="btn btn-secondary" style="min-height: 44px;">Size guide</button>
+          <button class="btn btn-ghost" style="min-height: 44px;">Details</button>
+          <span class="tag tag-accent">In repair</span>
+          <span class="tag tag-outline">M</span>
+        </div>
+        <div class="field" style="max-width: 320px;"><label for="be-shift-email">Email address</label><input class="input" id="be-shift-email" placeholder="you@example.com"></div>
+        <div style="width: 220px;">
+          <div style="aspect-ratio: 3 / 4; background: var(--color-surface); position: relative; display: grid; place-items: center;">
+            <span style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-neutral-600);">Listing image</span>
+            <span class="tag tag-on-image tag-accent">Grade A</span>
+          </div>
+          <div style="padding-top: 12px; display: flex; flex-direction: column; gap: 4px;">
+            <span style="font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-neutral-700);">Second life no. 04117</span>
+            <span style="font-family: var(--font-heading); font-weight: 700; font-size: 16px; letter-spacing: -0.02em;">Meridian Bib Short</span>
+            <span style="font-size: 14px;">£96</span>
+          </div>
+        </div>
+        <div style="border-top: 1px solid var(--color-divider); padding-top: 18px;">
+          <div style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-neutral-700); margin-bottom: 12px;">Nav block · brand="shift"</div>
+          <dc-import name="Blocks" brand="shift" block="nav" device="mobile" show-announcement="{{ yes }}" bag-count="2" hint-size="100%,120px"></dc-import>
+        </div>
+      </div>
+    </sc-if>
+
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1000},&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;both&quot;,&quot;bridge&quot;,&quot;shift&quot;],&quot;default&quot;:&quot;both&quot;,&quot;tsType&quot;:&quot;'both' | 'bridge' | 'shift'&quot;,&quot;section&quot;:&quot;Brand&quot;}}">
+const TOKENS = [
+  ['--font-heading / --font-body', 'Fraunces (serif)', 'Archivo (grotesk)', '', ''],
+  ['--font-heading-weight', '800', '700', '', ''],
+  ['--color-bg', '#ffffff', '#f8f5ee', '#ffffff', '#f8f5ee'],
+  ['--color-surface', '#f0efee', '#ede8dd', '#f0efee', '#ede8dd'],
+  ['--color-text', '#201e1d', '#1b1a17', '#201e1d', '#1b1a17'],
+  ['--color-accent', '#003da7', '#a83e1e', '#003da7', '#a83e1e'],
+  ['--color-accent-2', '#2a5fbe', '#3f4a52', '#2a5fbe', '#3f4a52'],
+  ['--color-signal', '#d2601b', '#1b1a17', '#d2601b', '#1b1a17'],
+  ['--color-divider', 'ink at 40%', 'ink at 26%', '', ''],
+  ['Rule weight', '2px', '1px', '', ''],
+  ['Button case', 'Sentence, 14px', 'Uppercase, 12px tracked', '', ''],
+  ['--radius-control', '4px', '4px (shared)', '', ''],
+];
+
+class Component extends DCLogic {
+  state = { view: 'both', tick: 0 };
+
+  componentDidMount() {
+    const attach = () => {
+      const s = window.BridgeLocale;
+      if (!s) { this._retry = setTimeout(attach, 60); return; }
+      this._unsub = s.subscribe(() => this.setState({ tick: this.state.tick + 1 }));
+      this.setState({ tick: this.state.tick + 1 });
+    };
+    attach();
+  }
+  componentWillUnmount() {
+    clearTimeout(this._retry);
+    if (this._unsub) this._unsub();
+  }
+
+  renderVals() {
+    const view = this.props.view || this.state.view;
+    const chip = (hex) => hex
+      ? 'flex: none; width: 18px; height: 18px; background: ' + hex + '; border: 1px solid rgba(32,30,29,0.25);'
+      : 'display: none;';
+    const band = (hex) => 'flex: 1; height: 60px; background: ' + hex + ';';
+
+    return {
+      yes: true,
+      viewOptions: [['both', 'Side by side'], ['bridge', 'Bridge'], ['shift', 'SHIFT']].map((v) => ({
+        label: v[1], on: view === v[0], pick: () => this.setState({ view: v[0] }),
+      })),
+      showBridge: view !== 'shift',
+      showShift: view !== 'bridge',
+      paneCols: view === 'both' ? 'repeat(auto-fit, minmax(340px, 1fr))' : 'minmax(0, 1fr)',
+      brandKey: view === 'shift' ? 'shift' : 'bridge',
+      diffCount: String(TOKENS.length),
+      tokenRows: TOKENS.map((t) => ({
+        name: t[0], bridge: t[1], shift: t[2],
+        bridgeSwatch: chip(t[3]), shiftSwatch: chip(t[4]),
+      })),
+      bridgeSwatches: ['#ffffff', '#f0efee', '#003da7', '#d2601b', '#201e1d'].map((h) => ({ style: band(h) })),
+      shiftSwatches: ['#f8f5ee', '#ede8dd', '#a83e1e', '#3f4a52', '#1b1a17'].map((h) => ({ style: band(h) })),
+    };
+  }
+}
+
+</script>
+</body>
+</html>

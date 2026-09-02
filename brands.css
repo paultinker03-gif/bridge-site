@@ -1,0 +1,221 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   BRANDS — the token layer that sits on top of tokens.css.
+
+   tokens.css owns the SYSTEM: component classes, spacing, focus rings, tap
+   targets, logical properties, RTL. This file owns nothing but BRAND: type,
+   colour, rule weight and a handful of component finishes.
+
+   Two expressions, one system:
+     [data-brand="bridge"]  parent brand — Fraunces serif, cobalt, warm grey
+     [data-brand="shift"]   sub-brand    — Archivo grotesk, oxide, unbleached
+
+   Both blocks are written at full strength so either brand can be nested
+   inside the other (custom properties inherit past a data-brand change).
+   ══════════════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap');
+
+/* ── BRIDGE ─────────────────────────────────────────────────────────── */
+[data-brand="bridge"] {
+  /* Ground — white. Bridge is printed on paper stock, not tinted board;
+     the surface tone below is what separates cards from the page. */
+  --color-bg: #ffffff;
+  --color-surface: #f0efee;
+  --color-text: #201e1d;
+  --color-divider: color-mix(in srgb, #201e1d 20%, transparent);
+
+  --color-accent: #003da7;
+  --color-accent-2: #2a5fbe;
+  --color-accent-100: #eff3fb;
+  --color-accent-200: #d6e0f4;
+  --color-accent-300: #b0c4e9;
+  --color-accent-400: #7593d6;
+  --color-accent-500: #2a5fbe;
+  --color-accent-600: #00429f;
+  --color-accent-700: #00337c;
+  --color-accent-800: #002458;
+  --color-accent-900: #001a3c;
+
+  --color-neutral-100: #f8f4f4;
+  --color-neutral-200: #eae7e7;
+  --color-neutral-300: #d7d3d3;
+  --color-neutral-400: #bab6b6;
+  --color-neutral-500: #9b9797;
+  --color-neutral-600: #7d7979;
+  --color-neutral-700: #605d5d;
+  --color-neutral-800: #444141;
+  --color-neutral-900: #2d2b2b;
+
+  --color-signal-500: #d2601b;
+  --color-signal: #d2601b;
+  --color-signal-ink: #ffffff;
+
+  --color-logo: #000000;
+
+  --font-heading: "Fraunces", Georgia, serif;
+  --font-body: "Fraunces", Georgia, serif;
+  --font-heading-weight: 800;
+
+  /* Interactive radius: the one knob for every tappable/typable control.
+     Panels and cards stay square — this softens controls only. */
+  --radius-interactive: 6px;
+  --radius-button: var(--radius-interactive);
+  --radius-input: var(--radius-interactive);
+  --radius-control: var(--radius-interactive);
+
+  --shadow-sm: 0 1px 2px color-mix(in srgb, #2d2b2b 14%, transparent);
+  --shadow-md: 0 3px 10px color-mix(in srgb, #2d2b2b 16%, transparent);
+  --shadow-lg: 0 12px 32px color-mix(in srgb, #2d2b2b 22%, transparent);
+}
+
+[data-brand="bridge"] h1,
+[data-brand="bridge"] h2,
+[data-brand="bridge"] h3 { letter-spacing: -0.015em; line-height: 1.12; }
+[data-brand="bridge"] .btn { text-transform: none; letter-spacing: 0; font-size: 14px; font-weight: 800; justify-content: flex-start; text-align: start; }
+[data-brand="bridge"] .btn-icon { justify-content: center; }
+[data-brand="bridge"] .btn-ghost { color: var(--color-accent); }
+[data-brand="bridge"] .tag { text-transform: none; letter-spacing: 0.02em; font-size: 11px; padding: 3px 10px; }
+[data-brand="bridge"] .stepper-mark { border-radius: var(--radius-control); }
+
+/* ── SHIFT ──────────────────────────────────────────────────────────── */
+[data-brand="shift"] {
+  /* Ground — unbleached paper, lighter again: warmth without the tint. */
+  --color-bg: #fbf9f4;
+  --color-surface: #f1ece2;
+  --color-text: #1b1a17;
+  --color-divider: color-mix(in srgb, #1b1a17 26%, transparent);
+
+  /* Accent — oxide. Material honesty rather than eco-green. */
+  --color-accent: #a83e1e;
+  --color-accent-2: #3f4a52;
+
+  --color-accent-100: #f7ebe4;
+  --color-accent-200: #eed3c6;
+  --color-accent-300: #dfab92;
+  --color-accent-400: #c8764f;
+  --color-accent-500: #a83e1e;
+  --color-accent-600: #8f3316;
+  --color-accent-700: #742711;
+  --color-accent-800: #551c0c;
+  --color-accent-900: #3b1308;
+
+  --color-neutral-100: #f4f1ea;
+  --color-neutral-200: #e6e1d7;
+  --color-neutral-300: #d2ccbf;
+  --color-neutral-400: #b4ada0;
+  --color-neutral-500: #948d80;
+  --color-neutral-600: #766f64;
+  --color-neutral-700: #5b554c;
+  --color-neutral-800: #403b35;
+  --color-neutral-900: #292521;
+
+  /* Signal — counts and badges. SHIFT's is the oxide accent at full strength:
+     the one place the warm red is allowed to act as a marker. */
+  --color-signal-100: #f7ebe4;
+  --color-signal-500: #a83e1e;
+  --color-signal-700: #742711;
+  --color-signal: #a83e1e;
+  --color-signal-ink: #fdfbf7;
+
+  /* Focus stays blue in both brands. SHIFT's oxide accent is too close to a
+     warning colour to double as the focus ring — a focused field would read
+     as a failed one. */
+  --color-focus: #2563c9;
+
+  --color-logo: #1b1a17;
+
+  /* Type — grotesk against Bridge's serif. Same scale, different voice. */
+  --font-heading: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-heading-weight: 700;
+
+  /* Controls keep the system radius — SHIFT squares its panels, not its buttons. */
+  --radius-button: 3px;
+  --radius-input: 0px;
+  --radius-control: var(--radius-button);
+
+  --shadow-sm: 0 1px 2px color-mix(in srgb, #1b1a17 12%, transparent);
+  --shadow-md: 0 4px 14px color-mix(in srgb, #1b1a17 12%, transparent);
+  --shadow-lg: 0 18px 48px color-mix(in srgb, #1b1a17 18%, transparent);
+}
+
+[data-brand="shift"] h1,
+[data-brand="shift"] h2,
+[data-brand="shift"] h3 { letter-spacing: -0.035em; line-height: 1.02; }
+
+/* One-pixel rules instead of Bridge's two — SHIFT is drawn, not printed.
+   The nav itself carries no bottom rule in either brand; the page below it
+   supplies its own edge where one is wanted. */
+[data-brand="shift"] .table th { border-bottom-width: 1px; }
+
+/* Symmetric with the bridge rule below — declared so a shift scope nested inside
+   a bridge page (specimen frames in the blocks library) does not inherit its alignment. */
+[data-brand="shift"] .btn { text-transform: uppercase; letter-spacing: 0.06em; font-size: 12px; font-weight: 600; justify-content: center; text-align: center; }
+[data-brand="shift"] .btn-primary { color: #fdfbf7; }
+[data-brand="shift"] .btn-ghost { color: var(--color-text); }
+[data-brand="shift"] .nav-brand { letter-spacing: -0.04em; font-size: 30px; font-weight: 800; }
+[data-brand="shift"] .tag { text-transform: uppercase; letter-spacing: 0.1em; font-size: 10px; padding: 4px 9px; }
+[data-brand="shift"] .stepper-label { letter-spacing: 0.14em; }
+[data-brand="shift"] .card { background: transparent; padding: 0; }
+[data-brand="shift"] .input { background: transparent; border-width: 0 0 1px 0; padding-inline: 0; min-height: 44px; }
+
+/* The endorsement line is the one place SHIFT wears the parent's serif. */
+[data-brand="shift"] .brand-endorsement {
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  text-transform: none;
+}
+
+/* SHIFT keeps its grotesk in RTL islands. */
+[dir="rtl"] [data-brand="shift"] .brand-lockup,
+[dir="rtl"] [data-brand="shift"] .nav-brand {
+  --font-heading: "Archivo", Arial, sans-serif;
+  --font-body: "Archivo", Arial, sans-serif;
+  font-family: "Archivo", Arial, sans-serif;
+}
+
+/* ── ACCENT ─────────────────────────────────────────────────────────── */
+/* One accent only: oxide. */
+
+/* ── CARD TAG — the `.tag.tag-on-image` chip, given each brand's voice.
+      One flat construction, no shadow: the chip sits ON the photograph, it does
+      not float above it. Bridge prints a white chip with grey text, so
+      Low stock and Bestseller read identically — only Sale takes the accent.
+      SHIFT prints every chip the same way (the Grade A treatment): paper
+      ground, oxide ink, hairline oxide rule. The letter carries the meaning,
+      not the colour, so the tone modifiers are deliberately flattened. */
+[data-brand="bridge"] .tag-on-image,
+[data-brand="bridge"] .tag-on-image.tag-solid,
+[data-brand="bridge"] .tag-on-image.tag-quiet,
+[data-brand="bridge"] .tag-on-image.tag-neutral,
+[data-brand="bridge"] .tag-on-image.tag-outline {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: calc(var(--radius-button) * 0.75);
+  background: #ffffff;
+  color: var(--color-neutral-700);
+}
+[data-brand="bridge"] .tag-on-image.tag-accent {
+  background: var(--color-accent);
+  color: #fff;
+}
+[data-brand="bridge"] .tag-on-image.tag-sale,
+[data-brand="shift"] .tag-on-image.tag-sale {
+  background: #ffffff;
+  color: var(--color-signal-700);
+}
+
+[data-brand="shift"] .tag-on-image,
+[data-brand="shift"] .tag-on-image.tag-solid,
+[data-brand="shift"] .tag-on-image.tag-quiet,
+[data-brand="shift"] .tag-on-image.tag-accent,
+[data-brand="shift"] .tag-on-image.tag-neutral,
+[data-brand="shift"] .tag-on-image.tag-outline {
+  background: #ffffff;
+  color: var(--color-neutral-600);
+  box-shadow: none;
+}

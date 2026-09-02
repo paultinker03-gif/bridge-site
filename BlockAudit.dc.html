@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="brands.css">
+<style>
+  body { margin: 0; }
+  a { color: var(--color-accent); }
+  a:hover { color: var(--color-accent-700); }
+</style>
+</helmet>
+
+<div data-brand="bridge" style="background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); min-height: 100vh;">
+  <div style="max-width: 1280px; margin: 0 auto; border-inline-start: 2px solid var(--color-divider); border-inline-end: 2px solid var(--color-divider);">
+
+    <header style="padding: 56px 48px 40px; border-bottom: 2px solid var(--color-divider);">
+      <div style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 24px;">Design system — linkage audit</div>
+      <h1 style="font-size: 64px; line-height: 0.94; letter-spacing: -0.03em; margin: 0 0 20px;">Linked blocks</h1>
+      <p style="font-size: 17px; max-width: 56ch; margin: 0; text-wrap: pretty;">Read live from each template file every time this page loads. A template is <strong style="font-weight: 800;">linked</strong> when it mounts <code style="font-family: inherit;">Blocks.dc.html</code> rather than copying its markup. Edit a template and reload — this table follows.</p>
+      <div style="display: flex; gap: 28px; margin-top: 32px; font-size: 12px; color: var(--color-neutral-700);">
+        <span>Source of truth · <a href="Blocks.dc.html">Blocks.dc.html</a></span>
+        <span>Controls · <a href="Components.dc.html">Components.dc.html</a></span>
+        <span>Foundations · <a href="BridgeDesignSystem.dc.html">BridgeDesignSystem.dc.html</a></span>
+      </div>
+    </header>
+
+    <section style="display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 2px solid var(--color-divider);">
+      <div style="padding: 28px 32px; border-inline-end: 1px solid var(--color-divider);">
+        <div style="font-size: 44px; letter-spacing: -0.02em; line-height: 1;">{{ nLinked }}</div>
+        <div style="font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700); margin-top: 8px;">Templates linked</div>
+      </div>
+      <div style="padding: 28px 32px; border-inline-end: 1px solid var(--color-divider);">
+        <div style="font-size: 44px; letter-spacing: -0.02em; line-height: 1; color: {{ driftColor }};">{{ nDrift }}</div>
+        <div style="font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700); margin-top: 8px;">Possible drift</div>
+      </div>
+      <div style="padding: 28px 32px;">
+        <div style="font-size: 44px; letter-spacing: -0.02em; line-height: 1;">{{ nMounts }}</div>
+        <div style="font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700); margin-top: 8px;">Block mounts total</div>
+      </div>
+    </section>
+
+    <section style="border-bottom: 2px solid var(--color-divider);">
+      <div style="display: grid; grid-template-columns: 260px 96px 1fr 150px; gap: 0; padding: 14px 32px; border-bottom: 2px solid var(--color-divider); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-neutral-700);">
+        <div>Template</div>
+        <div>Brand</div>
+        <div>Blocks mounted</div>
+        <div>Status</div>
+      </div>
+
+      <sc-for list="{{ rows }}" as="row" hint-placeholder-count="8">
+        <div style="display: grid; grid-template-columns: 260px 96px 1fr 150px; gap: 0; padding: 18px 32px; border-bottom: 1px solid var(--color-divider); align-items: start;" style-hover="background: var(--color-surface);">
+          <div style="font-size: 14px; font-weight: 600; padding-inline-end: 16px;">
+            <a href="{{ row.file }}">{{ row.file }}</a>
+            <div style="font-size: 11px; font-weight: 400; color: var(--color-neutral-700); margin-top: 4px;">{{ row.note }}</div>
+          </div>
+          <div style="font-size: 12px; color: var(--color-neutral-700); text-transform: uppercase; letter-spacing: 0.08em;">{{ row.brand }}</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-inline-end: 16px;">
+            <sc-for list="{{ row.blocks }}" as="b" hint-placeholder-count="3">
+              <span style="font-size: 11px; letter-spacing: 0.04em; padding: 4px 9px; border-radius: 6px; background: var(--color-accent-100); color: var(--color-accent-900);">{{ b }}</span>
+            </sc-for>
+            <sc-for list="{{ row.comps }}" as="c" hint-placeholder-count="0">
+              <span style="font-size: 11px; letter-spacing: 0.04em; padding: 4px 9px; border-radius: 6px; border: 1px solid var(--color-divider); color: var(--color-neutral-800);">{{ c }}</span>
+            </sc-for>
+            <sc-if value="{{ row.empty }}" hint-placeholder-val="{{ false }}">
+              <span style="font-size: 12px; color: var(--color-neutral-700);">—</span>
+            </sc-if>
+          </div>
+          <div>
+            <span style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 10px; border-radius: 6px; background: {{ row.statusBg }}; color: {{ row.statusFg }};">{{ row.status }}</span>
+          </div>
+        </div>
+      </sc-for>
+    </section>
+
+    <section style="display: grid; grid-template-columns: 1fr 1fr; border-bottom: 2px solid var(--color-divider);">
+      <div style="padding: 36px 32px; border-inline-end: 2px solid var(--color-divider);">
+        <h2 style="margin: 0 0 12px; font-size: 22px;">How the check works</h2>
+        <p style="font-size: 13px; color: var(--color-neutral-800); margin: 0 0 12px; text-wrap: pretty;">Each template file is fetched and scanned for block mounts. Filled chips are blocks from the master file; outlined chips are individual components.</p>
+        <p style="font-size: 13px; color: var(--color-neutral-800); margin: 0; text-wrap: pretty;"><strong style="font-weight: 800;">Possible drift</strong> flags a template that has its own nav or footer markup while mounting none from the master — the case worth fixing. Pages with no chrome at all (routers, docs, production sheets) are marked exempt, not drifting.</p>
+      </div>
+      <div style="padding: 36px 32px;">
+        <h2 style="margin: 0 0 12px; font-size: 22px;">Verify by eye</h2>
+        <p style="font-size: 13px; color: var(--color-neutral-800); margin: 0 0 16px; text-wrap: pretty;">The definitive test is still a live one: change something in the master nav block and reload a template. If it moves, it is linked.</p>
+        <div style="border: 1px solid var(--color-divider); padding: 16px; font-size: 12px; color: var(--color-neutral-800);">Open <a href="Blocks.dc.html">Blocks.dc.html</a> → nav block → adjust the wordmark → reload <a href="BridgeShop.dc.html">BridgeShop.dc.html</a> → revert.</div>
+      </div>
+    </section>
+
+    <div style="padding: 24px 32px; font-size: 11px; color: var(--color-neutral-700); letter-spacing: 0.06em;">Scanned {{ scanCount }} template files · {{ scannedAt }}</div>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+const FILES = [
+  ['BridgeShop.dc.html', 'bridge', 'Storefront — home, PLP, PDP, checkout'],
+  ['BridgeSearch.dc.html', 'bridge', 'Search overlay and results'],
+  ['BridgeLogin.dc.html', 'bridge', 'Sign in / create account'],
+  ['BridgeAccount.dc.html', 'bridge', 'Account area'],
+  ['BridgeJournal.dc.html', 'bridge', 'Editorial'],
+  ['BridgeLegal.dc.html', 'bridge', 'Policy pages'],
+  ['ShiftShop.dc.html', 'shift', 'Storefront — PLP, PDP, checkout'],
+  ['ShiftHome.dc.html', 'shift', 'Landing'],
+  ['ShiftSearch.dc.html', 'shift', 'Search'],
+  ['ShiftLogin.dc.html', 'shift', 'Sign in'],
+  ['ShiftAccount.dc.html', 'shift', 'Account area'],
+  ['ShiftNotices.dc.html', 'shift', 'Notices / newsletter'],
+  ['BrandExpressions.dc.html', 'both', 'Side-by-side brand reference'],
+  ['Demo.dc.html', '—', 'Prototype router — owns no chrome', true],
+  ['BridgeDesignSystem.dc.html', 'bridge', 'Foundations reference', true],
+  ['BridgeShotList.dc.html', 'bridge', 'Photography production sheet', true],
+  ['ShiftShotList.dc.html', 'shift', 'Photography production sheet', true],
+  ['LocalePicker.dc.html', 'both', 'Leaf component — consumed by Blocks', true]
+];
+
+class Component extends DCLogic {
+  state = { rows: null, scannedAt: '' };
+
+  componentDidMount() { this.scan(); }
+
+  async scan() {
+    const rows = await Promise.all(FILES.map(async ([file, brand, note, exempt]) => {
+      let src = '';
+      try { src = await (await fetch(file, { cache: 'no-store' })).text(); } catch (e) { src = ''; }
+      const uniq = (a) => [...new Set(a)];
+      const blocks = uniq([...src.matchAll(/<dc-import[^>]*name="Blocks"[^>]*block="([^"]+)"/g)].map(m => m[1]));
+      const comps = uniq([...src.matchAll(/<dc-import[^>]*name="Components"[^>]*comp="([^"]+)"/g)].map(m => m[1])
+        .concat([...src.matchAll(/<dc-import[^>]*name="LocalePicker"/g)].map(() => 'localePicker')));
+      // Own-chrome heuristic. Strip illustrative code samples first — <code>/<pre>
+      // blocks and escaped markup in docs are not the page's own chrome.
+      const prose = src
+        .replace(/<pre[\s\S]*?<\/pre>/gi, '')
+        .replace(/<code[\s\S]*?<\/code>/gi, '')
+        .replace(/&lt;[\s\S]*?&gt;/g, '');
+      const ownChrome = /<nav[\s>]|<footer[\s>]|role="navigation"/.test(prose);
+      const missing = !src;
+      const linked = blocks.length > 0;
+      const drift = !linked && ownChrome && !missing && !exempt;
+
+      let status = 'Linked', statusBg = 'var(--color-accent-100)', statusFg = 'var(--color-accent-900)';
+      if (missing) { status = 'Not found'; statusBg = 'var(--color-neutral-200)'; statusFg = 'var(--color-neutral-800)'; }
+      else if (drift) { status = 'Drift'; statusBg = '#f6e0c8'; statusFg = '#6b3b06'; }
+      else if (!linked) { status = 'Exempt'; statusBg = 'transparent'; statusFg = 'var(--color-neutral-700)'; }
+
+      return { file, brand, note, blocks, comps, empty: !blocks.length && !comps.length, status, statusBg, statusFg, drift, linked };
+    }));
+    this.setState({ rows, scannedAt: new Date().toLocaleString() });
+  }
+
+  renderVals() {
+    const rows = this.state.rows || [];
+    const nDrift = rows.filter(r => r.drift).length;
+    return {
+      rows,
+      scanCount: FILES.length,
+      scannedAt: this.state.scannedAt || 'reading files…',
+      nLinked: rows.filter(r => r.linked).length,
+      nDrift,
+      nMounts: rows.reduce((n, r) => n + r.blocks.length, 0),
+      driftColor: nDrift ? '#8a4c08' : 'var(--color-text)'
+    };
+  }
+}
+
+</script>
+</body>
+</html>
